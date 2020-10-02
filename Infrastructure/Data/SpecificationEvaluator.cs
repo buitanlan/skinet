@@ -24,7 +24,7 @@ namespace Infrastructure.Data
             {
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
-            if(!spec.IsPagingEnabled)
+            if(spec.IsPagingEnabled)
             {
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }
