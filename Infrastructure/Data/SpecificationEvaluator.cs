@@ -20,9 +20,9 @@ namespace Infrastructure.Data
             {
                 query = query.OrderBy(spec.OrderBy);
             }
-            if (spec.OrderBy != null)
+            if (spec.OrderByDescending != null)
             {
-                query = query.OrderBy(spec.OrderBy);
+                query = query.OrderByDescending(spec.OrderByDescending);
             }
             if(!spec.IsPagingEnabled)
             {
