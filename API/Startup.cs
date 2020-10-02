@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Extensions;
 using API.Helpers;
+using API.Middlewares;
 using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
@@ -29,29 +31,25 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+      
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
-            services.AddSwaggerGen();
 
             services.AddDbContext<StoreContext>(opt =>
             {
                 opt.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
+            services.AddApplicationServices();
+            services.AddSwaggerDocumentation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,6 +60,8 @@ namespace API
             app.UseRouting();
             app.UseStaticFiles();
             app.UseAuthorization();
+            app.UseSwaggerDocumention();
+
 
             app.UseEndpoints(endpoints =>
             {
