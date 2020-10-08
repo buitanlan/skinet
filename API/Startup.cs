@@ -8,6 +8,7 @@ using API.Middlewares;
 using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,12 +41,17 @@ namespace API
             {
                 opt.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<AppIdentityDbContext>(opt =>
+            {
+                opt.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
+            });
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
                 var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddApplicationServices();
+            services.AddIdentityServices();
             services.AddSwaggerDocumentation();
             services.AddCors(opt => 
             {
