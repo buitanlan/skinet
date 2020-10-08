@@ -2,6 +2,8 @@ using System.Linq;
 using API.Errors;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +13,20 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.Configure<IdentityOptions>(opt =>
+            {
+               // Default Password settings.
+               opt.Password.RequireDigit = true;
+               opt.Password.RequireLowercase = true;
+               opt.Password.RequireNonAlphanumeric = true;
+               opt.Password.RequireUppercase = true;
+               opt.Password.RequiredLength = 6;
+               opt.Password.RequiredUniqueChars = 1;
+            });
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
