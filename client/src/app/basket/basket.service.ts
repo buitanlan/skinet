@@ -37,15 +37,22 @@ export class BasketService {
     const itemToAdd: IBasketItem = this.mapProductItemToBasketItem(item, quantity);
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd, quantity);
+    this.setBasket(basket);
   }
   private addOrUpdateItem(items: IBasketItem[], itemToAdd: IBasketItem, quantity: number):
     IBasketItem[]{
-    const index = items.findIndex(i => i.id === itemToAdd.id);
-    if (index === -1) {
+    if (items === null) {
+      items = [];
       itemToAdd.quantity = quantity;
       items.push(itemToAdd);
     } else {
-      items[index].quantity += quantity;
+      const index = items.findIndex((i) => i.id === itemToAdd.id);
+      if (index === -1) {
+        itemToAdd.quantity = quantity;
+        items.push(itemToAdd);
+      } else {
+        items[index].quantity += quantity;
+      }
     }
     return items;
   }
