@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center">
         <a routerLink="/basket" class = "position-relative">
             <i class = "fas fa-shopping-cart mr-5 text-dark cart"></i>
-            <div class="cart-no">5</div>
+            <div *ngIf="(basket$ |async) as basket" class="cart-no">{{basket.items.length}}</div>
         </a>
         <a class="btn btn-outline-secondary mr-2" href="#">Login</a>
         <a class="btn btn-outline-secondary mr-3" href="#">Sign up</a>
