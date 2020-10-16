@@ -72,8 +72,7 @@
             "ssl": true,
             "sslCert": "ssl/server.crt",
             "sslKey": "ssl/server.key",
-            "open": true,
-            "watch": false
+            "open": true
           },
           "configurations": {
             "production": {
