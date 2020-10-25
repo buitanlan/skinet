@@ -55,9 +55,9 @@ namespace Infrastructure.Services
 
         }
 
-        public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<DeliveryMethod>().ListAllAsync();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)

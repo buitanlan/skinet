@@ -49,7 +49,7 @@ namespace API.Controllers
             if (order == null) return NotFound(new ApiResponse(404));
             return _mapper.Map<Order, OrderToReturnDto>(order);
         }
-        [HttpGet("{deliveryMethods}")]
+        [HttpGet("deliveryMethods")]
         public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
         {
             return Ok(await _orderService.GetDeliveryMethodsAsync());
