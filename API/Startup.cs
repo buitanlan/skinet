@@ -82,8 +82,6 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerDocumention();
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
