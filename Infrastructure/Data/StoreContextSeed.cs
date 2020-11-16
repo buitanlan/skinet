@@ -34,8 +34,21 @@ namespace Infrastructure.Data
                 if (!context.Products.Any())
                 {
                     var productsData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/products.json");
-                    var products = JsonSerializer.Deserialize<List<Product>>(productsData);
-                    await context.Products.AddRangeAsync(products);
+                    var products = JsonSerializer.Deserialize<List<ProductSeedModel>>(productsData);
+                    foreach (var item in products)
+                    {
+                        var pictureFileName = item.PictureUrl.Substring(16);
+                        var product = new Product
+                        {
+                            Name = item.Name,
+                            Description = item.Description,
+                            Price = item.Price,
+                            ProductBrandId = item.ProductBrandId,
+                            ProductTypeId = item.ProductTypeId
+                        };
+                        product.AddPhoto(item.PictureUrl, pictureFileName);
+                        context.Products.Add(product);
+                    }
                     await context.SaveChangesAsync();
                 }
                 if (!context.DeliveryMethods.Any())
