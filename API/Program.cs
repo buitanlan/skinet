@@ -30,9 +30,10 @@ namespace API
                 await StoreContextSeed.SeedAsync(context, loggerFactory);
                 // This method gets called by the runtime. Use this method to
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                 var identityContext = services.GetRequiredService<AppIdentityDbContext>();
                 await identityContext.Database.MigrateAsync();
-                await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+                await AppIdentityDbContextSeed.SeedUsersAsync(userManager, roleManager);
             }
             catch(Exception ex)
             {
