@@ -23,3 +23,6 @@ export interface IBasketTotals {
   subtotal: number;
   total: number;
 }
+export interface IBasketQuantity{
+  quantity: number;
+}

@@ -11,14 +11,14 @@ namespace API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo 
-                { 
-                    Title = "SkiNet API", 
-                    Version = "v1", 
-                    Contact  = new OpenApiContact
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "SkiNet API",
+                    Version = "v1",
+                    Contact = new OpenApiContact
                     {
                         Name = "Bui Tan Lan",
-                        Email = string.Empty,
+                        Email = "tanlanhcmus@gmail.com",
                         Url = new Uri("https://github.com/BuiTanLan/skinet"),
                     },
                     License = new OpenApiLicense
@@ -26,7 +26,7 @@ namespace API.Extensions
                         Name = "MIT License",
                         //Url = new Uri("https://example.com/license"),
                     }
-                    });
+                });
                 var securitySchema = new OpenApiSecurityScheme
                 {
                     Description = "JWT Auth Bearer Scheme",
@@ -38,7 +38,7 @@ namespace API.Extensions
                     {
                         Type = ReferenceType.SecurityScheme,
                         Id = "Bearer"
-                    }     
+                    }
                 };
                 c.AddSecurityDefinition("Bearer", securitySchema);
                 var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };

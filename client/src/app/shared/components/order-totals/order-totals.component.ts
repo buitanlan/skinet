@@ -9,11 +9,11 @@ import { IBasketTotals } from '../../models/basket';
   styleUrls: ['./order-totals.component.scss']
 })
 export class OrderTotalsComponent implements OnInit {
-  basketTotal$: Observable<IBasketTotals>;
+  basketTotalPrice$: Observable<IBasketTotals>;
   constructor(private basketService: BasketService) { }
 
   ngOnInit(): void {
-    this.basketTotal$ = this.basketService.basketTotal$;
+    this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
   }
 
 }
