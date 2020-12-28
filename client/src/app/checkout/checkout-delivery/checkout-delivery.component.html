@@ -1,17 +1,33 @@
 <div class="mt-4" [formGroup]="checkoutForm">
-  <div class="row" formGroup="deliveryForm">
+  <div class="row" formGroupName="deliveryForm">
     <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
       <input
         type="radio"
-        id="{{ method.id }}"
+        id={{ method.id }}
+        value={{method.id}}
         formControlName="deliveryMethod"
-        class="custem-control-label"
-      />
-      <label for="{{method.id}}" class="custem-control-label">
+        class="custom-control-input">
+      <label for="{{method.id}}" class="custom-control-label">
           <strong>{{method.shortName}} - {{method.price | currency }}</strong>
           <br> 
           <span class="label-description">{{method.description}}</span>
       </label>
     </div>
+  </div>
+</div>
+<div class="mt-4" [formGroup]="checkoutForm">
+  <div class="row ml-5" formGroupName="deliveryForm">
+      <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
+          <input type="radio" 
+              id={{method.id}} 
+              value={{method.id}} 
+              formControlName="deliveryMethod"
+              class="custom-control-input">
+          <label for="{{method.id}}" class="custom-control-label">
+              <strong>{{method.shortName}} - {{method.price | currency}}</strong>
+              <br>
+              <span class="label-description">{{method.description}}</span>
+          </label>
+      </div>
   </div>
 </div>
