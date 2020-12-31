@@ -6,6 +6,8 @@ import { ProductsDetailsComponent } from './products-details/products-details.co
 
 const routes: Routes = [
   { path: '', component: ShopComponent },
+  { path: 'page/:page', component: ShopComponent },
+
   {
     path: ':id',
     component: ProductsDetailsComponent,
