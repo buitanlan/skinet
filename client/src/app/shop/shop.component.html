@@ -5,20 +5,20 @@
       <select
         class="custom-select mb-4"
         (change)="onSortSelected($event.target.value)"
+        [(ngModel)]="this.shopParams.sort"
       >
         <option *ngFor="let sort of sortOptions" [value]="sort.value">
           {{ sort.name }}
         </option>
       </select>
-
       <h5 class="text-warning ml-3">Brands</h5>
       <ul class="list-group my-3">
         <li
           class="list-group-item"
           *ngFor="let brand of brands"
-          [class.active]="brand.id === this.shopParams.brandId"
+          [class.active]="brand.name.toLowerCase() === this.shopParams.brandName"
           [value]="brand.id"
-          (click)="onBrandSelected(brand.id)"
+          (click)="onBrandSelected(brand.name.toLowerCase())"
         >
           {{ brand.name }}
         </li>
@@ -28,9 +28,9 @@
         <li
           class="list-group-item"
           *ngFor="let type of types"
-          [class.active]="type.id === this.shopParams.typeId"
+          [class.active]="type.name.toLowerCase() === this.shopParams.typeName"
           [value]="type.id"
-          (click)="onTypeSelected(type.id)"
+          (click)="onTypeSelected(type.name.toLowerCase())"
         >
           {{ type.name }}
         </li>

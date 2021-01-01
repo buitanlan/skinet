@@ -8,8 +8,8 @@ namespace Core.Specifications
         : base(x =>
                 (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains
                 (productParams.Search)) &&
-                (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-                (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId))
+                (productParams.BrandName == "all" || x.ProductBrand.Name.ToLower() == productParams.BrandName) &&
+                (productParams.TypeName == "all" || x.ProductType.Name.ToLower() == productParams.TypeName))
         {
 
         }

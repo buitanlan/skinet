@@ -21,48 +21,43 @@ export class ShopComponent implements OnInit {
   shopParams = new ShopParams();
   totalCount: number;
   sortOptions = [
-    { name: 'Alphabetical', value: 'name' },
-    { name: 'Price: Low to High', value: 'priceAsc' },
-    { name: 'Price: High to Low', value: 'priceDesc' },
+    { name: 'Alphabetical', value: 'name'},
+    { name: 'Price: Low to High', value: 'asc'},
+    { name: 'Price: High to Low', value: 'desc'},
   ];
   constructor(
     private shopService: ShopService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.getBrands();
+    this.getTypes();
     this.route.params
       .subscribe((params) => {
         this.shopParams.pageNumber = params.page || 1;
       });
+    console.log('gdg', this.brands);
+    console.log('hhd', this.types);
     this.route.queryParams
       .subscribe((params) => {
-        this.shopParams.sort = params.sort;
-        this.shopParams.search = params.search;
-        this.shopParams.brandId = this.brands.find( x => x.name.toLowerCase() === params.brand).id || 1;
-        this.shopParams.typeId = this.types.find( x => x.name.toLowerCase() === params.type).id;
-        console.log('a', params.brand);
-        console.log('b', params.type);
-
-        console.log('c', this.brands);
-
+        this.shopParams.sort = params.sort || 'name';
+        this.shopParams.search = params.search || '';
+        this.shopParams.brandName = params.brand || 'all';
+        this.shopParams.typeName = params.type || 'all';
 
       });
-
     this.getProducts();
-    this.getBrands();
-    this.getTypes();
   }
   // tslint:disable-next-line:typedef
   getProducts() {
-    this.shopService.getProducts(this.shopParams).subscribe(
+    this.shopService.getProducts(this.shopParams).pipe(
+    ).subscribe(
       (response: IPagination) => {
         this.products = response.data;
-        console.log(this.shopParams.pageNumber);
 
         this.shopParams.pageNumber = response.pageIndex;
-        console.log(this.shopParams.pageNumber);
 
         this.shopParams.pageSize = response.pageSize;
         this.totalCount = response.count;
@@ -95,24 +90,25 @@ export class ShopComponent implements OnInit {
     );
   }
   // tslint:disable-next-line:typedef
-  onBrandSelected(brandId: number) {
-    this.shopParams.brandId = brandId;
+  onBrandSelected(brandName: string) {
+    this.shopParams.brandName = brandName;
     this.shopParams.pageNumber = 1;
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        brand: this.brands.find((b) => b.id === brandId).name.toLowerCase(),
+        brand: this.shopParams.brandName,
       },
       queryParamsHandling: 'merge',
     });
   }
-  onTypeSelected(typeId: number) {
-    this.shopParams.typeId = typeId;
+  onTypeSelected(typeName: string) {
+    this.shopParams.typeName = typeName;
     this.shopParams.pageNumber = 1;
+    console.log(typeName);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        type: this.types.find((b) => b.id === typeId).name.toLowerCase(),
+        type: this.shopParams.typeName,
       },
       queryParamsHandling: 'merge',
     });
@@ -123,9 +119,7 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        sort: this.sortOptions
-          .find((b) => b.value === sort)
-          .value.toLowerCase(),
+        sort: this.shopParams.sort,
       },
       queryParamsHandling: 'merge',
     });
@@ -143,13 +137,10 @@ export class ShopComponent implements OnInit {
   onSearch() {
     this.shopParams.search = this.searchTerm.nativeElement.value;
     this.shopParams.pageNumber = 1;
-    this.router.navigate(['/shop'], {
-      queryParams: { page: this.shopParams.pageNumber },
-    });
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        sort: this.shopParams.search.toLowerCase(),
+        search: this.shopParams.search.toLowerCase(),
       },
       queryParamsHandling: 'merge',
     });

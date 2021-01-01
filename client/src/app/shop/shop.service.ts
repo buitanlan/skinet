@@ -23,12 +23,13 @@ export class ShopService {
     return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
   getProducts(shopParams: ShopParams) {
+    console.log('faf', shopParams);
     let params = new HttpParams();
-    if (shopParams.brandId !== 0) {
-      params = params.append('brandId', shopParams.brandId.toString());
+    if (shopParams.brandName) {
+      params = params.append('brandName', shopParams.brandName);
     }
-    if (shopParams.typeId !== 0) {
-      params = params.append('typeId', shopParams.typeId.toString());
+    if (shopParams.typeName) {
+      params = params.append('typeName', shopParams.typeName);
     }
     if (shopParams.search) {
       params = params.append('search', shopParams.search);
