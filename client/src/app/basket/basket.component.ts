@@ -17,14 +17,15 @@ export class BasketComponent implements OnInit {
   ngOnInit(): void {
     this.basket$ = this.basketService.basket$;
   }
-  removeBasketItem(item: IBasketItem) {
-    this.basketService.removeItemFromBasket(item);
-  }
-  decrementItemQuantity(item: IBasketItem) {
-    this.basketService.decrementItemQuantity(item);
-  }
-  incrementItemQuantity(item: IBasketItem) {
-    this.basketService.incrementItemQuantity(item);
-  }
+  // removeBasketItem(item: IBasketItem) {
+  //   console.log(item);
+  //   this.basketService.removeItemFromBasket(item);
+  // }
+  // decrementItemQuantity(item: IBasketItem) {
+  //   this.basketService.decrementItemQuantity(item);
+  // }
+  // incrementItemQuantity(item: IBasketItem) {
+  //   this.basketService.incrementItemQuantity(item);
+  // }
 
 }
