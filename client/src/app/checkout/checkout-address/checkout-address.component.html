@@ -10,19 +10,28 @@
              <app-text-input [label]="'First Name'" formControlName="firstName"></app-text-input>
          </div>
          <div class="form-group col-6">
-            <app-text-input [label]="'Last Name'" formControlName="firstName"></app-text-input>
+            <app-text-input [label]="'Last Name'" formControlName="lastName"></app-text-input>
         </div>
         <div class="form-group col-6">
-            <app-text-input [label]="'Street'" formControlName="firstName"></app-text-input>
+            <app-text-input [label]="'Street'" formControlName="street"></app-text-input>
         </div>
         <div class="form-group col-6">
-            <app-text-input [label]="'City'" formControlName="firstName"></app-text-input>
+            <app-text-input [label]="'City'" formControlName="city"></app-text-input>
         </div>
         <div class="form-group col-6">
-            <app-text-input [label]="'State'" formControlName="firstName"></app-text-input>
+            <app-text-input [label]="'State'" formControlName="state"></app-text-input>
         </div>
         <div class="form-group col-6">
-            <app-text-input [label]="'ZipCode'" formControlName="firstName"></app-text-input>
+            <app-text-input [label]="'ZipCode'" formControlName="zipcode"></app-text-input>
         </div>
      </div>
+ </div>
+ <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+     <button class="btn btn-outline-primary" routerLink="/basket/">
+        <i class="fas fa-arrow-left"></i>  Back to Basket
+    </button>
+     
+     <button class="btn btn-primary" cdkStepperNext>
+        Go to Delivery <i class="fas fa-arrow-right"></i>
+     </button>
  </div>
