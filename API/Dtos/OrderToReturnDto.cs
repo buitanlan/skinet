@@ -8,7 +8,7 @@ namespace API.Dtos
     {
         public int Id { get; set; }
         public string BuyerEmail { get; set; }
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset OrderDate { get; set; } 
         public Address ShipToAddress { get; set; }
         public string DeliveryMethod { get; set; }
         public decimal ShippingPrice { get; set; }
