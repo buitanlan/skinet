@@ -43,13 +43,13 @@ namespace Infrastructure.Services
             var subtotal = items.Sum(item => item.Quantity * item.Quantity);
 
             // check  to see if order exists
-            var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
-            var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
-            if (existingOrder != null)
-            {
-                _unitOfWork.Repository<Order>().Delete(existingOrder);
-                await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
-            }
+            // var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
+            // var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+            // if (existingOrder != null)
+            // {
+            //     _unitOfWork.Repository<Order>().Delete(existingOrder);
+            //     await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
+            // }
 
             //create order 
             var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
