@@ -13,7 +13,7 @@ export class OrderDetailedComponent implements OnInit {
   order: IOrder;
 
   constructor(private route: ActivatedRoute, private breadcrumbService: BreadcrumbService, private ordersService: OrdersService) {
-    this.breadcrumbService.set('@OrderDetailed', '');
+    // this.breadcrumbService.set('@OrderDetailed', '');
   }
 
   ngOnInit(): void {

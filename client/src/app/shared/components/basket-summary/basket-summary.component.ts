@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { BasketService } from 'src/app/basket/basket.service';
-import { IBasket, IBasketItem } from '../../models/basket';
+import { IBasketItem } from '../../models/basket';
+import { IOrderItem } from '../../models/order';
 
 @Component({
   selector: 'app-basket-summary',
@@ -9,25 +8,26 @@ import { IBasket, IBasketItem } from '../../models/basket';
   styleUrls: ['./basket-summary.component.scss']
 })
 export class BasketSummaryComponent implements OnInit {
-  basket$: Observable<IBasket>;
 
-  @Input() isBasket: true;
-  // @Output() decrement: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-  // @Output() increment: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-  // @Output() remove: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-  constructor(private basketService: BasketService) { }
+  @Input() isBasket = true;
+  @Input() isOrder = false;
+  @Input() items: IBasketItem[] | IOrderItem[] = [];
+  @Output() decrement: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
+  @Output() increment: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
+  @Output() remove: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
+  constructor() { }
 
   ngOnInit(): void {
-    this.basket$ = this.basketService.basket$;
+    console.log(this.items);
   }
   removeBasketItem(item: IBasketItem) {
-    this.basketService.removeItemFromBasket(item);
+    this.remove.emit(item);
   }
   decrementItemQuantity(item: IBasketItem) {
-    this.basketService.decrementItemQuantity(item);
+    this.decrement.emit(item);
   }
   incrementItemQuantity(item: IBasketItem) {
-    this.basketService.incrementItemQuantity(item);
+    this.increment.emit(item);
   }
 
 }

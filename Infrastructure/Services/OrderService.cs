@@ -25,13 +25,14 @@ namespace Infrastructure.Services
         {
             //get basket from repo
             var basket = await _basketRepo.GetBasketAsync(basketId);
-
             //get item from produtc repo
             var items = new List<OrderItem>();
             foreach (var item in basket.Items)
             {
+                int index = item.PictureUrl.IndexOf("images/products/");
+                string pictureUrl = item.PictureUrl.Substring(index);
                 var productItem = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
-                var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.Photos.FirstOrDefault(x=>x.IsMain)?.PictureUrl);
+                var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, pictureUrl);
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
@@ -40,7 +41,7 @@ namespace Infrastructure.Services
             var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetByIdAsync(deliveryMethodId);
 
             //calc subtotal
-            var subtotal = items.Sum(item => item.Quantity * item.Quantity);
+            var subtotal = items.Sum(item => item.Quantity * item.Price);
 
             // check  to see if order exists
             // var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
@@ -53,6 +54,8 @@ namespace Infrastructure.Services
 
             //create order 
             var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
+            order.Total = subtotal + order.DeliveryMethod.Price;
+
             _unitOfWork.Repository<Order>().Add(order);
 
             // save to db
