@@ -40,6 +40,7 @@ export class BasketService {
     return this.http.get(this.baseUrl + 'basket?id=' + id).pipe(
       map((basket: IBasket) => {
         this.basketSource.next(basket);
+        this.shipping = basket.shippingPrice;
         this.calculateTotalPrice();
         this.calculateTotalQuantity();
       })
