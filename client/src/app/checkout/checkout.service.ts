@@ -14,7 +14,6 @@ export class CheckoutService {
   constructor( private http: HttpClient) { }
 
   createOrder(order: IOrderToCreate){
-    console.log(order);
     return this.http.post(this.baseUrl + 'orders', order);
   }
   getDeliveryMethod(){

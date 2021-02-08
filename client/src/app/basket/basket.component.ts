@@ -20,7 +20,6 @@ export class BasketComponent implements OnInit {
     this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
   }
   removeBasketItem(item: IBasketItem) {
-    console.log(item);
     this.basketService.removeItemFromBasket(item);
   }
   decrementItemQuantity(item: IBasketItem) {

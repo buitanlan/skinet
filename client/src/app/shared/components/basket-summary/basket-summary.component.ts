@@ -18,7 +18,6 @@ export class BasketSummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.items);
   }
   removeBasketItem(item: IBasketItem) {
     this.remove.emit(item);

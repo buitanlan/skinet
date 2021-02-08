@@ -23,7 +23,6 @@ export class ShopService {
     return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
   getProducts(shopParams: ShopParams) {
-    console.log('faf', shopParams);
     let params = new HttpParams();
     if (shopParams.brandName) {
       params = params.append('brandName', shopParams.brandName);

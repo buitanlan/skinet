@@ -38,8 +38,6 @@ export class ShopComponent implements OnInit {
       .subscribe((params) => {
         this.shopParams.pageNumber = params.page || 1;
       });
-    console.log('gdg', this.brands);
-    console.log('hhd', this.types);
     this.route.queryParams
       .subscribe((params) => {
         this.shopParams.sort = params.sort || 'name';
@@ -104,7 +102,6 @@ export class ShopComponent implements OnInit {
   onTypeSelected(typeName: string) {
     this.shopParams.typeName = typeName;
     this.shopParams.pageNumber = 1;
-    console.log(typeName);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
