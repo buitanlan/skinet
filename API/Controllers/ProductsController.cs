@@ -111,6 +111,13 @@ namespace API.Controllers
         public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
             var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+            foreach (var photo in product.Photos)
+            {
+                if (photo.Id > 18)
+                {
+                    _photoService.DeleteFromDisk(photo);
+                }
+            }
 
             _unitOfWork.Repository<Product>().Delete(product);
             var result = await _unitOfWork.Complete();
