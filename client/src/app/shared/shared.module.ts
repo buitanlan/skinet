@@ -41,6 +41,7 @@ import { RouterModule } from '@angular/router';
     CarouselModule,
     OrderTotalsComponent,
     ReactiveFormsModule,
+    FormsModule,
     BsDropdownModule,
     TextInputComponent,
     CdkStepperModule,

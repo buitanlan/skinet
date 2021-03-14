@@ -29,7 +29,9 @@ export class ShopComponent implements OnInit {
     private shopService: ShopService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.shopParams = this.shopService.getShopParams();
+  }
 
   ngOnInit(): void {
     this.getBrands();
@@ -46,18 +48,13 @@ export class ShopComponent implements OnInit {
         this.shopParams.typeName = params.type || 'all';
 
       });
-    this.getProducts();
+    this.getProducts(true);
   }
-  // tslint:disable-next-line:typedef
-  getProducts() {
-    this.shopService.getProducts(this.shopParams).pipe(
+  getProducts(useCache = false) {
+    this.shopService.getProducts(useCache).pipe(
     ).subscribe(
       (response: IPagination) => {
         this.products = response.data;
-
-        this.shopParams.pageNumber = response.pageIndex;
-
-        this.shopParams.pageSize = response.pageSize;
         this.totalCount = response.count;
       },
       (error) => {
@@ -65,7 +62,6 @@ export class ShopComponent implements OnInit {
       }
     );
   }
-  // tslint:disable-next-line:typedef
   getBrands() {
     this.shopService.getBrand().subscribe(
       (response: IBrand[]) => {
@@ -76,7 +72,6 @@ export class ShopComponent implements OnInit {
       }
     );
   }
-  // tslint:disable-next-line:typedef
   getTypes() {
     this.shopService.getType().subscribe(
       (response: IType[]) => {
@@ -87,10 +82,11 @@ export class ShopComponent implements OnInit {
       }
     );
   }
-  // tslint:disable-next-line:typedef
   onBrandSelected(brandName: string) {
-    this.shopParams.brandName = brandName;
-    this.shopParams.pageNumber = 1;
+    const params = this.shopService.getShopParams();
+    params.brandName = brandName;
+    params.pageNumber = 1;
+    this.shopService.setShopParams(params);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
@@ -100,8 +96,10 @@ export class ShopComponent implements OnInit {
     });
   }
   onTypeSelected(typeName: string) {
-    this.shopParams.typeName = typeName;
-    this.shopParams.pageNumber = 1;
+    const params = this.shopService.getShopParams();
+    params.typeName = typeName;
+    params.pageNumber = 1;
+    this.shopService.setShopParams(params);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
@@ -111,8 +109,10 @@ export class ShopComponent implements OnInit {
     });
   }
   onSortSelected(sort: string) {
-    this.shopParams.sort = sort;
-    this.shopParams.pageNumber = 1;
+    const params = this.shopService.getShopParams();
+    params.sort = sort;
+    params.pageNumber = 1;
+    this.shopService.setShopParams(params);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
@@ -122,9 +122,12 @@ export class ShopComponent implements OnInit {
     });
   }
   onPageChanged(event: number) {
-    if (this.shopParams.pageNumber !== event) {
-      this.shopParams.pageNumber = event;
-      this.getProducts();
+    const params = this.shopService.getShopParams();
+
+    if (params.pageNumber !== event) {
+      params.pageNumber = event;
+      this.shopService.setShopParams(params);
+      this.getProducts(true);
       this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
         queryParamsHandling: 'merge',
       });
@@ -132,8 +135,10 @@ export class ShopComponent implements OnInit {
   }
 
   onSearch() {
-    this.shopParams.search = this.searchTerm.nativeElement.value;
-    this.shopParams.pageNumber = 1;
+    const params = this.shopService.getShopParams();
+    params.search = this.searchTerm.nativeElement.value;
+    params.pageNumber = 1;
+    this.shopService.setShopParams(params);
     this.getProducts();
     this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
@@ -144,7 +149,8 @@ export class ShopComponent implements OnInit {
   }
   onReset() {
     this.searchTerm.nativeElement.value = '';
-    this.shopParams = new ShopParams();
+    const params = new ShopParams();
+    this.shopService.setShopParams(params);
     this.router.navigate(['/shop'], {
       queryParams: { page: this.shopParams.pageNumber },
     });
