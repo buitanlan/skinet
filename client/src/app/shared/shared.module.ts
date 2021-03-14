@@ -13,6 +13,7 @@ import { StepperComponent } from './components/stepper/stepper.component';
 import { BasketSummaryComponent } from './components/basket-summary/basket-summary.component';
 import { RouterModule } from '@angular/router';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 
 
 
@@ -35,7 +36,8 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     ReactiveFormsModule,
     CdkStepperModule,
     RouterModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    NgxGalleryModule
   ],
   exports: [
     PaginationModule,
@@ -50,7 +52,8 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     CdkStepperModule,
     StepperComponent,
     BasketSummaryComponent,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    NgxGalleryModule
   ]
 })
 export class SharedModule { }
