@@ -14,6 +14,7 @@ export class EditProductFormComponent implements OnInit {
   @Input() product: ProductFormValues;
   @Input() brands: IBrand[];
   @Input() types: IType[];
+  min = 1;
 
   constructor(private route: ActivatedRoute, private adminService: AdminService, private router: Router) { }
 

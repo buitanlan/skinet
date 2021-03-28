@@ -12,14 +12,13 @@ import { IUser } from '../shared/models/user';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
-  private currentUserSource = new BehaviorSubject<IUser>(null);
+  private currentUserSource = new ReplaySubject<IUser>(1);
   currentUser$ = this.currentUserSource.asObservable();
   private isAdminSource = new ReplaySubject<boolean>(1);
   isAdmin$ = this.isAdminSource.asObservable();
   constructor(private http: HttpClient, private router: Router) { }
-  getCurrentUserValue() {
-    return this.currentUserSource.value;
-  }
+
+
   loadCurrentUser(token: string) {
     if (token === null) {
       this.currentUserSource.next(null);
@@ -39,6 +38,9 @@ export class AccountService {
       })
     );
   }
+
+
+
   login(value: any) {
     return this.http.post(this.baseUrl + 'account/login', value).pipe(
       map((user: IUser) => {
@@ -51,6 +53,8 @@ export class AccountService {
       })
     );
   }
+
+
   register(value: any) {
      return this.http.post(this.baseUrl + 'account/register', value).pipe(
        map((user: IUser) => {
@@ -61,22 +65,29 @@ export class AccountService {
        })
      );
   }
+
+
   logout() {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
+    this.isAdminSource.next(null);
     this.router.navigateByUrl('/');
   }
   checkEmailExists(email: string) {
     return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
   }
 
+
   getUserAddress(){
     return this.http.get<IAddress>(this.baseUrl + 'account/address');
   }
 
+
   updateUserAddress(address: IAddress){
     return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
   }
+
+
   isAdmin(token: string): boolean {
     if (token) {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));

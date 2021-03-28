@@ -7,17 +7,20 @@ import { map } from 'rxjs/operators';
 import { ShopParams } from '../shared/models/shopParams';
 import { IProduct } from '../shared/models/product';
 import { of } from 'rxjs';
+import { env } from 'process';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
   products: IProduct[] = [];
   brands: IBrand[] = [];
   types: IType[] = [];
   pagination = new Pagination();
   shopParams = new ShopParams();
+  productCache = new Map();
 
   constructor(private http: HttpClient) {}
   getBrand() {
@@ -42,28 +45,35 @@ export class ShopService {
        })
     );
   }
+
+
   getProduct(id: number) {
-    const product = this.products.find(p => p.id === id);
+    let product: IProduct;
+    this.productCache.forEach((products: IProduct[]) => {
+      console.log(product);
+      product = products.find(p => p.id === id);
+    });
+
     if (product) {
       return of(product);
     }
+
     return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
+
+
   getProducts(useCache: boolean) {
     if (useCache === false) {
-      this.products = [];
+      this.productCache = new Map();
     }
 
-    if (this.products.length > 0 && useCache === true) {
-      const pagesReceived = Math.ceil(this.products.length / this.shopParams.pageSize);
-
-      if (this.shopParams.pageNumber <= pagesReceived) {
-        this.pagination.data =
-          this.products.slice((this.shopParams.pageNumber - 1) * this.shopParams.pageSize,
-            this.shopParams.pageNumber * this.shopParams.pageSize);
+    if (this.productCache.size > 0 && useCache === true) {
+      if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
+        this.pagination.data = this.productCache.get(Object.values(this.shopParams).join('-'));
         return of(this.pagination);
       }
     }
+
     let params = new HttpParams();
     if (this.shopParams.brandName) {
       params = params.append('brandName', this.shopParams.brandName);
@@ -84,12 +94,14 @@ export class ShopService {
       })
       .pipe(
         map((response) => {
-          this.products = [...this.products, ...response.body.data];
+          this.productCache.set(Object.values(this.shopParams).join('-'), response.body.data);
           this.pagination = response.body;
-          return response.body;
+          return this.pagination;
         })
       );
   }
+
+
   setShopParams(params: ShopParams): void {
     this.shopParams = params;
   }

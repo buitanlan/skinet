@@ -23,7 +23,7 @@ export class TextInputComponent implements OnInit, ControlValueAccessor {
     control.updateValueAndValidity();
 
   }
-  onChange(event) {
+  onChange(event: any) {
   }
   onTouched(){}
   writeValue(obj: any): void {

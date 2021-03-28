@@ -4,7 +4,7 @@
       <h5 class="text-warning ml-4 mt-4 mb-3">Sort</h5>
       <select
         class="custom-select mb-4"
-        (change)="onSortSelected($event.target.value)"
+        (change)="onSortSelected($event)"
         [(ngModel)]="this.shopParams.sort"
       >
         <option *ngFor="let sort of sortOptions" [value]="sort.value">

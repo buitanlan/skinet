@@ -6,7 +6,6 @@ import { IProduct } from '../shared/models/product';
 import { ShopParams } from '../shared/models/shopParams';
 import { IType } from '../shared/models/type';
 import { ShopService } from './shop.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shop',
@@ -33,6 +32,7 @@ export class ShopComponent implements OnInit {
     this.shopParams = this.shopService.getShopParams();
   }
 
+
   ngOnInit(): void {
     this.getBrands();
     this.getTypes();
@@ -50,6 +50,8 @@ export class ShopComponent implements OnInit {
       });
     this.getProducts(true);
   }
+
+
   getProducts(useCache = false) {
     this.shopService.getProducts(useCache).pipe(
     ).subscribe(
@@ -62,6 +64,8 @@ export class ShopComponent implements OnInit {
       }
     );
   }
+
+
   getBrands() {
     this.shopService.getBrand().subscribe(
       (response: IBrand[]) => {
@@ -72,6 +76,8 @@ export class ShopComponent implements OnInit {
       }
     );
   }
+
+
   getTypes() {
     this.shopService.getType().subscribe(
       (response: IType[]) => {
@@ -82,6 +88,8 @@ export class ShopComponent implements OnInit {
       }
     );
   }
+
+
   onBrandSelected(brandName: string) {
     const params = this.shopService.getShopParams();
     params.brandName = brandName;
@@ -95,6 +103,8 @@ export class ShopComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+
   onTypeSelected(typeName: string) {
     const params = this.shopService.getShopParams();
     params.typeName = typeName;
@@ -108,7 +118,10 @@ export class ShopComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
-  onSortSelected(sort: string) {
+
+
+  onSortSelected(event: Event) {
+    const sort = (event.target as HTMLSelectElement).value;
     const params = this.shopService.getShopParams();
     params.sort = sort;
     params.pageNumber = 1;
@@ -121,6 +134,8 @@ export class ShopComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+
   onPageChanged(event: number) {
     const params = this.shopService.getShopParams();
 
@@ -133,6 +148,8 @@ export class ShopComponent implements OnInit {
       });
     }
   }
+
+
 
   onSearch() {
     const params = this.shopService.getShopParams();
@@ -147,6 +164,8 @@ export class ShopComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+
   onReset() {
     this.searchTerm.nativeElement.value = '';
     const params = new ShopParams();
