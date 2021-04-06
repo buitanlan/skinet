@@ -13,7 +13,7 @@
             <i class="fas fa-shopping-cart mr-5 text-dark cart"></i>
             <div *ngIf="(basket$ |async) as basket">
                 <div *ngIf="basketTotalQuantity$ | async" class="cart-no">
-                    {{(basketTotalQuantity$ | async).quantity}}
+                    {{(basketTotalQuantity$ | async)?.quantity}}
                 </div>
             </div>
         </a>
@@ -24,7 +24,7 @@
         <ng-container *ngIf="(currentUser$ | async)">
             <div class="dropdown ml-3 mr-5" dropdown>
                 <a class="dropdown-toggle" style="cursor:pointer" dropdownToggle>
-                    <strong>Welcome {{(currentUser$ | async).displayName}}</strong>
+                    <strong>Welcome {{(currentUser$ | async)!.displayName}}</strong>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;" *dropdownMenu>
                     <a routerLink="/basket" class="dropdown-item d-flex align-items-center py-2">

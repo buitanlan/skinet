@@ -13,10 +13,10 @@ import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOpt
   styleUrls: ['./products-details.component.scss']
 })
 export class ProductsDetailsComponent implements OnInit {
-  product: IProduct;
+  product = {} as IProduct;
   quantity = 1;
-  galleryOptions: NgxGalleryOptions[];
-  galleryImages: NgxGalleryImage[];
+  galleryOptions!: NgxGalleryOptions[];
+  galleryImages!: NgxGalleryImage[];
   constructor(private shopService: ShopService,
               private activatedRoute: ActivatedRoute,
               private bcService: BreadcrumbService,
@@ -65,7 +65,7 @@ export class ProductsDetailsComponent implements OnInit {
     }
   }
   loadProduct() {
-    this.shopService.getProduct(+this.activatedRoute.snapshot.paramMap.get('id')).subscribe(product => {
+    this.shopService.getProduct(Number(this.activatedRoute.snapshot.paramMap.get('id'))).subscribe(product => {
       this.product = product;
       this.bcService.set('@productDetails', product.name);
       this.initializeGallery();

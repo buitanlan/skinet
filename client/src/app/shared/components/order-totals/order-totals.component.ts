@@ -7,9 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./order-totals.component.scss']
 })
 export class OrderTotalsComponent implements OnInit {
-  @Input() shippingPrice: number;
-  @Input() subtotal: number;
-  @Input() total: number;
+  @Input() shippingPrice = 0;
+  @Input() subtotal = 0;
+  @Input() total = 0;
   constructor() { }
 
   ngOnInit(): void {

@@ -10,8 +10,8 @@ import { AdminService } from './admin.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  products: IProduct[];
-  totalCount: number;
+  products: IProduct[] = {} as IProduct[];
+  totalCount = 0;
   shopParams: ShopParams;
 
   constructor(private shopService: ShopService, private adminService: AdminService) {

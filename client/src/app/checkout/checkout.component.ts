@@ -12,8 +12,8 @@ import { IBasketTotals } from '../shared/models/basket';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  basketTotalPrice$: Observable<IBasketTotals>;
-  checkoutForm: FormGroup;
+  basketTotalPrice$!: Observable<IBasketTotals>;
+  checkoutForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -49,7 +49,7 @@ export class CheckoutComponent implements OnInit {
   getAddressFromValues(){
     this.accountService.getUserAddress().subscribe(address => {
       if (address){
-        this.checkoutForm.get('addressForm').patchValue(address);
+        this.checkoutForm?.get('addressForm')?.patchValue(address);
       }
     }, err => {
       console.log(err);
@@ -60,7 +60,7 @@ export class CheckoutComponent implements OnInit {
     const basket = this.basketService.getCurrentBasketValue();
     if (basket.deliveryMethodId !== null)
     {
-      this.checkoutForm.get('deliveryForm').get('deliveryMethod').patchValue(basket.deliveryMethodId.toString());
+      this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
     }
   }
 

@@ -7,7 +7,6 @@ import { map } from 'rxjs/operators';
 import { ShopParams } from '../shared/models/shopParams';
 import { IProduct } from '../shared/models/product';
 import { of } from 'rxjs';
-import { env } from 'process';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -94,7 +93,7 @@ export class ShopService {
       })
       .pipe(
         map((response) => {
-          this.productCache.set(Object.values(this.shopParams).join('-'), response.body.data);
+          this.productCache.set(Object.values(this.shopParams).join('-'), response.body?.data);
           this.pagination = response.body;
           return this.pagination;
         })

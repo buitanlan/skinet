@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IAddress } from '../shared/models/address';
@@ -19,15 +19,15 @@ export class AccountService {
   constructor(private http: HttpClient, private router: Router) { }
 
 
-  loadCurrentUser(token: string) {
+  loadCurrentUser(token: string): Observable<any> {
     if (token === null) {
-      this.currentUserSource.next(null);
-      return of(null);
+      this.currentUserSource.next(undefined);
+      return of(undefined);
     }
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get(this.baseUrl + 'account', { headers }).pipe(
+    return this.http.get<IUser>(this.baseUrl + 'account', { headers }).pipe(
       map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
@@ -42,7 +42,7 @@ export class AccountService {
 
 
   login(value: any) {
-    return this.http.post(this.baseUrl + 'account/login', value).pipe(
+    return this.http.post<IUser>(this.baseUrl + 'account/login', value).pipe(
       map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
@@ -56,7 +56,7 @@ export class AccountService {
 
 
   register(value: any) {
-     return this.http.post(this.baseUrl + 'account/register', value).pipe(
+     return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
        map((user: IUser) => {
          if (user) {
            localStorage.setItem('token', user.token);
@@ -69,8 +69,8 @@ export class AccountService {
 
   logout() {
     localStorage.removeItem('token');
-    this.currentUserSource.next(null);
-    this.isAdminSource.next(null);
+    this.currentUserSource.next(undefined);
+    this.isAdminSource.next(undefined);
     this.router.navigateByUrl('/');
   }
   checkEmailExists(email: string) {
@@ -88,12 +88,18 @@ export class AccountService {
   }
 
 
-  isAdmin(token: string): boolean {
+  isAdmin(token: string): boolean | undefined {
     if (token) {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       if (decodedToken.role.indexOf('Admin') > -1) {
         return true;
       }
+      else{
+        return undefined;
+      }
+    }
+    else {
+      return undefined;
     }
   }
 }

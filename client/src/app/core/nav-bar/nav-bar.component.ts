@@ -12,10 +12,10 @@ import { IUser } from 'src/app/shared/models/user';
 })
 export class NavBarComponent implements OnInit {
 
-  basket$: Observable<IBasket>;
-  currentUser$: Observable<IUser>;
-  basketTotalQuantity$: Observable<IBasketQuantity>;
-  isAdmin$: Observable<boolean>;
+  basket$!: Observable<IBasket>;
+  currentUser$!: Observable<IUser>;
+  basketTotalQuantity$!: Observable<IBasketQuantity>;
+  isAdmin$!: Observable<boolean>;
 
   constructor(private basketService: BasketService, private accountService: AccountService) { }
 

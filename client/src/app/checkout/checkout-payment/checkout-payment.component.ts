@@ -4,10 +4,10 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BasketService } from 'src/app/basket/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
-import { IOrder } from 'src/app/shared/models/order';
+import { IOrder, IOrderToCreate } from 'src/app/shared/models/order';
 import { CheckoutService } from '../checkout.service';
 
-declare var Stripe;
+declare var Stripe: (arg0: string) => any;
 
 @Component({
   selector: 'app-checkout-payment',
@@ -15,10 +15,10 @@ declare var Stripe;
   styleUrls: ['./checkout-payment.component.scss']
 })
 export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
-  @Input() checkoutForm: FormGroup;
-  @ViewChild('cardNumber', {static: true}) cardNumberElement: ElementRef;
-  @ViewChild('cardExpiry', {static: true}) cardExpiryElement: ElementRef;
-  @ViewChild('cardCvc', {static: true}) cardCvcElement: ElementRef;
+  @Input() checkoutForm!: FormGroup;
+  @ViewChild('cardNumber', {static: true}) cardNumberElement!: ElementRef;
+  @ViewChild('cardExpiry', {static: true}) cardExpiryElement!: ElementRef;
+  @ViewChild('cardCvc', {static: true}) cardCvcElement!: ElementRef;
   stripe: any;
   cardNumber: any;
   cardExpiry: any;
@@ -56,7 +56,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardExpiry.destroy();
   }
 
-  onChange({error}){
+  onChange({error}: any){
     if (error) {
       this.cardErrors = error.message;
     } else {
@@ -73,10 +73,10 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
         payment_method: {
           card: this.cardNumber,
           billing_details: {
-            name: this.checkoutForm.get('paymentForm').get('nameOnCard').value
+            name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
           }
         }
-      }).then(result => {
+      }).then((result: any) => {
         console.log(result);
         if (result.paymentIntent) {
           this.basketService.deleteLocalBasket(basket.id);
@@ -96,8 +96,8 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     if (basket.id){
       return{
         basketId: basket.id,
-        deliveryMethodId: +this.checkoutForm.get('deliveryForm').get('deliveryMethod').value,
-        shipToAddress: this.checkoutForm.get('addressForm').value
+        deliveryMethodId: +this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
+        shipToAddress: this.checkoutForm?.get('addressForm')?.value
       };
     }
   }
