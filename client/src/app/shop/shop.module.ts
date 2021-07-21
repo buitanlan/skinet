@@ -7,9 +7,17 @@ import { ProductsDetailsComponent } from './products-details/products-details.co
 import { RouterModule } from '@angular/router';
 import { ShopRoutingModule } from './shop-routing.module';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [ShopComponent, ProductItemComponent, ProductsDetailsComponent],
-  imports: [CommonModule, SharedModule, RouterModule, ShopRoutingModule, FormsModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule,
+    ShopRoutingModule,
+    FormsModule,
+    BrowserModule
+  ],
 })
 export class ShopModule {}
