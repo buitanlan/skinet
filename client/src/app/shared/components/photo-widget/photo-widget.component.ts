@@ -1,5 +1,6 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {ImageCroppedEvent, base64ToFile} from 'ngx-image-cropper';
+import { Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
+import { ImageCroppedEvent, base64ToFile} from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-photo-widget',
@@ -10,29 +11,30 @@ export class PhotoWidgetComponent implements OnInit {
   @Output() addFile = new EventEmitter();
   files: File[] = [];
   imageChangedEvent: any = '';
-  croppedImage: any = '';
+  croppedImage: string | null = null;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
+  fileChangeEvent(file: File): void {
+    this.imageChangedEvent = file;
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
+    this.croppedImage = event.base64 ?? null;
   }
 
-  onSelect(event) {
+  onSelect(event: NgxDropzoneChangeEvent) {
     this.files = [];
     this.files.push(...event.addedFiles);
     this.fileChangeEvent(this.files[0]);
   }
 
   onUpload() {
-    console.log(base64ToFile(this.croppedImage));
-    this.addFile.emit(base64ToFile(this.croppedImage));
+    if (this.croppedImage) {
+      this.addFile.emit(base64ToFile(this.croppedImage));
+    }
   }
 }

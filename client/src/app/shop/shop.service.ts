@@ -47,17 +47,17 @@ export class ShopService {
 
 
   getProduct(id: number) {
-    let product: IProduct;
+    let product: IProduct | undefined;
     this.productCache.forEach((products: IProduct[]) => {
-      console.log(product);
       product = products.find(p => p.id === id);
     });
 
     if (product) {
       return of(product);
-    }
+    } else {
+      return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
 
-    return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
+    }
   }
 
 
@@ -94,7 +94,7 @@ export class ShopService {
       .pipe(
         map((response) => {
           this.productCache.set(Object.values(this.shopParams).join('-'), response.body?.data);
-          this.pagination = response.body;
+          this.pagination = response.body ?? {} as IPagination;
           return this.pagination;
         })
       );

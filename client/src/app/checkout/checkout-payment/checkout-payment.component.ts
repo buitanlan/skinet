@@ -65,41 +65,42 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   }
   submitOrder(){
     const basket = this.basketService.getCurrentBasketValue();
-    const orderToCreate = this.getOrderToCreate(basket);
+    if (basket?.id) {
+      const orderToCreate = this.getOrderToCreate(basket);
 
-    this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrder) => {
-      this.toastr.success('Order created successfully');
-      this.stripe.confirmCardPayment(basket.clientSecret, {
-        payment_method: {
-          card: this.cardNumber,
-          billing_details: {
-            name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+      this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrderToCreate) => {
+        this.toastr.success('Order created successfully');
+        this.stripe.confirmCardPayment(basket.clientSecret, {
+          payment_method: {
+            card: this.cardNumber,
+            billing_details: {
+              name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+            }
           }
-        }
-      }).then((result: any) => {
-        console.log(result);
-        if (result.paymentIntent) {
-          this.basketService.deleteLocalBasket(basket.id);
-          const  navigationExtras: NavigationExtras = {state: order};
-          this.router.navigate(['checkout/success'], navigationExtras);
-        } else {
-          this.toastr.error('Payment error');
-        }
+        }).then((result: any) => {
+          console.log(result);
+          if (result.paymentIntent) {
+            this.basketService.deleteLocalBasket(basket.id);
+            const navigationExtras: NavigationExtras = { state: order };
+            this.router.navigate(['checkout/success'], navigationExtras);
+          } else {
+            this.toastr.error('Payment error');
+          }
+        });
+      }, error => {
+        this.toastr.error(error.message);
+        console.log(error);
       });
-    }, error => {
-      this.toastr.error(error.message);
-      console.log(error);
-    });
+    }
   }
 
-  private getOrderToCreate(basket: IBasket){
-    if (basket.id){
-      return{
+  private getOrderToCreate(basket: IBasket) {
+      const orderToCreate = {
         basketId: basket.id,
-        deliveryMethodId: +this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
+        deliveryMethodId: + this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
         shipToAddress: this.checkoutForm?.get('addressForm')?.value
-      };
-    }
+      } as IOrderToCreate;
+      return orderToCreate;
   }
 
 }

@@ -10,8 +10,8 @@ import { CheckoutService } from '../checkout.service';
   styleUrls: ['./checkout-delivery.component.scss']
 })
 export class CheckoutDeliveryComponent implements OnInit {
-  @Input() checkoutForm: FormGroup;
-  deliveryMethods: IDeliveryMethod[];
+  @Input() checkoutForm!: FormGroup;
+  deliveryMethods = [] as IDeliveryMethod[];
 
   constructor(private checkoutService: CheckoutService, private basketService: BasketService) { }
 

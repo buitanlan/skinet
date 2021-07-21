@@ -13,11 +13,11 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./edit-product.component.scss']
 })
 export class EditProductComponent implements OnInit {
-  product: IProduct;
+  product = {} as IProduct;
 
   productFormValues: ProductFormValues;
-  brands: IBrand[];
-  types: IType[];
+  brands = [] as IBrand[];
+  types = [] as IType[];
 
   constructor(private adminService: AdminService,
               private shopService: ShopService,
@@ -46,9 +46,9 @@ export class EditProductComponent implements OnInit {
   }
 
   loadProduct() {
-    this.shopService.getProduct(+this.route.snapshot.paramMap.get('id')).subscribe((response: any) => {
-      const productBrandId = this.brands && this.brands.find(x => x.name === response.productBrand).id;
-      const productTypeId = this.types && this.types.find(x => x.name === response.productType).id;
+    this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: any) => {
+      const productBrandId = this.brands && this.brands.find(x => x.name === response.productBrand)?.id;
+      const productTypeId = this.types && this.types.find(x => x.name === response.productType)?.id;
       this.product = { ...response, productBrandId, productTypeId };
       this.product = response;
       this.productFormValues = {...response, productBrandId, productTypeId};
@@ -66,7 +66,7 @@ export class EditProductComponent implements OnInit {
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
       const updatedProduct = {...this.product, ...product, price: +product.price};
-      this.adminService.updateProduct(updatedProduct, +this.route.snapshot.paramMap.get('id')).subscribe((response: any) => {
+      this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: any) => {
         this.router.navigate(['/admin']);
       });
     } else {

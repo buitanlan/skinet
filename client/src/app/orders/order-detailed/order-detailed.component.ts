@@ -10,14 +10,14 @@ import { OrdersService } from '../orders.service';
   styleUrls: ['./order-detailed.component.scss']
 })
 export class OrderDetailedComponent implements OnInit {
-  order: IOrder;
+  order = {} as IOrder;
 
   constructor(private route: ActivatedRoute, private breadcrumbService: BreadcrumbService, private ordersService: OrdersService) {
-    // this.breadcrumbService.set('@OrderDetailed', '');
+    this.breadcrumbService.set('@OrderDetailed', '');
   }
 
   ngOnInit(): void {
-    this.ordersService.getOrderDetailed(+this.route.snapshot.paramMap.get('id'))
+    this.ordersService.getOrderDetailed(Number(this.route.snapshot.paramMap.get('id')))
     .subscribe((order: IOrder) => {
     this.order = order;
     this.breadcrumbService.set('@OrderDetailed', `Order# ${order.id} - ${order.status}`);

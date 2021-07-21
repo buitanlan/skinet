@@ -9,7 +9,7 @@ import { AccountService } from 'src/app/account/account.service';
   styleUrls: ['./checkout-address.component.scss']
 })
 export class CheckoutAddressComponent implements OnInit {
-  @Input() checkoutForm: FormGroup;
+  @Input() checkoutForm!: FormGroup;
 
   constructor(private accountService: AccountService, private toastr: ToastrService) {
 
@@ -18,7 +18,7 @@ export class CheckoutAddressComponent implements OnInit {
   ngOnInit(): void {
   }
   saveUserAddress(){
-    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm').value)
+    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value)
     .subscribe(() => {
       this.toastr.success('Address saved');
 

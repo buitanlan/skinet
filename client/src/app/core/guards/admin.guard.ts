@@ -16,10 +16,13 @@ export class AdminGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> {
     return this.accountService.isAdmin$.pipe(
       map(admin => {
+        this.router.navigateByUrl('/');
         if (admin) {
           return true;
         }
-        this.router.navigateByUrl('/');
+        else {
+          return false;
+        }
       })
     );
   }

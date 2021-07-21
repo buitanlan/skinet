@@ -10,8 +10,8 @@ import { IBasket } from 'src/app/shared/models/basket';
   styleUrls: ['./checkout-review.component.scss']
 })
 export class CheckoutReviewComponent implements OnInit {
-  @Input() appStepper: CdkStepper;
-  basket$: Observable<IBasket>;
+  @Input() appStepper!: CdkStepper;
+  basket$!: Observable<IBasket | null>;
 
   constructor(private basketService: BasketService, private toastr: ToastrService) { }
 

@@ -9,8 +9,8 @@ import { BasketService } from './basket.service';
   styleUrls: ['./basket.component.scss']
 })
 export class BasketComponent implements OnInit {
-  basket$: Observable<IBasket>;
-  basketTotalPrice$: Observable<IBasketTotals>;
+  basket$!: Observable<IBasket | null>;
+  basketTotalPrice$!: Observable<IBasketTotals | null>;
 
   constructor(private basketService: BasketService) {
   }

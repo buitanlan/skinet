@@ -1,7 +1,7 @@
  <div class="form-label-group">
     <input 
-        [ngClass]="(controlDir && controlDir.control &&
-        controlDir.control.touched) ? !controlDir.control.valid ? 'is-invalid': 'is-valid': null"
+        [ngClass]="(controlDir && controlDir?.control &&
+        controlDir?.control?.touched) ? !controlDir?.control?.valid ? 'is-invalid': 'is-valid': 'null'"
         [type]="type" 
         (input)="onChange($any($event.target).value)" 
         (blur)="onTouched()"

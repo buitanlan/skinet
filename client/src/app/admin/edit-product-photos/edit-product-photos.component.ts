@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {IPhoto, IProduct} from '../../shared/models/product';
 import {AdminService} from '../admin.service';
 import {ToastrService} from 'ngx-toastr';
-import {HttpEvent, HttpEventType} from '@angular/common/http';
+import {HttpEvent, HttpEventType, HttpProgressEvent} from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-product-photos',
@@ -10,7 +10,7 @@ import {HttpEvent, HttpEventType} from '@angular/common/http';
   styleUrls: ['./edit-product-photos.component.scss']
 })
 export class EditProductPhotosComponent implements OnInit {
-  @Input() product: IProduct;
+  @Input() product = {} as IProduct;
   progress = 0;
   addPhotoMode = false;
 
@@ -27,7 +27,9 @@ export class EditProductPhotosComponent implements OnInit {
     this.adminService.uploadImage(file, this.product.id).subscribe((event: HttpEvent<any>) => {
       switch (event.type) {
         case HttpEventType.UploadProgress:
-          this.progress = Math.round(event.loaded / event.total * 100);
+          if (event.total) {
+            this.progress = Math.round(event.loaded / event.total * 100);
+          }
           break;
         case HttpEventType.Response:
           this.product = event.body;

@@ -9,8 +9,8 @@ import { AccountService } from '../account.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
-  returnUrl: string;
+  loginForm!: FormGroup;
+  returnUrl!: string;
 
   constructor(
     private accountService: AccountService,

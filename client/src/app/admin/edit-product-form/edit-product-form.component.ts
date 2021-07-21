@@ -11,9 +11,9 @@ import { IType } from 'src/app/shared/models/type';
   styleUrls: ['./edit-product-form.component.scss']
 })
 export class EditProductFormComponent implements OnInit {
-  @Input() product: ProductFormValues;
-  @Input() brands: IBrand[];
-  @Input() types: IType[];
+  @Input() product = new ProductFormValues();
+  @Input() brands: IBrand[] = [];
+  @Input() types: IType[] = [];
   min = 1;
 
   constructor(private route: ActivatedRoute, private adminService: AdminService, private router: Router) { }
@@ -24,7 +24,8 @@ export class EditProductFormComponent implements OnInit {
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
       const updatedProduct = {...this.product, ...product, price: +product.price};
-      this.adminService.updateProduct(updatedProduct, +this.route.snapshot.paramMap.get('id')).subscribe((response: any) => {
+      this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id')))
+        .subscribe((response: any) => {
         this.router.navigate(['/admin']);
       });
     } else {
@@ -34,6 +35,7 @@ export class EditProductFormComponent implements OnInit {
       });
     }
   }
+
 
   updatePrice(event: any) {
     this.product.price = event;
