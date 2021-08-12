@@ -19,10 +19,10 @@ export class EditProductComponent implements OnInit {
   brands = [] as IBrand[];
   types = [] as IType[];
 
-  constructor(private adminService: AdminService,
-              private shopService: ShopService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(private readonly adminService: AdminService,
+              private readonly shopService: ShopService,
+              private readonly route: ActivatedRoute,
+              private readonly router: Router) {
     this.productFormValues = new ProductFormValues();
   }
 
