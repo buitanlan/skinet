@@ -16,8 +16,7 @@ import { BrowserModule } from '@angular/platform-browser';
     SharedModule,
     RouterModule,
     ShopRoutingModule,
-    FormsModule,
-    BrowserModule
+    FormsModule
   ],
 })
 export class ShopModule {}
