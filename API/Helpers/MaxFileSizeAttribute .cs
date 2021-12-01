@@ -1,34 +1,32 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 
-namespace API.Helpers
+namespace API.Helpers;
+
+public class MaxFileSizeAttribute : ValidationAttribute
 {
-    public class MaxFileSizeAttribute : ValidationAttribute
+    private readonly int _maxFileSize;
+    public MaxFileSizeAttribute(int maxFileSize)
     {
-        private readonly int _maxFileSize;
-        public MaxFileSizeAttribute(int maxFileSize)
-        {
-            _maxFileSize = maxFileSize;
-        }
+        _maxFileSize = maxFileSize;
+    }
 
-        protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+    protected override ValidationResult IsValid(
+        object value, ValidationContext validationContext)
+    {
+        var file = value as IFormFile;
+        if (file is { })
         {
-            var file = value as IFormFile;
-            if (file is { })
+            if (file.Length > _maxFileSize)
             {
-                if (file.Length > _maxFileSize)
-                {
-                    return new ValidationResult(GetErrorMessage());
-                }
+                return new ValidationResult(GetErrorMessage());
             }
-
-            return ValidationResult.Success;
         }
 
-        private string GetErrorMessage()
-        {
-            return $"Maximum allowed file size is { _maxFileSize} bytes.";
-        }
+        return ValidationResult.Success;
+    }
+
+    private string GetErrorMessage()
+    {
+        return $"Maximum allowed file size is { _maxFileSize} bytes.";
     }
 }
