@@ -27,9 +27,9 @@ namespace Infrastructure.Data
 
         public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
         {
-            if(_repositories == null) _repositories = new Hashtable();
+            if (_repositories is null) _repositories = new Hashtable();
             var type = typeof(TEntity).Name;
-            if(!_repositories.ContainsKey(type))
+            if (!_repositories.ContainsKey(type))
             {
                 var repositoryType = typeof(GenericRepository<>);
                 var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _context);

@@ -18,10 +18,10 @@ namespace API.Helpers
         {
             var file = value as IFormFile;
 
-            if (file != null)
+            if (file is { })
             {
                 var extension = Path.GetExtension(file.FileName);
-                if (extension != null && !_extensions.Contains(extension.ToLower()))
+                if (extension is { } && !_extensions.Contains(extension.ToLower()))
                 {
                     return new ValidationResult(GetErrorMessage());
                 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class BuggyController :BaseApiController
+    public class BuggyController : BaseApiController
     {
         private readonly StoreContext _context;
         public BuggyController(StoreContext context)
@@ -15,7 +15,7 @@ namespace API.Controllers
         public ActionResult GetNotFoundRequest()
         {
             var thing = _context.Products.Find(42);
-            if (thing == null)
+            if (thing is null)
             {
                 return NotFound(new ApiResponse(404));
             }

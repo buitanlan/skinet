@@ -46,7 +46,7 @@ namespace Infrastructure.Services
             // check  to see if order exists
             // var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
             // var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
-            // if (existingOrder != null)
+            // if (existingOrder is {})
             // {
             //     _unitOfWork.Repository<Order>().Delete(existingOrder);
             //     await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);

@@ -15,7 +15,7 @@ namespace API.Helpers
             object value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
-            if (file != null)
+            if (file is { })
             {
                 if (file.Length > _maxFileSize)
                 {

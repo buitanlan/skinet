@@ -183,7 +183,7 @@ namespace Infrastructure.Identity.Migrations
                 table: "Address",
                 column: "AppUserId",
                 unique: true,
-                filter: "[AppUserId] IS NOT NULL");
+                filter: "[AppUserId] is {}");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -195,7 +195,7 @@ namespace Infrastructure.Identity.Migrations
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                filter: "[NormalizedName] is {}");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -222,7 +222,7 @@ namespace Infrastructure.Identity.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                filter: "[NormalizedUserName] is {}");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

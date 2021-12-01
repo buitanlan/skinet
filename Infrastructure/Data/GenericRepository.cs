@@ -34,7 +34,8 @@ namespace Infrastructure.Data
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            var t = ApplySpecification(spec);
+            return await    t.ToListAsync();
         }
         public async Task<int> CountAsync(ISpecification<T> spec)
         {

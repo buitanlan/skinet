@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
 using API.Helpers;
@@ -9,7 +6,6 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -29,7 +25,7 @@ namespace API.Controllers
         }
 
 
-        [Cached(600)]
+       // [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
             [FromQuery] ProductSpecParams productParams)
@@ -53,7 +49,7 @@ namespace API.Controllers
         {
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
             var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
-            if (product == null) return NotFound(new ApiResponse(404));
+            if (product is null) return NotFound(new ApiResponse(404));
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
 
@@ -139,7 +135,7 @@ namespace API.Controllers
             {
                 var photo = await _photoService.SaveToDiskAsync(photoDto.Photo);
 
-                if (photo != null)
+                if (photo is { })
                 {
                     product.AddPhoto(photo.PictureUrl, photo.FileName);
 
@@ -168,7 +164,7 @@ namespace API.Controllers
 
             var photo = product.Photos.SingleOrDefault(x => x.Id == photoId);
 
-            if (photo != null)
+            if (photo is { })
             {
                 if (photo.IsMain)
                     return BadRequest(new ApiResponse(400,

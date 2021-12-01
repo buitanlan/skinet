@@ -51,7 +51,7 @@ namespace Infrastructure.Identity.Migrations
 
                     b.HasIndex("AppUserId")
                         .IsUnique()
-                        .HasFilter("[AppUserId] IS NOT NULL");
+                        .HasFilter("[AppUserId] is {}");
 
                     b.ToTable("Address");
                 });
@@ -119,7 +119,7 @@ namespace Infrastructure.Identity.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasFilter("[NormalizedUserName] is {}");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -146,7 +146,7 @@ namespace Infrastructure.Identity.Migrations
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasFilter("[NormalizedName] is {}");
 
                     b.ToTable("AspNetRoles");
                 });

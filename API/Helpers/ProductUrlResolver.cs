@@ -22,11 +22,11 @@ namespace API.Helpers
             // return null;
             var photo = source.Photos.FirstOrDefault(x => x.IsMain);
 
-            if (photo != null)
+            if (photo is { })
             {
                 return _config["ApiUrl"] + photo.PictureUrl;
             }
-            return _config["ApiUrl"] +"images/products/placeholder.png";
+            return _config["ApiUrl"] + "images/products/placeholder.png";
         }
     }
 }

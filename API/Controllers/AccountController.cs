@@ -44,7 +44,7 @@ namespace API.Controllers
         [HttpGet("emailexists")]
         public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
         {
-            return await _userManager.FindByEmailAsync(email) != null;
+            return await _userManager.FindByEmailAsync(email) is { };
         }
 
         [Authorize]
@@ -62,7 +62,7 @@ namespace API.Controllers
             var user = await _userManager.FindByUserByClaimsPrincipleWithAddressAsync(HttpContext.User);
             user.Address = _mapper.Map<AddressDto, Address>(address);
             var result = await _userManager.UpdateAsync(user);
-            if(result.Succeeded) return Ok(_mapper.Map<Address, AddressDto>(user.Address));
+            if (result.Succeeded) return Ok(_mapper.Map<Address, AddressDto>(user.Address));
             return BadRequest("Problem updating the user");
         }
 
@@ -70,7 +70,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            if (user == null) return Unauthorized(new ApiResponse(401));
+            if (user is null) return Unauthorized(new ApiResponse(401));
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
@@ -88,7 +88,7 @@ namespace API.Controllers
             {
                 return new BadRequestObjectResult(new ApiValidationErrorResponse
                 {
-                    Errors = new[] {"Email address is in use"}
+                    Errors = new[] { "Email address is in use" }
                 });
             }
             var user = new AppUser

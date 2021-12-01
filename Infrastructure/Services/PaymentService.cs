@@ -29,8 +29,8 @@ namespace Infrastructure.Services
             StripeConfiguration.ApiKey = _config["StripeSettingS:SecretKey"];
             var basket = await _basketRepo.GetBasketAsync(basketId);
 
-            if(basket == null) return null;
-            
+            if (basket is null) return null;
+
             var shippingPrice = 0m;
             if (basket.DeliveryMethodId.HasValue)
             {
@@ -43,7 +43,7 @@ namespace Infrastructure.Services
             {
                 var productItem = await _unitOfWork.Repository<Product>()
                     .GetByIdAsync(item.Id);
-                if(item.Price != productItem.Price)
+                if (item.Price != productItem.Price)
                 {
                     item.Price = productItem.Price;
                 }
@@ -52,7 +52,7 @@ namespace Infrastructure.Services
             var service = new PaymentIntentService();
             PaymentIntent intent;
 
-            if(string.IsNullOrEmpty(basket.PaymentIntentId))
+            if (string.IsNullOrEmpty(basket.PaymentIntentId))
             {
                 var options = new PaymentIntentCreateOptions
                 {
@@ -77,7 +77,7 @@ namespace Infrastructure.Services
                 await service.UpdateAsync(basket.PaymentIntentId, options);
             }
 
-            
+
             await _basketRepo.UpdateBasketAsync(basket);
             return basket;
         }
@@ -87,7 +87,7 @@ namespace Infrastructure.Services
             var spec = new OrderByPaymentIntentIdWithItemsSpecification(paymentIntentId);
             var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
 
-            if(order == null) return null;
+            if (order is null) return null;
 
             order.Status = OrderStatus.PaymentFailed;
             await _unitOfWork.Complete();
@@ -100,14 +100,14 @@ namespace Infrastructure.Services
             var spec = new OrderByPaymentIntentIdWithItemsSpecification(paymentIntentId);
             var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
 
-            if (order == null) return null;
+            if (order is null) return null;
 
             order.Status = OrderStatus.PaymentReceived;
             _unitOfWork.Repository<Order>().Update(order);
 
             await _unitOfWork.Complete();
 
-            return order;        
+            return order;
         }
     }
 }
