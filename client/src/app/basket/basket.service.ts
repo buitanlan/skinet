@@ -149,7 +149,7 @@ export class BasketService {
     itemToAdd: IBasketItem,
     quantity: number
   ): IBasketItem[] {
-    if (items === null) {
+    if (!items) {
       items = [];
       itemToAdd.quantity = quantity;
       items.push(itemToAdd);

@@ -17,7 +17,7 @@
                 </div>
             </div>
         </a>
-        <ng-container *ngIf="(currentUser$ | async) === null">
+        <ng-container *ngIf="!(currentUser$ | async)">
             <a routerLink="/account/login" class="btn btn-outline-secondary mr-2">Login</a>
             <a routerLink="/account/register" class="btn btn-outline-secondary mr-3">Sign up</a>
         </ng-container>

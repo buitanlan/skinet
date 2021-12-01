@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <div class="col-4 offset-4">
-    <div *ngIf="(basket$ | async) === null">
+    <div *ngIf="!(basket$ | async)">
       <i
         class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
 

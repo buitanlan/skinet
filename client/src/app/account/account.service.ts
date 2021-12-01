@@ -20,7 +20,7 @@ export class AccountService {
 
 
   loadCurrentUser(token: string): Observable<any> {
-    if (token === null) {
+    if (!token) {
       this.currentUserSource.next(undefined);
       return of(undefined);
     }
