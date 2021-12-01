@@ -14,7 +14,7 @@ public class PhotoService : IPhotoService
         }
     }
 
-    public async Task<Photo> SaveToDiskAsync(IFormFile file)
+    public async Task<Photo?> SaveToDiskAsync(IFormFile file)
     {
         var photo = new Photo();
         if (file.Length > 0)

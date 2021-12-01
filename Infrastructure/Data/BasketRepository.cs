@@ -17,13 +17,13 @@ public class BasketRepository : IBasketRepository
         return await _database.KeyDeleteAsync(basketId);
     }
 
-    public async Task<CustomerBasket> GetBasketAsync(string basketId)
+    public async Task<CustomerBasket?> GetBasketAsync(string basketId)
     {
         var data = await _database.StringGetAsync(basketId);
         return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
     }
 
-    public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
+    public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket basket)
     {
         var created = await _database.StringSetAsync(basket.Id, JsonSerializer.Serialize(basket),
         TimeSpan.FromDays(30));

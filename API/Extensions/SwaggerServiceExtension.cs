@@ -21,8 +21,8 @@ public static class SwaggerServiceExtensions
                 License = new OpenApiLicense
                 {
                     Name = "MIT License",
-                        //Url = new Uri("https://example.com/license"),
-                    }
+                    //Url = new Uri("https://example.com/license"),
+                }
             });
             var securitySchema = new OpenApiSecurityScheme
             {

@@ -22,8 +22,8 @@ public static class ApplicationServicesExtensions
         services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
         services.Configure<IdentityOptions>(opt =>
         {
-                // Default Password settings.
-                opt.Password.RequireDigit = true;
+            // Default Password settings.
+            opt.Password.RequireDigit = true;
             opt.Password.RequireLowercase = true;
             opt.Password.RequireNonAlphanumeric = true;
             opt.Password.RequireUppercase = true;

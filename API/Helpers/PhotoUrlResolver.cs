@@ -13,7 +13,7 @@ public class PhotoUrlResolver : IValueResolver<Photo, PhotoToReturnDto, string>
         _config = config;
     }
 
-    public string Resolve(Photo source, PhotoToReturnDto destination, string destMember, ResolutionContext context)
+    public string? Resolve(Photo source, PhotoToReturnDto destination, string destMember, ResolutionContext context)
     {
         if (!string.IsNullOrEmpty(source.PictureUrl))
         {

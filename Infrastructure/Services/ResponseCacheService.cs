@@ -29,7 +29,7 @@ public class ResponseCacheService : IResponseCacheService
         await _database.StringSetAsync(cacheKey, serialisedResponse, timeToLive);
     }
 
-    public async Task<string> GetCacheResponseAsync(string cacheKey)
+    public async Task<string?> GetCacheResponseAsync(string cacheKey)
     {
         var cachedResponse = await _database.StringGetAsync(cacheKey);
 

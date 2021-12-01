@@ -11,7 +11,7 @@ public class OrderItemUrlResolver : IValueResolver<OrderItem, OrderItemDto, stri
     {
         _config = config;
     }
-    public string Resolve(OrderItem source, OrderItemDto destination, string destMember,
+    public string? Resolve(OrderItem source, OrderItemDto destination, string destMember,
     ResolutionContext context)
     {
         if (!string.IsNullOrEmpty(source.ItemOrdered.PictureUrl))

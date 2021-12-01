@@ -18,7 +18,7 @@ public class OrderService : IOrderService
         _unitOfWork = unitOfWork;
         _basketRepo = basketRepo;
     }
-    public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
+    public async Task<Order?> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
     {
         //get basket from repo
         var basket = await _basketRepo.GetBasketAsync(basketId);

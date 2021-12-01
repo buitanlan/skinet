@@ -21,7 +21,7 @@ public class PaymentService : IPaymentService
         _basketRepo = basketRepo;
         _config = config;
     }
-    public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
+    public async Task<CustomerBasket?> CreateOrUpdatePaymentIntent(string basketId)
     {
         StripeConfiguration.ApiKey = _config["StripeSettingS:SecretKey"];
         var basket = await _basketRepo.GetBasketAsync(basketId);
@@ -79,7 +79,7 @@ public class PaymentService : IPaymentService
         return basket;
     }
 
-    public async Task<Core.Entities.OrderAggregate.Order> UpdateOrderPaymentFailed(string paymentIntentId)
+    public async Task<Core.Entities.OrderAggregate.Order?> UpdateOrderPaymentFailed(string paymentIntentId)
     {
         var spec = new OrderByPaymentIntentIdWithItemsSpecification(paymentIntentId);
         var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
@@ -92,7 +92,7 @@ public class PaymentService : IPaymentService
         return order;
     }
 
-    public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
+    public async Task<Order?> UpdateOrderPaymentSucceeded(string paymentIntentId)
     {
         var spec = new OrderByPaymentIntentIdWithItemsSpecification(paymentIntentId);
         var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
