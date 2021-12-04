@@ -8,9 +8,9 @@ public class ApiResponse
         Message = message ?? GetDefaultMessageForStatusCode(statusCode);
     }
     public int StatusCode { get; set; }
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
-    private string GetDefaultMessageForStatusCode(int statusCode)
+    private string? GetDefaultMessageForStatusCode(int statusCode)
     {
         return statusCode switch
         {

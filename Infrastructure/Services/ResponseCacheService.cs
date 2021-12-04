@@ -11,7 +11,7 @@ public class ResponseCacheService : IResponseCacheService
     {
         _database = redis.GetDatabase();
     }
-    public async Task CacheResponseAsync(string cacheKey, object response, TimeSpan timeToLive)
+    public async Task CacheResponseAsync(string cacheKey, object? response, TimeSpan timeToLive)
     {
 
         if (response is null)

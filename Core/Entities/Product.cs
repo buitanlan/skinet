@@ -29,7 +29,7 @@ public class Product : BaseEntity
     public void RemovePhoto(int id)
     {
         var photo = _photos.Find(x => x.Id == id);
-        _photos.Remove(photo);
+        if (photo is {}) _photos.Remove(photo);
     }
 
     public void SetMainPhoto(int id)
@@ -41,11 +41,9 @@ public class Product : BaseEntity
         }
 
         var photo = _photos.Find(x => x.Id == id);
-        if (photo is { })
-        {
-            photo.IsMain = true;
-            if (currentMain is { }) currentMain.IsMain = false;
-        }
+        if (photo is null) return;
+        photo.IsMain = true;
+        if (currentMain is { }) currentMain.IsMain = false;
 
     }
 }

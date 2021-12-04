@@ -10,21 +10,12 @@ public class AllowedExtensionsAttribute : ValidationAttribute
         _extensions = extensions;
     }
 
-    protected override ValidationResult IsValid(
-        object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(
+        object? value, ValidationContext validationContext)
     {
-        var file = value as IFormFile;
-
-        if (file is { })
-        {
-            var extension = Path.GetExtension(file.FileName);
-            if (extension is { } && !_extensions.Contains(extension.ToLower()))
-            {
-                return new ValidationResult(GetErrorMessage());
-            }
-        }
-
-        return ValidationResult.Success;
+        if (value is not IFormFile file) return ValidationResult.Success;
+        var extension = Path.GetExtension(file.FileName);
+        return !_extensions.Contains(extension.ToLower()) ? new ValidationResult(GetErrorMessage()) : ValidationResult.Success;
     }
 
     private string GetErrorMessage()

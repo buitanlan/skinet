@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
@@ -18,7 +19,7 @@ public class OrderService : IOrderService
         _unitOfWork = unitOfWork;
         _basketRepo = basketRepo;
     }
-    public async Task<Order?> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
+    public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
     {
         //get basket from repo
         var basket = await _basketRepo.GetBasketAsync(basketId);
@@ -26,7 +27,7 @@ public class OrderService : IOrderService
         var items = new List<OrderItem>();
         foreach (var item in basket.Items)
         {
-            int index = item.PictureUrl.IndexOf("images/products/");
+            int index = item.PictureUrl.IndexOf("images/products/", StringComparison.Ordinal);
             string pictureUrl = item.PictureUrl.Substring(index);
             var productItem = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
             var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, pictureUrl);
@@ -71,13 +72,13 @@ public class OrderService : IOrderService
         return await _unitOfWork.Repository<DeliveryMethod>().ListAllAsync();
     }
 
-    public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+    public async Task<Order?> GetOrderByIdAsync(int id, string buyerEmail)
     {
         var spec = new OrdersWithItemsAndOrderingSpecification(id, buyerEmail);
         return await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
     }
 
-    public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+    public async Task<IReadOnlyList<Order?>> GetOrdersForUserAsync(string buyerEmail)
     {
         var spec = new OrdersWithItemsAndOrderingSpecification(buyerEmail);
         return await _unitOfWork.Repository<Order>().ListAsync(spec);
