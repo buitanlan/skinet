@@ -8,9 +8,9 @@ public class OrderItem : BaseEntity
     }
     public OrderItem(ProductItemOrdered itemOrdered, decimal price, int quantity)
     {
-        this.ItemOrdered = itemOrdered;
-        this.Price = price;
-        this.Quantity = quantity;
+        ItemOrdered = itemOrdered;
+        Price = price;
+        Quantity = quantity;
 
     }
     public ProductItemOrdered ItemOrdered { get; set; }

@@ -13,7 +13,7 @@ public class Product : BaseEntity
     private readonly List<Photo> _photos = new();
     public IReadOnlyList<Photo> Photos => _photos.AsReadOnly();
 
-    public void AddPhoto(string pictureUrl, string fileName, bool isMain = false)
+    public void AddPhoto(string? pictureUrl, string? fileName, bool isMain = false)
     {
         var photo = new Photo
         {

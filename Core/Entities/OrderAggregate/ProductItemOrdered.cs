@@ -8,9 +8,9 @@ public class ProductItemOrdered
 
     public ProductItemOrdered(int productItemId, string productName, string pictureUrl)
     {
-        this.ProductItemId = productItemId;
-        this.ProductName = productName;
-        this.PictureUrl = pictureUrl;
+        ProductItemId = productItemId;
+        ProductName = productName;
+        PictureUrl = pictureUrl;
 
     }
     public int ProductItemId { get; set; }

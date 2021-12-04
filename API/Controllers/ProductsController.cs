@@ -24,7 +24,7 @@ public class ProductsController : BaseApiController
     }
 
 
-    // [Cached(600)]
+    [Cached(600)]
     [HttpGet]
     public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
         [FromQuery] ProductSpecParams productParams)
@@ -106,13 +106,14 @@ public class ProductsController : BaseApiController
     public async Task<ActionResult<Product>> DeleteProduct(int id)
     {
         var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
-        foreach (var photo in product.Photos)
-        {
-            if (photo.Id > 18)
+        if (product?.Photos is {})
+            foreach (var photo in product.Photos)
             {
-                _photoService.DeleteFromDisk(photo);
+                if (photo.Id > 18)
+                {
+                    _photoService.DeleteFromDisk(photo);
+                }
             }
-        }
 
         _unitOfWork.Repository<Product>().Delete(product);
         var result = await _unitOfWork.Complete();
@@ -130,24 +131,17 @@ public class ProductsController : BaseApiController
         var spec = new ProductsWithTypesAndBrandsSpecification(id);
         var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
-        if (photoDto.Photo.Length > 0)
+        if (photoDto.Photo?.Length <= 0) return _mapper.Map<Product, ProductToReturnDto>(product);
+        var photo = await _photoService.SaveToDiskAsync(photoDto.Photo);
+
         {
-            var photo = await _photoService.SaveToDiskAsync(photoDto.Photo);
+            product?.AddPhoto(photo.PictureUrl, photo.FileName);
 
-            if (photo is { })
-            {
-                product.AddPhoto(photo.PictureUrl, photo.FileName);
+            if (product != null) _unitOfWork.Repository<Product>().Update(product);
 
-                _unitOfWork.Repository<Product>().Update(product);
+            var result = await _unitOfWork.Complete();
 
-                var result = await _unitOfWork.Complete();
-
-                if (result <= 0) return BadRequest(new ApiResponse(400, "Problem adding photo product"));
-            }
-            else
-            {
-                return BadRequest(new ApiResponse(400, "problem saving photo to disk"));
-            }
+            if (result <= 0) return BadRequest(new ApiResponse(400, "Problem adding photo product"));
         }
 
         return _mapper.Map<Product, ProductToReturnDto>(product);

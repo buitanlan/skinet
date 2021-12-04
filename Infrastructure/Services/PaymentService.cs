@@ -79,7 +79,7 @@ public class PaymentService : IPaymentService
         return basket;
     }
 
-    public async Task<Core.Entities.OrderAggregate.Order?> UpdateOrderPaymentFailed(string paymentIntentId)
+    public async Task<Order?> UpdateOrderPaymentFailed(string paymentIntentId)
     {
         var spec = new OrderByPaymentIntentIdWithItemsSpecification(paymentIntentId);
         var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);

@@ -2,17 +2,14 @@ namespace Core.Entities.OrderAggregate;
 
 public class Address
 {
-    public Address()
-    {
-    }
     public Address(string firstName, string lastName, string street, string city, string state, string zipCode)
     {
-        this.FirstName = firstName;
-        this.LastName = lastName;
-        this.Street = street;
-        this.City = city;
-        this.State = state;
-        this.ZipCode = zipCode;
+        FirstName = firstName;
+        LastName = lastName;
+        Street = street;
+        City = city;
+        State = state;
+        ZipCode = zipCode;
 
     }
     public string FirstName { get; set; }
