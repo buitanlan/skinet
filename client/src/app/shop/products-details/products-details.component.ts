@@ -4,7 +4,7 @@ import { BasketService } from 'src/app/basket/basket.service';
 import { IProduct } from 'src/app/shared/models/product';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../shop.service';
-import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOptions} from '@kolkov/ngx-gallery';
+import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 
 
 @Component({
@@ -17,16 +17,16 @@ export class ProductsDetailsComponent implements OnInit {
   quantity = 1;
   galleryOptions!: NgxGalleryOptions[];
   galleryImages!: NgxGalleryImage[];
-  constructor(private shopService: ShopService,
-              private activatedRoute: ActivatedRoute,
-              private bcService: BreadcrumbService,
-              private basketService: BasketService) {
+  constructor(private readonly shopService: ShopService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly bcService: BreadcrumbService,
+    private readonly basketService: BasketService) {
     this.bcService.set('@productDetails', '');
-   }
+  }
   ngOnInit(): void {
     this.loadProduct();
   }
-    initializeGallery() {
+  initializeGallery() {
     this.galleryOptions = [
       {
         width: '500px',

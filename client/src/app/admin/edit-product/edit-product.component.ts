@@ -20,9 +20,9 @@ export class EditProductComponent implements OnInit {
   types = [] as IType[];
 
   constructor(private readonly adminService: AdminService,
-              private readonly shopService: ShopService,
-              private readonly route: ActivatedRoute,
-              private readonly router: Router) {
+    private readonly shopService: ShopService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router) {
     this.productFormValues = new ProductFormValues();
   }
 
@@ -51,7 +51,7 @@ export class EditProductComponent implements OnInit {
       const productTypeId = this.types && this.types.find(x => x.name === response.productType)?.id;
       this.product = { ...response, productBrandId, productTypeId };
       this.product = response;
-      this.productFormValues = {...response, productBrandId, productTypeId};
+      this.productFormValues = { ...response, productBrandId, productTypeId };
     });
   }
 
@@ -65,12 +65,12 @@ export class EditProductComponent implements OnInit {
 
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
-      const updatedProduct = {...this.product, ...product, price: +product.price};
+      const updatedProduct = { ...this.product, ...product, price: +product.price };
       this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: any) => {
         this.router.navigate(['/admin']);
       });
     } else {
-      const newProduct = {...product, price: +product.price};
+      const newProduct = { ...product, price: +product.price };
       this.adminService.createProduct(newProduct).subscribe((response: any) => {
         this.router.navigate(['/admin']);
       });

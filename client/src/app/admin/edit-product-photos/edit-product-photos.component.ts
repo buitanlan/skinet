@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {IPhoto, IProduct} from '../../shared/models/product';
-import {AdminService} from '../admin.service';
-import {ToastrService} from 'ngx-toastr';
-import {HttpEvent, HttpEventType, HttpProgressEvent} from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { IPhoto, IProduct } from '../../shared/models/product';
+import { AdminService } from '../admin.service';
+import { ToastrService } from 'ngx-toastr';
+import { HttpEvent, HttpEventType, HttpProgressEvent } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-product-photos',
@@ -14,7 +14,7 @@ export class EditProductPhotosComponent implements OnInit {
   progress = 0;
   addPhotoMode = false;
 
-  constructor(private adminService: AdminService, private toast: ToastrService) { }
+  constructor(private readonly adminService: AdminService, private readonly toast: ToastrService) { }
 
   ngOnInit(): void {
   }

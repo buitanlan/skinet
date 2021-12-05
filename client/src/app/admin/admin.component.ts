@@ -14,7 +14,7 @@ export class AdminComponent implements OnInit {
   totalCount = 0;
   shopParams: ShopParams;
 
-  constructor(private shopService: ShopService, private adminService: AdminService) {
+  constructor(private readonly shopService: ShopService, private readonly adminService: AdminService) {
     this.shopParams = this.shopService.getShopParams();
   }
 

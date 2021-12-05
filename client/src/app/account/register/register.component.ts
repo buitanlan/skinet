@@ -13,7 +13,7 @@ import { AccountService } from '../account.service';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errors!: string;
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
+  constructor(private readonly fb: FormBuilder, private accountService: AccountService, private readonly router: Router) { }
 
   ngOnInit(): void {
     this.createRegisterForm();
@@ -36,11 +36,11 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(this.registerForm.value).subscribe(response => {
       this.router.navigateByUrl('/shop');
     }, error => {
-        console.log(error);
-        this.errors = error.errors;
+      console.log(error);
+      this.errors = error.errors;
     });
   }
-  validateEmailNotToken(): AsyncValidatorFn{
+  validateEmailNotToken(): AsyncValidatorFn {
     return control => {
       return timer(500).pipe(
         switchMap(() => {

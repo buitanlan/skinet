@@ -12,7 +12,7 @@ export class BasketComponent implements OnInit {
   basket$!: Observable<IBasket | null>;
   basketTotalPrice$!: Observable<IBasketTotals | null>;
 
-  constructor(private basketService: BasketService) {
+  constructor(private readonly basketService: BasketService) {
   }
 
   ngOnInit(): void {

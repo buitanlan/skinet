@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
-import {AccountService} from '../../account/account.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { AccountService } from '../../account/account.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-  constructor(private accountService: AccountService, private router: Router) {
+  constructor(private readonly accountService: AccountService, private readonly router: Router) {
   }
 
   canActivate(
@@ -19,7 +19,7 @@ export class AdminGuard implements CanActivate {
         if (!admin) {
           this.router.navigateByUrl('/');
         }
-          return !!admin;
+        return !!admin;
       })
     );
   }

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
@@ -19,7 +18,7 @@ public class OrderService : IOrderService
         _unitOfWork = unitOfWork;
         _basketRepo = basketRepo;
     }
-    public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
+    public async Task<Order?> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
     {
         //get basket from repo
         var basket = await _basketRepo.GetBasketAsync(basketId);
@@ -42,25 +41,21 @@ public class OrderService : IOrderService
         var subtotal = items.Sum(item => item.Quantity * item.Price);
 
         // check  to see if order exists
-        // var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
-        // var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
-        // if (existingOrder is {})
-        // {
-        //     _unitOfWork.Repository<Order>().Delete(existingOrder);
-        //     await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
-        // }
+        var spec = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
+        var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+        if (existingOrder is {})
+        {
+            _unitOfWork.Repository<Order>().Delete(existingOrder);
+            await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
+        }
 
         //create order 
-        var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
-        order.Total = subtotal + order.DeliveryMethod.Price;
-
+        var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
         _unitOfWork.Repository<Order>().Add(order);
 
         // save to db
         var result = await _unitOfWork.Complete();
         if (result <= 0) return null;
-
-        //  delete basket
 
         // return db
         return order;

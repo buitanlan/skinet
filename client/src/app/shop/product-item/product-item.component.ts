@@ -9,7 +9,7 @@ import { IProduct } from 'src/app/shared/models/product';
 })
 export class ProductItemComponent implements OnInit {
   @Input() product = {} as IProduct;
-  constructor( private basketService: BasketService) { }
+  constructor(private readonly basketService: BasketService) { }
 
   ngOnInit(): void {
   }

@@ -12,16 +12,16 @@ import { IUser } from '../shared/models/user';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
-  private currentUserSource = new ReplaySubject<IUser>(1);
+  private currentUserSource = new ReplaySubject<IUser | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   private isAdminSource = new ReplaySubject<boolean>(1);
   isAdmin$ = this.isAdminSource.asObservable();
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private readonly http: HttpClient, private router: Router) { }
 
 
   loadCurrentUser(token: string): Observable<any> {
     if (!token) {
-      this.currentUserSource.next(undefined);
+      this.currentUserSource.next(null);
       return of(undefined);
     }
     let headers = new HttpHeaders();
@@ -56,21 +56,21 @@ export class AccountService {
 
 
   register(value: any) {
-     return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
-       map((user: IUser) => {
-         if (user) {
-           localStorage.setItem('token', user.token);
-           this.currentUserSource.next(user);
-         }
-       })
-     );
+    return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
+      map((user: IUser) => {
+        if (user) {
+          localStorage.setItem('token', user.token);
+          this.currentUserSource.next(user);
+        }
+      })
+    );
   }
 
 
   logout() {
     localStorage.removeItem('token');
-    this.currentUserSource.next(undefined);
-    this.isAdminSource.next(undefined);
+    this.currentUserSource.next(null);
+    this.isAdminSource.next(false);
     this.router.navigateByUrl('/');
   }
   checkEmailExists(email: string) {
@@ -78,28 +78,28 @@ export class AccountService {
   }
 
 
-  getUserAddress(){
+  getUserAddress() {
     return this.http.get<IAddress>(this.baseUrl + 'account/address');
   }
 
 
-  updateUserAddress(address: IAddress){
+  updateUserAddress(address: IAddress) {
     return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
   }
 
 
-  isAdmin(token: string): boolean | undefined {
+  isAdmin(token: string): boolean {
     if (token) {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       if (decodedToken.role.indexOf('Admin') > -1) {
         return true;
       }
-      else{
-        return undefined;
+      else {
+        return false;
       }
     }
     else {
-      return undefined;
+      return false;
     }
   }
 }

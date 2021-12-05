@@ -10,9 +10,9 @@ import { environment } from 'src/environments/environment';
 export class TestErrorComponent implements OnInit {
   baseUrl = environment.apiUrl;
   validationErrors: any;
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   get404Error() {
     this.http.get(this.baseUrl + 'products/42').subscribe(
       (response) => console.log(response),

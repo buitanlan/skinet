@@ -4,8 +4,10 @@ import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BasketService } from 'src/app/basket/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
-import { IOrder, IOrderToCreate } from 'src/app/shared/models/order';
+import { IOrderToCreate } from 'src/app/shared/models/order';
 import { CheckoutService } from '../checkout.service';
+import { lastValueFrom } from 'rxjs';
+
 
 declare var Stripe: (arg0: string) => any;
 
@@ -24,12 +26,16 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardExpiry: any;
   cardCvc: any;
   cardErrors: any;
+  loading = false;
   cardHandler = this.onChange.bind(this);
+  cardNumberValid = false;
+  cardExpiryValid = false;
+  cardCvcValid = false;
   constructor(
-    private basketService: BasketService,
-    private checkoutService: CheckoutService,
-    private toastr: ToastrService,
-    private router: Router) { }
+    private readonly basketService: BasketService,
+    private readonly checkoutService: CheckoutService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router) { }
 
   ngAfterViewInit(): void {
     this.stripe = Stripe('pk_test_51HgMIsDINKKez9i6TlUBPF7GNwy3ztZVjnlSXn0Kl8vXRq7PqQ0jd00ne6hlyAsE0ZX0UVPUGIvBFKaC3EsZbEho0003KxxGAY');
@@ -56,44 +62,63 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardExpiry.destroy();
   }
 
-  onChange({error}: any){
-    if (error) {
-      this.cardErrors = error.message;
+  onChange(event: any){
+    if (event.error) {
+      this.cardErrors = event.error.message;
     } else {
       this.cardErrors = null;
     }
-  }
-  submitOrder(){
-    const basket = this.basketService.getCurrentBasketValue();
-    if (basket?.id) {
-      const orderToCreate = this.getOrderToCreate(basket);
 
-      this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrderToCreate) => {
-        this.toastr.success('Order created successfully');
-        this.stripe.confirmCardPayment(basket.clientSecret, {
-          payment_method: {
-            card: this.cardNumber,
-            billing_details: {
-              name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
-            }
-          }
-        }).then((result: any) => {
-          console.log(result);
-          if (result.paymentIntent) {
-            this.basketService.deleteLocalBasket(basket.id);
-            const navigationExtras: NavigationExtras = { state: order };
-            this.router.navigate(['checkout/success'], navigationExtras);
-          } else {
-            this.toastr.error('Payment error');
-          }
-        });
-      }, error => {
-        this.toastr.error(error.message);
-        console.log(error);
-      });
+    switch (event.elementType) {
+      case 'cardNumber':
+        this.cardNumberValid = event.complete;
+        break;
+      case 'cardExpiry':
+        this.cardExpiryValid = event.complete;
+        break;
+      case 'cardCvc':
+        this.cardCvcValid = event.complete;
+        break;
     }
   }
+  async submitOrder(){
+    this.loading = true
+    const basket = this.basketService.getCurrentBasketValue();
+    try {
+      if(basket){
+        const createdOrder = await this.createOrder(basket);
+        const paymentResult = await this.confirmPaymentWithStripe(basket);
+  
+        if (paymentResult.paymentIntent) {
+          this.basketService.deleteBasket(basket);
+          const navigationExtras: NavigationExtras = {state: createdOrder};
+          this.router.navigate(['checkout/success'], navigationExtras);
+        } else {
+          this.toastr.error(paymentResult.error.message);
+        }
+        this.loading = false;
+      }
+     
+    } catch (error) {
+      console.log(error);
+      this.loading = false;
+    }
+  }
+  private async confirmPaymentWithStripe(basket: IBasket) {
+    return this.stripe.confirmCardPayment(basket.clientSecret, {
+      payment_method: {
+        card: this.cardNumber,
+        billing_details: {
+          name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+        }
+      }
+    });
+  }
 
+  private async createOrder(basket: IBasket){
+    const orderToCreate = this.getOrderToCreate(basket);
+    return await lastValueFrom(this.checkoutService.createOrder(orderToCreate));
+  }
   private getOrderToCreate(basket: IBasket) {
       const orderToCreate = {
         basketId: basket.id,
@@ -104,3 +129,4 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   }
 
 }
+

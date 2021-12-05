@@ -25,8 +25,16 @@
        <i class="fas fa-arrow-left"></i>  Back to Review
    </button>
     
-    <button class="btn btn-primary" (click)="submitOrder()" >
+   <button 
+   [disabled]="loading 
+       || checkoutForm.get('paymentForm')?.invalid 
+       || !cardNumberValid 
+       || !cardExpiryValid 
+       || !cardCvcValid" 
+   class="btn btn-primary" 
+   (click)="submitOrder()">
        Submit Order <i class="fas fa-arrow-right"></i>
+       <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
     </button>
   </div>
   

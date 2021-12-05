@@ -13,7 +13,7 @@ export class CheckoutDeliveryComponent implements OnInit {
   @Input() checkoutForm!: FormGroup;
   deliveryMethods = [] as IDeliveryMethod[];
 
-  constructor(private checkoutService: CheckoutService, private basketService: BasketService) { }
+  constructor(private readonly checkoutService: CheckoutService, private readonly basketService: BasketService) { }
 
   ngOnInit(): void {
     this.checkoutService.getDeliveryMethod().subscribe((dm: IDeliveryMethod[]) => {
@@ -21,7 +21,7 @@ export class CheckoutDeliveryComponent implements OnInit {
     }, err => console.log(err));
   }
 
-  setShippingPrice(deliveryMethod: IDeliveryMethod){
+  setShippingPrice(deliveryMethod: IDeliveryMethod) {
     this.basketService.setShippingPrice(deliveryMethod);
   }
 

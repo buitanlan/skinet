@@ -16,26 +16,26 @@ export class CheckoutComponent implements OnInit {
   checkoutForm!: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private accountService: AccountService,
-    private basketService: BasketService) {}
+    private readonly fb: FormBuilder,
+    private readonly accountService: AccountService,
+    private readonly basketService: BasketService) { }
 
   ngOnInit(): void {
     this.createCheckoutForm();
     this.getAddressFromValues();
     this.getDeliveryMethodValue();
     this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
-   }
+  }
 
-  createCheckoutForm(){
+  createCheckoutForm() {
     this.checkoutForm = this.fb.group({
-      addressForm : this.fb.group({
-        firstName : [null, Validators.required],
-        lastName : [null, Validators.required],
-        street : [null, Validators.required],
-        city : [null, Validators.required],
-        state : [null, Validators.required],
-        zipCode : [null, Validators.required]
+      addressForm: this.fb.group({
+        firstName: [null, Validators.required],
+        lastName: [null, Validators.required],
+        street: [null, Validators.required],
+        city: [null, Validators.required],
+        state: [null, Validators.required],
+        zipCode: [null, Validators.required]
       }),
       deliveryForm: this.fb.group({
         deliveryMethod: [null, Validators.required]
@@ -46,9 +46,9 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  getAddressFromValues(){
+  getAddressFromValues() {
     this.accountService.getUserAddress().subscribe(address => {
-      if (address){
+      if (address) {
         this.checkoutForm?.get('addressForm')?.patchValue(address);
       }
     }, err => {
@@ -56,9 +56,9 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  getDeliveryMethodValue(){
+  getDeliveryMethodValue() {
     const basket = this.basketService.getCurrentBasketValue();
-    if (basket?.deliveryMethodId){
+    if (basket?.deliveryMethodId) {
       this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
     }
   }

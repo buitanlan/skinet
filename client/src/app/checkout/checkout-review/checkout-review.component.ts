@@ -13,13 +13,13 @@ export class CheckoutReviewComponent implements OnInit {
   @Input() appStepper!: CdkStepper;
   basket$!: Observable<IBasket | null>;
 
-  constructor(private basketService: BasketService, private toastr: ToastrService) { }
+  constructor(private readonly basketService: BasketService, private readonly toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.basket$ = this.basketService.basket$;
   }
-  createPaymentIntent(){
-      return this.basketService.createPaymentIntent().subscribe((res: any) => {
+  createPaymentIntent() {
+    return this.basketService.createPaymentIntent().subscribe((res: any) => {
       this.toastr.success('Payment intent created');
       this.appStepper.next();
     }, err => {

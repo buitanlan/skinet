@@ -9,7 +9,7 @@ import { IProduct, ProductFormValues } from '../shared/models/product';
 export class AdminService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   createProduct(product: ProductFormValues) {
     return this.http.post(this.baseUrl + 'products', product);
@@ -23,7 +23,7 @@ export class AdminService {
     return this.http.delete(this.baseUrl + 'products/' + id);
   }
 
-    uploadImage(file: File, id: number) {
+  uploadImage(file: File, id: number) {
     const formData = new FormData();
     formData.append('photo', file, 'image.png');
     return this.http.put(this.baseUrl + 'products/' + id + '/photo', formData, {

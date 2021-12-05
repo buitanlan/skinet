@@ -21,7 +21,7 @@ export class ShopService {
   shopParams = new ShopParams();
   productCache = new Map();
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
   getBrand() {
     if (this.brands.length > 0) {
       return of(this.brands);
@@ -30,7 +30,7 @@ export class ShopService {
       map(response => {
         this.brands = response;
         return response;
-       })
+      })
     );
   }
   getType() {
@@ -41,7 +41,7 @@ export class ShopService {
       map(response => {
         this.types = response;
         return response;
-       })
+      })
     );
   }
 

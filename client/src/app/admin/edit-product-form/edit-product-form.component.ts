@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductFormValues } from '../../shared/models/product';
 import { IBrand } from '../../shared/models/brand';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,20 +16,20 @@ export class EditProductFormComponent implements OnInit {
   @Input() types: IType[] = [];
   min = 1;
 
-  constructor(private route: ActivatedRoute, private adminService: AdminService, private router: Router) { }
+  constructor(private readonly route: ActivatedRoute, private readonly adminService: AdminService, private readonly router: Router) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
-      const updatedProduct = {...this.product, ...product, price: +product.price};
+      const updatedProduct = { ...this.product, ...product, price: +product.price };
       this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id')))
         .subscribe((response: any) => {
-        this.router.navigate(['/admin']);
-      });
+          this.router.navigate(['/admin']);
+        });
     } else {
-      const newProduct = {...product, price: +product.price};
+      const newProduct = { ...product, price: +product.price };
       this.adminService.createProduct(newProduct).subscribe((response: any) => {
         this.router.navigate(['/admin']);
       });

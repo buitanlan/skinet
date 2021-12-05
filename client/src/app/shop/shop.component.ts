@@ -20,14 +20,14 @@ export class ShopComponent implements OnInit {
   shopParams = new ShopParams();
   totalCount = 0;
   sortOptions = [
-    { name: 'Alphabetical', value: 'name'},
-    { name: 'Price: Low to High', value: 'asc'},
-    { name: 'Price: High to Low', value: 'desc'},
+    { name: 'Alphabetical', value: 'name' },
+    { name: 'Price: Low to High', value: 'asc' },
+    { name: 'Price: High to Low', value: 'desc' },
   ];
   constructor(
-    private shopService: ShopService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly shopService: ShopService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     this.shopParams = this.shopService.getShopParams();
   }

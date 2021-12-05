@@ -12,7 +12,7 @@ import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router, private toastr: ToastrService) {}
+  constructor(private readonly router: Router, private readonly toastr: ToastrService) { }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler

@@ -7,14 +7,14 @@ public class Order : BaseEntity
 
     }
     public Order(IReadOnlyList<OrderItem> orderItems, string buyerEmail, Address shipToAddress,
-    DeliveryMethod? deliveryMethod, decimal subtotal)
+    DeliveryMethod? deliveryMethod, decimal subtotal, string paymentIntentId)
     {
         OrderItems = orderItems;
         BuyerEmail = buyerEmail;
         ShipToAddress = shipToAddress;
         DeliveryMethod = deliveryMethod;
         Subtotal = subtotal;
-        // this.PaymentIntentId = paymentIntentId;
+        PaymentIntentId = paymentIntentId;
     }
     public string BuyerEmail { get; set; }
     public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
@@ -24,5 +24,5 @@ public class Order : BaseEntity
     public decimal Subtotal { get; set; }
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public string PaymentIntentId { get; set; }
-    public decimal Total { get; set; }
+    public decimal GetTotal() => Subtotal + DeliveryMethod.Price;
 }
