@@ -4,27 +4,30 @@
     <nav class="my-2 my-md-0 mr-md-3 text-uppercase" style="font-size: larger;">
         <a class="p-2" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
         <a class="p-2" routerLink="/shop" routerLinkActive="active">Shop</a>
-        <a *ngIf="(isAdmin$ | async)" class="p-2" routerLink="/test-error" routerLinkActive="active">Errors</a>
-        <a *ngIf="(isAdmin$ | async)" class="p-2" routerLink="/admin" routerLinkActive="active">Admin</a>
+        <ng-container *ngIf="(isAdmin$ | async)">
+            <a class="p-2" routerLink="/test-error" routerLinkActive="active">Errors</a>
+            <a class="p-2" routerLink="/admin" routerLinkActive="active">Admin</a>
+        </ng-container> 
 
     </nav>
     <div class="d-flex align-items-center">
         <a routerLink="/basket" class="position-relative">
             <i class="fas fa-shopping-cart mr-5 text-dark cart"></i>
-            <div *ngIf="(basket$ |async) as basket">
-                <div *ngIf="basketTotalQuantity$ | async" class="cart-no">
-                    {{(basketTotalQuantity$ | async)?.quantity}}
+            <div *ngIf="(basket$ | async) as basket">
+                <div *ngIf="(basketTotalQuantity$ | async) as totalQuantity" class="cart-no">
+                    {{totalQuantity.quantity}}
                 </div>
             </div>
         </a>
-        <ng-container *ngIf="!(currentUser$ | async)">
+        <ng-template #loading>
             <a routerLink="/account/login" class="btn btn-outline-secondary mr-2">Login</a>
             <a routerLink="/account/register" class="btn btn-outline-secondary mr-3">Sign up</a>
-        </ng-container>
-        <ng-container *ngIf="(currentUser$ | async)">
+        </ng-template>
+        
+        <ng-container *ngIf="(currentUser$ | async) as currentUser; else loading">
             <div class="dropdown ml-3 mr-5" dropdown>
                 <a class="dropdown-toggle" style="cursor:pointer" dropdownToggle>
-                    <strong>Welcome {{(currentUser$ | async)!.displayName}}</strong>
+                    <strong>Welcome {{currentUser.displayName}}</strong>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;" *dropdownMenu>
                     <a routerLink="/basket" class="dropdown-item d-flex align-items-center py-2">

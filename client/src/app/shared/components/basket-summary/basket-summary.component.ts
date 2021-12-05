@@ -7,7 +7,7 @@ import { IOrderItem } from '../../models/order';
   templateUrl: './basket-summary.component.html',
   styleUrls: ['./basket-summary.component.scss']
 })
-export class BasketSummaryComponent implements OnInit {
+export class BasketSummaryComponent {
 
   @Input() isBasket = true;
   @Input() isOrder = false;
@@ -16,9 +16,6 @@ export class BasketSummaryComponent implements OnInit {
   @Output() increment: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
   @Output() remove: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
   constructor() { }
-
-  ngOnInit(): void {
-  }
   removeBasketItem(item: IBasketItem) {
     this.remove.emit(item);
   }

@@ -7,12 +7,11 @@ import { environment } from 'src/environments/environment';
   templateUrl: './test-error.component.html',
   styleUrls: ['./test-error.component.scss'],
 })
-export class TestErrorComponent implements OnInit {
+export class TestErrorComponent {
   baseUrl = environment.apiUrl;
   validationErrors: any;
   constructor(private readonly http: HttpClient) { }
 
-  ngOnInit(): void { }
   get404Error() {
     this.http.get(this.baseUrl + 'products/42').subscribe(
       (response) => console.log(response),

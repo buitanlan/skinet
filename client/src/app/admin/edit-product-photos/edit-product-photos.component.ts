@@ -9,15 +9,12 @@ import { HttpEvent, HttpEventType, HttpProgressEvent } from '@angular/common/htt
   templateUrl: './edit-product-photos.component.html',
   styleUrls: ['./edit-product-photos.component.scss']
 })
-export class EditProductPhotosComponent implements OnInit {
+export class EditProductPhotosComponent {
   @Input() product = {} as IProduct;
   progress = 0;
   addPhotoMode = false;
 
   constructor(private readonly adminService: AdminService, private readonly toast: ToastrService) { }
-
-  ngOnInit(): void {
-  }
 
   addPhotoModeToggle() {
     this.addPhotoMode = !this.addPhotoMode;

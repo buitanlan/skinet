@@ -7,12 +7,10 @@ import { IProduct } from 'src/app/shared/models/product';
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss']
 })
-export class ProductItemComponent implements OnInit {
+export class ProductItemComponent{
   @Input() product = {} as IProduct;
   constructor(private readonly basketService: BasketService) { }
 
-  ngOnInit(): void {
-  }
   addItemToBasket() {
     this.basketService.addItemToBasket(this.product);
   }

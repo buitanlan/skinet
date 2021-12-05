@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ProductFormValues } from '../../shared/models/product';
 import { IBrand } from '../../shared/models/brand';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,17 +10,13 @@ import { IType } from 'src/app/shared/models/type';
   templateUrl: './edit-product-form.component.html',
   styleUrls: ['./edit-product-form.component.scss']
 })
-export class EditProductFormComponent implements OnInit {
+export class EditProductFormComponent  {
   @Input() product = new ProductFormValues();
   @Input() brands: IBrand[] = [];
   @Input() types: IType[] = [];
   min = 1;
 
   constructor(private readonly route: ActivatedRoute, private readonly adminService: AdminService, private readonly router: Router) { }
-
-  ngOnInit(): void {
-  }
-
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
       const updatedProduct = { ...this.product, ...product, price: +product.price };

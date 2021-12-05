@@ -7,16 +7,13 @@ import { ImageCroppedEvent, base64ToFile} from 'ngx-image-cropper';
   templateUrl: './photo-widget.component.html',
   styleUrls: ['./photo-widget.component.scss']
 })
-export class PhotoWidgetComponent implements OnInit {
+export class PhotoWidgetComponent {
   @Output() addFile = new EventEmitter();
   files: File[] = [];
   imageChangedEvent: any = '';
   croppedImage: string | null = null;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   fileChangeEvent(file: File): void {
     this.imageChangedEvent = file;

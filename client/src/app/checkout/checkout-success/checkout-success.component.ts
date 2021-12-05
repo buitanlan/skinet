@@ -7,7 +7,7 @@ import { IOrder } from 'src/app/shared/models/order';
   templateUrl: './checkout-success.component.html',
   styleUrls: ['./checkout-success.component.scss']
 })
-export class CheckoutSuccessComponent implements OnInit {
+export class CheckoutSuccessComponent{
   order = {} as IOrder;
   constructor(private readonly router: Router) {
     const navigation = this.router.getCurrentNavigation();
@@ -17,7 +17,5 @@ export class CheckoutSuccessComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-  }
 
 }

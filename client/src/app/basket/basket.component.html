@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <div class="col-4 offset-4">
-    <div *ngIf="!(basket$ | async)">
+    <ng-template #loading>
       <i
         class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
 
@@ -11,9 +11,9 @@
       >
         Keep shopping
       </a>
-    </div>
+    </ng-template>
   </div>
-  <div *ngIf="basket$ | async">
+  <div *ngIf="(basket$ | async) as basket; else loading">
     <div class="pb-5">
       <div class="container">
         <div class="row">
@@ -22,7 +22,7 @@
               (decrement)="decrementItemQuantity($event)"
               (increment)="incrementItemQuantity($event)"
               (remove)="removeBasketItem($event)"
-              [items]="(basket$ | async)?.items"
+              [items]="basket.items"
             >
             </app-basket-summary>
 
