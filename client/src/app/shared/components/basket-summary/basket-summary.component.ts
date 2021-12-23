@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IBasketItem } from '../../models/basket';
-import { IOrderItem } from '../../models/order';
 
 @Component({
   selector: 'app-basket-summary',

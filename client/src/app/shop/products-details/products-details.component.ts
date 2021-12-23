@@ -43,7 +43,7 @@ export class ProductsDetailsComponent implements OnInit {
   }
 
   getImages() {
-    const imageUrls = [];
+    const imageUrls = [] as NgxGalleryImage[];
     for (const photo of this.product.photos) {
       imageUrls.push({
         small: photo.pictureUrl,
@@ -65,11 +65,13 @@ export class ProductsDetailsComponent implements OnInit {
     }
   }
   loadProduct() {
-    this.shopService.getProduct(Number(this.activatedRoute.snapshot.paramMap.get('id'))).subscribe(product => {
-      this.product = product;
-      this.bcService.set('@productDetails', product.name);
-      this.initializeGallery();
-
-    }, error => console.log(error));
+    this.shopService.getProduct(Number(this.activatedRoute.snapshot.paramMap.get('id'))).subscribe({
+      next: product => {
+        this.product = product;
+        this.bcService.set('@productDetails', product.name);
+        this.initializeGallery();
+      },
+      error: error => console.log(error)
+    });
   }
 }

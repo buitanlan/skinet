@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Output} from '@angular/core';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { ImageCroppedEvent, base64ToFile} from 'ngx-image-cropper';
 

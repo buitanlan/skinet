@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IAddress } from '../shared/models/address';
@@ -71,7 +71,7 @@ export class AccountService {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
     this.isAdminSource.next(false);
-    this.router.navigateByUrl('/');
+    void this.router.navigateByUrl('/');
   }
   checkEmailExists(email: string) {
     return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
@@ -89,17 +89,10 @@ export class AccountService {
 
 
   isAdmin(token: string): boolean {
-    if (token) {
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      if (decodedToken.role.indexOf('Admin') > -1) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    else {
+    if (!token) {
       return false;
     }
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    return decodedToken.role.indexOf('Admin') > -1;
   }
 }

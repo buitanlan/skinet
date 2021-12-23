@@ -33,11 +33,12 @@ export class RegisterComponent implements OnInit {
     });
   }
   onSubmit() {
-    this.accountService.register(this.registerForm.value).subscribe(response => {
-      this.router.navigateByUrl('/shop');
-    }, error => {
-      console.log(error);
-      this.errors = error.errors;
+    this.accountService.register(this.registerForm.value).subscribe({
+      next: () => void this.router.navigateByUrl('/shop'),
+      error: error => {
+        console.log(error);
+        this.errors = error.errors;
+      }
     });
   }
   validateEmailNotToken(): AsyncValidatorFn {

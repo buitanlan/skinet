@@ -53,40 +53,29 @@ export class ShopComponent implements OnInit {
 
 
   getProducts(useCache = false) {
-    this.shopService.getProducts(useCache).pipe(
-    ).subscribe(
-      (response: IPagination) => {
+    this.shopService.getProducts(useCache).subscribe({
+      next: (response:IPagination) => {
         this.products = response.data;
         this.totalCount = response.count;
       },
-      (error) => {
-        console.log(error);
-      }
-    );
+      error: (error) => console.log(error)
+    });
   }
 
 
   getBrands() {
-    this.shopService.getBrand().subscribe(
-      (response: IBrand[]) => {
-        this.brands = [{ id: 0, name: 'All' }, ...response];
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.shopService.getBrand().subscribe({
+      next: (response: IBrand[]) => this.brands = [{id: 0, name: 'All'}, ...response],
+      error: (error) => console.log(error)
+    });
   }
 
 
   getTypes() {
-    this.shopService.getType().subscribe(
-      (response: IType[]) => {
-        this.types = [{ id: 0, name: 'All' }, ...response];
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.shopService.getType().subscribe({
+      next: (response: IType[]) => this.types = [{id: 0, name: 'All'}, ...response],
+      error: (error) => console.log(error)
+    });
   }
 
 
@@ -96,7 +85,7 @@ export class ShopComponent implements OnInit {
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
     this.getProducts();
-    this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
+    void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
         brand: this.shopParams.brandName,
       },
@@ -111,7 +100,7 @@ export class ShopComponent implements OnInit {
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
     this.getProducts();
-    this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
+    void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
         type: this.shopParams.typeName,
       },
@@ -127,7 +116,7 @@ export class ShopComponent implements OnInit {
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
     this.getProducts();
-    this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
+    void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
         sort: this.shopParams.sort,
       },
@@ -143,7 +132,7 @@ export class ShopComponent implements OnInit {
       params.pageNumber = event;
       this.shopService.setShopParams(params);
       this.getProducts(true);
-      this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
+      void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
         queryParamsHandling: 'merge',
       });
     }
@@ -157,7 +146,7 @@ export class ShopComponent implements OnInit {
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
     this.getProducts();
-    this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
+    void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
         search: this.shopParams.search.toLowerCase(),
       },
@@ -170,7 +159,7 @@ export class ShopComponent implements OnInit {
     this.searchTerm.nativeElement.value = '';
     const params = new ShopParams();
     this.shopService.setShopParams(params);
-    this.router.navigate(['/shop'], {
+    void this.router.navigate(['/shop'], {
       queryParams: { page: this.shopParams.pageNumber },
     });
     this.getProducts();

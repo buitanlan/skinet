@@ -62,11 +62,11 @@ export class ShopService {
 
 
   getProducts(useCache: boolean) {
-    if (useCache === false) {
+    if (!useCache) {
       this.productCache = new Map();
     }
 
-    if (this.productCache.size > 0 && useCache === true) {
+    if (this.productCache.size > 0 && useCache) {
       if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
         this.pagination.data = this.productCache.get(Object.values(this.shopParams).join('-'));
         return of(this.pagination);
