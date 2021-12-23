@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { BasketService } from 'src/app/basket/basket.service';
-import { IBasket } from 'src/app/shared/models/basket';
-import { IOrderToCreate } from 'src/app/shared/models/order';
-import { CheckoutService } from '../checkout.service';
-import { lastValueFrom } from 'rxjs';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {NavigationExtras, Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {BasketService} from 'src/app/basket/basket.service';
+import {IBasket} from 'src/app/shared/models/basket';
+import {IOrderToCreate} from 'src/app/shared/models/order';
+import {CheckoutService} from '../checkout.service';
+import {lastValueFrom} from 'rxjs';
 
 
 declare var Stripe: (arg0: string) => any;
@@ -88,17 +88,17 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
       if(basket){
         const createdOrder = await this.createOrder(basket);
         const paymentResult = await this.confirmPaymentWithStripe(basket);
-  
+
         if (paymentResult.paymentIntent) {
           this.basketService.deleteBasket(basket);
           const navigationExtras: NavigationExtras = {state: createdOrder};
-          this.router.navigate(['checkout/success'], navigationExtras);
+          await this.router.navigate(['checkout/success'], navigationExtras);
         } else {
           this.toastr.error(paymentResult.error.message);
         }
         this.loading = false;
       }
-     
+
     } catch (error) {
       console.log(error);
       this.loading = false;
@@ -120,12 +120,11 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     return await lastValueFrom(this.checkoutService.createOrder(orderToCreate));
   }
   private getOrderToCreate(basket: IBasket) {
-      const orderToCreate = {
+    return {
         basketId: basket.id,
-        deliveryMethodId: + this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
+        deliveryMethodId: +this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
         shipToAddress: this.checkoutForm?.get('addressForm')?.value
       } as IOrderToCreate;
-      return orderToCreate;
   }
 
 }

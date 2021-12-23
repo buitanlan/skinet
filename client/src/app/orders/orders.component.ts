@@ -17,10 +17,13 @@ export class OrdersComponent implements OnInit {
     this.getOrders();
   }
   getOrders() {
-    this.ordersService.getOrdersForUser().subscribe((orders: IOrder[]) => {
-      this.orders = orders;
-    }, error => {
-      console.log(error);
+    this.ordersService.getOrdersForUser().subscribe({
+      next: (orders: IOrder[]) => {
+        this.orders = orders;
+      },
+      error: error => {
+        console.log(error);
+      }
     });
   }
 

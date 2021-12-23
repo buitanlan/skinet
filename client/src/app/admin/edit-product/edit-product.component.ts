@@ -30,28 +30,31 @@ export class EditProductComponent implements OnInit {
     const brands = this.getBrands();
     const types = this.getTypes();
 
-    forkJoin([types, brands]).subscribe(results => {
-      this.types = results[0];
-      this.brands = results[1];
-    }, error => {
-      console.log(error);
-    }, () => {
+    forkJoin([types, brands]).subscribe({
+      next: results => {
+        this.types = results[0];
+        this.brands = results[1];
+      },
+      error: error => console.log(error),
+      complete: () => {
       if (this.route.snapshot.url[0].path === 'edit') {
         this.loadProduct();
       }
-    });
+    }
+  });
   }
   updatePrice(event: any) {
     this.product.price = event;
   }
 
   loadProduct() {
-    this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: any) => {
-      const productBrandId = this.brands && this.brands.find(x => x.name === response.productBrand)?.id;
-      const productTypeId = this.types && this.types.find(x => x.name === response.productType)?.id;
-      this.product = { ...response, productBrandId, productTypeId };
+    this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: IProduct) => {
+      const productBrandId = this.brands.find(x => x.name === response.productBrand)?.id;
+      const productTypeId = this.types.find(x => x.name === response.productType)?.id;
       this.product = response;
-      this.productFormValues = { ...response, productBrandId, productTypeId };
+      if( productBrandId && productTypeId){
+        this.productFormValues = { ...response, productBrandId, productTypeId };
+      }
     });
   }
 
@@ -66,13 +69,13 @@ export class EditProductComponent implements OnInit {
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
       const updatedProduct = { ...this.product, ...product, price: +product.price };
-      this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: any) => {
-        this.router.navigate(['/admin']);
+      this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe(() => {
+        void this.router.navigate(['/admin']);
       });
     } else {
       const newProduct = { ...product, price: +product.price };
-      this.adminService.createProduct(newProduct).subscribe((response: any) => {
-        this.router.navigate(['/admin']);
+      this.adminService.createProduct(newProduct).subscribe(() => {
+        void this.router.navigate(['/admin']);
       });
     }
   }

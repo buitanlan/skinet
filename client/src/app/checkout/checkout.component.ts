@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AccountService } from '../account/account.service';
 import { BasketService } from '../basket/basket.service';
@@ -47,12 +46,13 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAddressFromValues() {
-    this.accountService.getUserAddress().subscribe(address => {
-      if (address) {
-        this.checkoutForm?.get('addressForm')?.patchValue(address);
-      }
-    }, err => {
-      console.log(err);
+    this.accountService.getUserAddress().subscribe({
+      next: address => {
+        if (address) {
+          this.checkoutForm?.get('addressForm')?.patchValue(address);
+        }
+      },
+      error: err => console.log(err)
     });
   }
 

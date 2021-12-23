@@ -15,16 +15,17 @@ export class CheckoutAddressComponent  {
   constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {
 
   }
-  
+
   saveUserAddress() {
-    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value)
-      .subscribe((address: IAddress) => {
+    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
+      next: (address: IAddress) => {
         this.toastr.success('Address saved');
         this.checkoutForm.get('addressForm')?.reset(address);
-
-      }, err => {
+      },
+      error: err => {
         this.toastr.error(err.message);
-      });
+      }
+    });
   }
 
 }

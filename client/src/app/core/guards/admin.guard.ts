@@ -17,7 +17,7 @@ export class AdminGuard implements CanActivate {
     return this.accountService.isAdmin$.pipe(
       map(admin => {
         if (!admin) {
-          this.router.navigateByUrl('/');
+          void this.router.navigateByUrl('/');
         }
         return !!admin;
       })

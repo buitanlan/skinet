@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IPhoto, IProduct } from '../../shared/models/product';
+import { Component, Input } from '@angular/core';
+import { IProduct } from '../../shared/models/product';
 import { AdminService } from '../admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { HttpEvent, HttpEventType, HttpProgressEvent } from '@angular/common/http';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-product-photos',
@@ -21,37 +21,42 @@ export class EditProductPhotosComponent {
   }
 
   uploadFile(file: File) {
-    this.adminService.uploadImage(file, this.product.id).subscribe((event: HttpEvent<any>) => {
-      switch (event.type) {
-        case HttpEventType.UploadProgress:
-          if (event.total) {
-            this.progress = Math.round(event.loaded / event.total * 100);
-          }
-          break;
-        case HttpEventType.Response:
-          this.product = event.body;
-          setTimeout(() => {
-            this.progress = 0;
-            this.addPhotoMode = false;
-          }, 1500);
+    this.adminService.uploadImage(file, this.product.id).subscribe({
+      next: (event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.UploadProgress:
+            if (event.total) {
+              this.progress = Math.round(event.loaded / event.total * 100);
+            }
+            break;
+          case HttpEventType.Response:
+            this.product = event.body;
+            setTimeout(() => {
+              this.progress = 0;
+              this.addPhotoMode = false;
+            }, 1500);
+        }
+      }, error: error => {
+        if (error.errors) {
+          this.toast.error(error.errors[0]);
+        } else {
+          this.toast.error('Problem uploading image');
+        }
+        this.progress = 0;
       }
-    }, error => {
-      if (error.errors) {
-        this.toast.error(error.errors[0]);
-      } else {
-        this.toast.error('Problem uploading image');
-      }
-      this.progress = 0;
     });
   }
 
   deletePhoto(photoId: number) {
-    this.adminService.deleteProductPhoto(photoId, this.product.id).subscribe(() => {
-      const photoIndex = this.product.photos.findIndex(x => x.id === photoId);
-      this.product.photos.splice(photoIndex, 1);
-    }, error => {
-      this.toast.error('Problem deleting photo');
-      console.log(error);
+    this.adminService.deleteProductPhoto(photoId, this.product.id).subscribe({
+      next:() => {
+        const photoIndex = this.product.photos.findIndex(x => x.id === photoId);
+        this.product.photos.splice(photoIndex, 1);
+      },
+      error: error => {
+        this.toast.error('Problem deleting photo');
+        console.log(error);
+      }
     });
   }
 
