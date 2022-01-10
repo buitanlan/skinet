@@ -19,15 +19,15 @@ export class AccountService {
   constructor(private readonly http: HttpClient, private router: Router) { }
 
 
-  loadCurrentUser(token: string): Observable<any> {
+  loadCurrentUser(token: string | null): Observable<any> {
     if (!token) {
       this.currentUserSource.next(null);
-      return of(undefined);
+      return of(null);
     }
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<IUser>(this.baseUrl + 'account', { headers }).pipe(
+    return this.http.get<IUser>(`${this.baseUrl}account`, { headers }).pipe(
       map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
