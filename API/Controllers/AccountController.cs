@@ -33,7 +33,7 @@ public class AccountController : BaseApiController
         return new UserDto
         {
             Email = user.Email,
-            Token = await _tokenService.CreateToken(user),
+            Token = await _tokenService.CreateAccessToken(user),
             DisplayName = user.DisplayName
         };
     }
@@ -74,7 +74,7 @@ public class AccountController : BaseApiController
         return new UserDto
         {
             Email = user.Email,
-            Token = await _tokenService.CreateToken(user),
+            Token = await _tokenService.CreateAccessToken(user),
             DisplayName = user.DisplayName
         };
     }
@@ -99,8 +99,27 @@ public class AccountController : BaseApiController
         return new UserDto
         {
             DisplayName = user.DisplayName,
-            Token = await _tokenService.CreateToken(user),
+            Token = await _tokenService.CreateAccessToken(user),
             Email = user.Email
         };
+    }
+    
+    private void SetRefreshTokenToCookie(string token)
+    {
+        // append cookie with refresh token to the http response
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTime.UtcNow.AddDays(7)
+        };
+        Response.Cookies.Append("refreshToken", token, cookieOptions);
+    }
+
+
+    private string GetIpAddress()
+    {
+        if (Request.Headers.ContainsKey("X-Forwarded-For"))
+            return Request.Headers["X-Forwarded-For"];
+        return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? throw new InvalidOperationException();
     }
 }

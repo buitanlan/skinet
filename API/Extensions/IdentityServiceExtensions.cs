@@ -9,7 +9,7 @@ namespace API.Extensions;
 
 public static class IdentityServiceExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
+    public static void AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
         var builder = services.AddIdentityCore<AppUser>();
         builder = new IdentityBuilder(builder.UserType, typeof(AppRole), builder.Services);
@@ -30,6 +30,5 @@ public static class IdentityServiceExtensions
                     ValidateAudience = false
                 };
             });
-        return services;
     }
 }

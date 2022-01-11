@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Core.Entities.Identity;
 using Core.Interfaces;
@@ -20,12 +21,12 @@ public class TokenService : ITokenService
         _config = config;
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
     }
-    public async Task<string> CreateToken(AppUser user)
+    public async Task<string> CreateAccessToken(AppUser user)
     {
         var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName)
+                new(JwtRegisteredClaimNames.Email, user.Email),
+                new(JwtRegisteredClaimNames.GivenName, user.DisplayName)
             };
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -43,5 +44,20 @@ public class TokenService : ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
 
+    }
+
+    public RefreshToken CreateRefreshToken(string ipAddress)
+    {
+        using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+        var randomBytes = new byte[64];
+        rngCryptoServiceProvider.GetBytes(randomBytes);
+        var refreshToken = new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomBytes),
+            Expires = DateTime.UtcNow.AddDays(7),
+            Created = DateTime.UtcNow,
+            CreatedByIp = ipAddress
+        };
+        return refreshToken;
     }
 }
