@@ -24,10 +24,8 @@ export class AccountService {
       this.currentUserSource.next(null);
       return of(null);
     }
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<IUser>(`${this.baseUrl}account`, { headers }).pipe(
+    return this.http.get<IUser>(`${this.baseUrl}account`,).pipe(
       map((user: IUser) => {
         if (user) {
           localStorage.setItem('token', user.token);
