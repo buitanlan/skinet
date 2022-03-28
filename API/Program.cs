@@ -8,13 +8,13 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog((_, lc) => lc.WriteTo.Console());
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
-
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("API"));
@@ -42,12 +42,11 @@ builder.Services.AddCors(opt =>
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 try
 {
     var context = services.GetRequiredService<StoreContext>();
     await context.Database.MigrateAsync();
-    await StoreContextSeed.SeedAsync(context, loggerFactory);
+    await StoreContextSeed.SeedAsync(context);
     // This method gets called by the runtime. Use this method to
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
@@ -57,8 +56,7 @@ try
 }
 catch (Exception ex)
 {
-    var logger = loggerFactory.CreateLogger<Program>();
-    logger.LogError(ex, "An error occurred during migration");
+    Log.Fatal(ex, "An error occurred during migration");
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -84,10 +82,7 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerDocumention();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapFallbackToController("Index", "Fallback");
-});
-await app.RunAsync();
+app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
+app.Run();
 

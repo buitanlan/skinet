@@ -1,5 +1,6 @@
 using Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity;
 
@@ -7,11 +8,11 @@ public class AppIdentityDbContextSeed
 {
     public static async Task SeedUsersAsync(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
-        if (!userManager.Users.Any()!)
+        if (!await userManager.Users.AnyAsync())
         {
             var users = new List<AppUser>
                 {
-                    new AppUser
+                    new()
                     {
                         DisplayName = "Bob",
                         Email = "bob@test.com",
@@ -26,7 +27,7 @@ public class AppIdentityDbContextSeed
                             ZipCode = "90210"
                         }
                     },
-                    new AppUser
+                    new()
                     {
                         DisplayName = "Admin",
                         Email = "admin@test.com",
@@ -37,8 +38,8 @@ public class AppIdentityDbContextSeed
 
             var roles = new List<AppRole>
                 {
-                    new AppRole { Name = "Admin"},
-                    new AppRole { Name = "Member"}
+                    new() { Name = "Admin"},
+                    new() { Name = "Member"}
                 };
 
             foreach (var role in roles)

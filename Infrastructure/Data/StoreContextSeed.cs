@@ -1,54 +1,56 @@
 using System.Text.Json;
 using Core.Entities;
 using Core.Entities.OrderAggregate;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Infrastructure.Data;
 
 public class StoreContextSeed
 {
-    public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory)
+    public static async Task SeedAsync(StoreContext context)
     {
         try
         {
-            if (!context.ProductBrands.Any())
+            if (!await context.ProductBrands.AnyAsync())
             {
                 var brandsData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/brands.json");
                 var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
-                await context.ProductBrands.AddRangeAsync(brands);
+                if (brands != null) await context.ProductBrands.AddRangeAsync(brands);
             }
-            if (!context.ProductTypes.Any())
+            if (!await context.ProductTypes.AnyAsync())
             {
                 var typesData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/types.json");
                 var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
-                await context.ProductTypes.AddRangeAsync(types);
+                if (types != null) await context.ProductTypes.AddRangeAsync(types);
             }
-            if (!context.Products.Any())
+            if (!await context.Products.AnyAsync())
             {
                 var productsData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/products.json");
                 var products = JsonSerializer.Deserialize<List<ProductSeedModel>>(productsData);
-                foreach (var item in products)
-                {
-                    var pictureFileName = item.PictureUrl.Substring(16);
-                    var product = new Product
+                if (products != null)
+                    foreach (var item in products)
                     {
-                        Name = item.Name,
-                        Description = item.Description,
-                        Price = item.Price,
-                        ProductBrandId = item.ProductBrandId,
-                        ProductTypeId = item.ProductTypeId
-                    };
-                    product.AddPhoto(item.PictureUrl, pictureFileName);
-                    context.Products.Add(product);
-                }
+                        var pictureFileName = item.PictureUrl?[16..];
+                        var product = new Product
+                        {
+                            Name = item.Name,
+                            Description = item.Description,
+                            Price = item.Price,
+                            ProductBrandId = item.ProductBrandId,
+                            ProductTypeId = item.ProductTypeId
+                        };
+                        product.AddPhoto(item.PictureUrl, pictureFileName);
+                        context.Products.Add(product);
+                    }
             }
-            if (!context.DeliveryMethods.Any())
+            if (!await context.DeliveryMethods.AnyAsync())
             {
                 var dmData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/delivery.json");
 
                 var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
-                await context.DeliveryMethods.AddRangeAsync(methods);
-
+                if (methods != null) await context.DeliveryMethods.AddRangeAsync(methods);
             }
             await context.SaveChangesAsync();
 
@@ -56,8 +58,7 @@ public class StoreContextSeed
         }
         catch (Exception ex)
         {
-            var logger = loggerFactory.CreateLogger<StoreContextSeed>();
-            logger.LogInformation(ex.Message);
+            Log.Fatal(ex.Message);
         }
     }
 }
