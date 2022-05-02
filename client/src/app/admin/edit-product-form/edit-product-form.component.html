@@ -6,7 +6,7 @@
                 class="form-control" id="name" placeholder="Product Name" name="name" #name="ngModel"
                 [(ngModel)]="product.name">
             <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
-                <div *ngIf="name.errors?.required">
+                <div *ngIf="name.errors?.['required']">
                     Product Name is required
                 </div>
             </div>
@@ -18,13 +18,13 @@
                 pattern="^\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(\.[0-9][0-9])?$"
                 [ngModel]="+product.price | number: '1.2-2'" (ngModelChange)="updatePrice(+$event)">
             <div *ngIf="price.invalid && (price.dirty || price.touched)" class="invalid-feedback">
-                <div *ngIf="price.errors?.required">
+                <div *ngIf="price.errors?.['required']">
                     Product price is required
                 </div>
-                <div *ngIf="price.errors?.pattern">
+                <div *ngIf="price.errors?.['pattern']">
                     Product price needs to be decimal value
                 </div>
-                <div *ngIf="price.errors?.min">
+                <div *ngIf="price.errors?.['min']">
                     Product price must be greater than zero
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 required #description="ngModel" class="form-control" id="description" [(ngModel)]="product.description"
                 name="description" rows="3"></textarea>
             <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
-                <div *ngIf="description.errors?.required">
+                <div *ngIf="description.errors?.['required']">
                     Product price is required
                 </div>
             </div>

@@ -38,14 +38,14 @@ export class ShopComponent implements OnInit {
     this.getTypes();
     this.route.params
       .subscribe((params) => {
-        this.shopParams.pageNumber = params.page || 1;
+        this.shopParams.pageNumber = params['page'] || 1;
       });
     this.route.queryParams
       .subscribe((params) => {
-        this.shopParams.sort = params.sort || 'name';
-        this.shopParams.search = params.search || '';
-        this.shopParams.brandName = params.brand || 'all';
-        this.shopParams.typeName = params.type || 'all';
+        this.shopParams.sort = params['sort'] || 'name';
+        this.shopParams.search = params['search'] || '';
+        this.shopParams.brandName = params['brand'] || 'all';
+        this.shopParams.typeName = params['type'] || 'all';
 
       });
     this.getProducts(true);
