@@ -1,4 +1,3 @@
-
 using API.Extensions;
 using API.Helpers;
 using API.Middlewares;
@@ -12,16 +11,18 @@ using Serilog;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((_, lc) => lc.WriteTo.Console());
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .ReadFrom.Configuration(ctx.Configuration));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers();
-builder.Services.AddDbContext<StoreContext>(opt =>
+builder.Services.AddDbContextPool<StoreContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("API"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection"));
 });
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
@@ -81,6 +82,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSerilogRequestLogging();
 app.UseSwaggerDocumention();
 app.MapControllers();
 app.MapFallbackToController("Index", "Fallback");
