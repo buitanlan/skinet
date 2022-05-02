@@ -5,10 +5,13 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
-import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, data: { breadcrumb: 'Home' } },
+  {path: '', pathMatch: 'full', redirectTo: '/home'},
+  { path: 'home',
+    loadChildren: () =>
+      import('./home/home.module').then((mod) => mod.HomeModule),
+    data: { breadcrumb: 'Home' } },
   {
     path: 'test-error',
     component: TestErrorComponent,
@@ -61,7 +64,6 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module')
       .then(mod => mod.AdminModule), data: { breadcrumb: 'Admin' }
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
