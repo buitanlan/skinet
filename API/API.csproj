@@ -18,6 +18,17 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\hero1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\hero2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\hero3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\logo copy.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\logo.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\assets\images\placeholder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
