@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AsyncValidatorFn, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AsyncValidatorFn, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { AccountService } from '../account.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm!: UntypedFormGroup;
+  registerForm!: FormGroup;
   errors!: string;
   constructor(private readonly fb: UntypedFormBuilder, private accountService: AccountService, private readonly router: Router) { }
 
@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(this.registerForm.value).subscribe({
       next: () => void this.router.navigateByUrl('/shop'),
       error: error => {
-        console.log(error);
         this.errors = error.errors;
       }
     });

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from 'src/app/account/account.service';
 import { IAddress } from 'src/app/shared/models/address';
@@ -10,7 +10,7 @@ import { IAddress } from 'src/app/shared/models/address';
   styleUrls: ['./checkout-address.component.scss']
 })
 export class CheckoutAddressComponent  {
-  @Input() checkoutForm!: UntypedFormGroup;
+  @Input() checkoutForm!: FormGroup;
 
   constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {
 
