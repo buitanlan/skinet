@@ -11,15 +11,13 @@ const routes: Routes = [
   {
     path: ':id',
     component: ProductsDetailsComponent,
-    data: { breadcrumb: {alias: 'productDetails'} },
-  },
+    data: { breadcrumb: { alias: 'productDetails' } }
+  }
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    RouterModule.forChild(routes)
-  ],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ShopRoutingModule { }
+export class ShopRoutingModule {}

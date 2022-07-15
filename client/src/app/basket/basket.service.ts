@@ -8,7 +8,7 @@ import { IDeliveryMethod } from '../shared/models/deliveryMethod';
 import { IProduct } from '../shared/models/product';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class BasketService {
   baseUrl = environment.apiUrl;
@@ -20,7 +20,7 @@ export class BasketService {
   basketTotalQuantity$ = this.basketTotalQuantitySource.asObservable();
   shipping = 0;
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   createPaymentIntent() {
     return this.http.post<IBasket>(this.baseUrl + 'payments/' + this.getCurrentBasketValue()?.id, {}).pipe(
@@ -53,10 +53,7 @@ export class BasketService {
   calculateTotalQuantity() {
     const basket = this.getCurrentBasketValue();
     if (basket) {
-      const quantity = basket.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
+      const quantity = basket.items.reduce((sum, item) => sum + item.quantity, 0);
       this.basketTotalQuantitySource.next({ quantity });
     }
   }
@@ -76,10 +73,7 @@ export class BasketService {
     return this.basketSource.value;
   }
   addItemToBasket(item: IProduct, quantity = 1) {
-    const itemToAdd: IBasketItem = this.mapProductItemToBasketItem(
-      item,
-      quantity
-    );
+    const itemToAdd: IBasketItem = this.mapProductItemToBasketItem(item, quantity);
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd, quantity);
     this.setBasket(basket);
@@ -107,8 +101,8 @@ export class BasketService {
   removeItemFromBasket(item: IBasketItem) {
     const basket = this.getCurrentBasketValue();
     if (basket) {
-      if (basket.items.some(x => x.id === item.id)) {
-        basket.items = basket.items.filter(x => x.id !== item.id);
+      if (basket.items.some((x) => x.id === item.id)) {
+        basket.items = basket.items.filter((x) => x.id !== item.id);
         if (basket.items.length > 0) {
           this.setBasket(basket);
         } else {
@@ -119,30 +113,26 @@ export class BasketService {
   }
 
   deleteBasket(basket: IBasket) {
-    return this.http.delete(this.baseUrl + 'basket?id=' + basket.id).subscribe(() => {
-      this.basketSource.next(null);
-      this.basketTotalPriceSource.next(null);
-      this.basketTotalQuantitySource.next(null);
-      localStorage.removeItem('basketId');
-    }, error => console.log(error));
+    return this.http.delete(this.baseUrl + 'basket?id=' + basket.id).subscribe(
+      () => {
+        this.basketSource.next(null);
+        this.basketTotalPriceSource.next(null);
+        this.basketTotalQuantitySource.next(null);
+        localStorage.removeItem('basketId');
+      },
+      (error) => console.log(error)
+    );
   }
   private calculateTotalPrice() {
     const basket = this.getCurrentBasketValue();
     if (basket) {
       const shipping = this.shipping;
-      const subtotal = basket.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
+      const subtotal = basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const total = subtotal + shipping;
       this.basketTotalPriceSource.next({ shipping, total, subtotal });
     }
   }
-  private addOrUpdateItem(
-    items: IBasketItem[],
-    itemToAdd: IBasketItem,
-    quantity: number
-  ): IBasketItem[] {
+  private addOrUpdateItem(items: IBasketItem[], itemToAdd: IBasketItem, quantity: number): IBasketItem[] {
     if (!items) {
       items = [];
       itemToAdd.quantity = quantity;
@@ -163,10 +153,7 @@ export class BasketService {
     localStorage.setItem('basketId', basket.id);
     return basket;
   }
-  private mapProductItemToBasketItem(
-    item: IProduct,
-    quantity: number
-  ): IBasketItem {
+  private mapProductItemToBasketItem(item: IProduct, quantity: number): IBasketItem {
     return {
       id: item.id,
       productName: item.name,
@@ -174,7 +161,7 @@ export class BasketService {
       pictureUrl: item.pictureUrl,
       quantity,
       brand: item.productBrand,
-      type: item.productType,
+      type: item.productType
     };
   }
 }

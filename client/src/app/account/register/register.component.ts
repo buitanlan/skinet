@@ -13,7 +13,11 @@ import { AccountService } from '../account.service';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errors!: string;
-  constructor(private readonly fb: UntypedFormBuilder, private accountService: AccountService, private readonly router: Router) { }
+  constructor(
+    private readonly fb: UntypedFormBuilder,
+    private accountService: AccountService,
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     this.createRegisterForm();
@@ -23,32 +27,29 @@ export class RegisterComponent implements OnInit {
       displayName: [null, [Validators.required]],
       email: [
         null,
-        [
-          Validators.required,
-          Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'),
-        ],
-        [this.validateEmailNotToken()],
+        [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')],
+        [this.validateEmailNotToken()]
       ],
-      password: [null, [Validators.required]],
+      password: [null, [Validators.required]]
     });
   }
   onSubmit() {
     this.accountService.register(this.registerForm.value).subscribe({
       next: () => void this.router.navigateByUrl('/shop'),
-      error: error => {
+      error: (error) => {
         this.errors = error.errors;
       }
     });
   }
   validateEmailNotToken(): AsyncValidatorFn {
-    return control => {
+    return (control) => {
       return timer(500).pipe(
         switchMap(() => {
           if (!control.value) {
             return of(null);
           }
           return this.accountService.checkEmailExists(control.value).pipe(
-            map(res => {
+            map((res) => {
               return res ? { emailExists: true } : null;
             })
           );

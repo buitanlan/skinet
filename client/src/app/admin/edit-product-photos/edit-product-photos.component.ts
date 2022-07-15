@@ -14,7 +14,7 @@ export class EditProductPhotosComponent {
   progress = 0;
   addPhotoMode = false;
 
-  constructor(private readonly adminService: AdminService, private readonly toast: ToastrService) { }
+  constructor(private readonly adminService: AdminService, private readonly toast: ToastrService) {}
 
   addPhotoModeToggle() {
     this.addPhotoMode = !this.addPhotoMode;
@@ -26,7 +26,7 @@ export class EditProductPhotosComponent {
         switch (event.type) {
           case HttpEventType.UploadProgress:
             if (event.total) {
-              this.progress = Math.round(event.loaded / event.total * 100);
+              this.progress = Math.round((event.loaded / event.total) * 100);
             }
             break;
           case HttpEventType.Response:
@@ -36,7 +36,8 @@ export class EditProductPhotosComponent {
               this.addPhotoMode = false;
             }, 1500);
         }
-      }, error: error => {
+      },
+      error: (error) => {
         if (error.errors) {
           this.toast.error(error.errors[0]);
         } else {
@@ -49,11 +50,11 @@ export class EditProductPhotosComponent {
 
   deletePhoto(photoId: number) {
     this.adminService.deleteProductPhoto(photoId, this.product.id).subscribe({
-      next:() => {
-        const photoIndex = this.product.photos.findIndex(x => x.id === photoId);
+      next: () => {
+        const photoIndex = this.product.photos.findIndex((x) => x.id === photoId);
         this.product.photos.splice(photoIndex, 1);
       },
-      error: error => {
+      error: (error) => {
         this.toast.error('Problem deleting photo');
         console.log(error);
       }
@@ -65,6 +66,4 @@ export class EditProductPhotosComponent {
       this.product = product;
     });
   }
-
-
 }

@@ -10,12 +10,6 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ShopComponent, ProductItemComponent, ProductsDetailsComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    ShopRoutingModule,
-    FormsModule
-  ],
+  imports: [CommonModule, SharedModule, RouterModule, ShopRoutingModule, FormsModule]
 })
 export class ShopModule {}

@@ -11,8 +11,6 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   declarations: [NavBarComponent, TestErrorComponent, ServerErrorComponent, NotFoundComponent, SectionHeaderComponent],
   imports: [
@@ -28,4 +26,4 @@ import { SharedModule } from '../shared/shared.module';
   ],
   exports: [NavBarComponent, SectionHeaderComponent]
 })
-export class CoreModule { }
+export class CoreModule {}

@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { ImageCroppedEvent, base64ToFile} from 'ngx-image-cropper';
+import { ImageCroppedEvent, base64ToFile } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-photo-widget',
@@ -13,7 +13,7 @@ export class PhotoWidgetComponent {
   imageChangedEvent: any = '';
   croppedImage: string | null = null;
 
-  constructor() { }
+  constructor() {}
 
   fileChangeEvent(file: File): void {
     this.imageChangedEvent = file;

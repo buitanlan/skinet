@@ -3,9 +3,7 @@
     <ng-container *ngIf="!addPhotoMode">
       <div class="d-flex justify-content-between mb-3">
         <h3>Product Photos</h3>
-        <button class="btn btn-primary" (click)="addPhotoModeToggle()">
-          Add New Photo
-        </button>
+        <button class="btn btn-primary" (click)="addPhotoModeToggle()">Add New Photo</button>
       </div>
       <div class="row">
         <div class="col-3" *ngFor="let photo of product?.photos">
@@ -16,15 +14,13 @@
               height="225"
               src="{{ photo.pictureUrl }}"
               alt="{{ photo.fileName }}"
-            >
+            />
             <div class="btn-group" style="width: 100%">
               <button
                 type="button"
                 (click)="setMainPhoto(photo.id)"
                 [disabled]="photo.isMain"
-                class="{{
-                  photo.isMain ? 'btn btn-success' : 'btn btn-outline-success'
-                }}"
+                class="{{ photo.isMain ? 'btn btn-success' : 'btn btn-outline-success' }}"
                 style="width: 50%"
               >
                 Set Main
@@ -46,21 +42,12 @@
     <ng-container *ngIf="addPhotoMode">
       <div class="d-flex justify-content-between mb-3">
         <h3 class="text-primary">Add new product image</h3>
-        <button
-          class="btn btn-outline-secondary"
-          (click)="addPhotoModeToggle()"
-        >
-          Cancel
-        </button>
+        <button class="btn btn-outline-secondary" (click)="addPhotoModeToggle()">Cancel</button>
       </div>
             
       <div class="progress form-group" *ngIf="progress > 0">
                 
-        <div
-          class="progress-bar progress-bar-striped bg-success"
-          role="progressbar"
-          [style.width.%]="progress"
-        >
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
                     {{ progress }}%         
         </div>
               

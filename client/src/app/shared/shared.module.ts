@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationModule, } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PagingHeaderComponent } from './components/paging-header/paging-header.component';
@@ -19,9 +19,6 @@ import { PhotoWidgetComponent } from './components/photo-widget/photo-widget.com
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
-
-
-
 @NgModule({
   declarations: [
     PagingHeaderComponent,
@@ -30,7 +27,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     TextInputComponent,
     StepperComponent,
     BasketSummaryComponent,
-    PhotoWidgetComponent,
+    PhotoWidgetComponent
   ],
   imports: [
     CommonModule,
@@ -68,4 +65,4 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     PhotoWidgetComponent
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

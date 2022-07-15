@@ -19,10 +19,12 @@ export class EditProductComponent implements OnInit {
   brands = [] as IBrand[];
   types = [] as IType[];
 
-  constructor(private readonly adminService: AdminService,
+  constructor(
+    private readonly adminService: AdminService,
     private readonly shopService: ShopService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) {
+    private readonly router: Router
+  ) {
     this.productFormValues = new ProductFormValues();
   }
 
@@ -31,17 +33,17 @@ export class EditProductComponent implements OnInit {
     const types = this.getTypes();
 
     forkJoin([types, brands]).subscribe({
-      next: results => {
+      next: (results) => {
         this.types = results[0];
         this.brands = results[1];
       },
-      error: error => console.log(error),
+      error: (error) => console.log(error),
       complete: () => {
-      if (this.route.snapshot.url[0].path === 'edit') {
-        this.loadProduct();
+        if (this.route.snapshot.url[0].path === 'edit') {
+          this.loadProduct();
+        }
       }
-    }
-  });
+    });
   }
   updatePrice(event: any) {
     this.product.price = event;
@@ -49,10 +51,10 @@ export class EditProductComponent implements OnInit {
 
   loadProduct() {
     this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: IProduct) => {
-      const productBrandId = this.brands.find(x => x.name === response.productBrand)?.id;
-      const productTypeId = this.types.find(x => x.name === response.productType)?.id;
+      const productBrandId = this.brands.find((x) => x.name === response.productBrand)?.id;
+      const productTypeId = this.types.find((x) => x.name === response.productType)?.id;
       this.product = response;
-      if( productBrandId && productTypeId){
+      if (productBrandId && productTypeId) {
         this.productFormValues = { ...response, productBrandId, productTypeId };
       }
     });
@@ -79,5 +81,4 @@ export class EditProductComponent implements OnInit {
       });
     }
   }
-
 }

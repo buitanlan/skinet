@@ -23,11 +23,11 @@ export class AdminComponent implements OnInit {
   }
   getProducts(useCache = false) {
     this.shopService.getProducts(useCache).subscribe({
-      next: response => {
+      next: (response) => {
         this.products = response.data;
         this.totalCount = response.count;
       },
-      error: error => {
+      error: (error) => {
         console.log(error);
       }
     });
@@ -44,9 +44,11 @@ export class AdminComponent implements OnInit {
 
   deleteProduct(id: number) {
     this.adminService.deleteProduct(id).subscribe(() => {
-      this.products.splice(this.products.findIndex(p => p.id === id), 1);
+      this.products.splice(
+        this.products.findIndex((p) => p.id === id),
+        1
+      );
       this.totalCount--;
     });
   }
-
 }

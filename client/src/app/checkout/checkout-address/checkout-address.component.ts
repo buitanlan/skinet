@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from 'src/app/account/account.service';
 import { IAddress } from 'src/app/shared/models/address';
@@ -9,12 +9,10 @@ import { IAddress } from 'src/app/shared/models/address';
   templateUrl: './checkout-address.component.html',
   styleUrls: ['./checkout-address.component.scss']
 })
-export class CheckoutAddressComponent  {
+export class CheckoutAddressComponent {
   @Input() checkoutForm!: FormGroup;
 
-  constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {
-
-  }
+  constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {}
 
   saveUserAddress() {
     this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
@@ -22,10 +20,9 @@ export class CheckoutAddressComponent  {
         this.toastr.success('Address saved');
         this.checkoutForm.get('addressForm')?.reset(address);
       },
-      error: err => {
+      error: (err) => {
         this.toastr.error(err.message);
       }
     });
   }
-
 }

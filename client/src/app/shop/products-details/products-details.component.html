@@ -1,7 +1,11 @@
 <div class="container">
   <div class="row" *ngIf="product">
     <div class="col-6">
-      <ngx-gallery [options]="galleryOptions" [images]="galleryImages" style="display: inline-block; margin-bottom: 20px">
+      <ngx-gallery
+        [options]="galleryOptions"
+        [images]="galleryImages"
+        style="display: inline-block; margin-bottom: 20px"
+      >
       </ngx-gallery>
     </div>
     <div class="col-6 mt-5">
@@ -10,18 +14,18 @@
       </h3>
       <p style="font-size: 1.5em">{{ product.price | currency }}</p>
       <div class="d-flex justify-content-start align-items-center">
-        <i (click)="decrementQuantity()"
+        <i
+          (click)="decrementQuantity()"
           class="fas fa-minus-circle text-warning me-2"
           style="cursor: pointer; font-size: 2em"
         ></i>
-        <span class="font-weight-bold" style="font-size: 1.5em">{{quantity}}</span>
-        <i (click)="incrementQuantity()"
+        <span class="font-weight-bold" style="font-size: 1.5em">{{ quantity }}</span>
+        <i
+          (click)="incrementQuantity()"
           class="fas fa-plus-circle text-warning mx-2"
           style="cursor: pointer; font-size: 2em"
         ></i>
-        <button (click)="addItemToBasket()" class="btn btn-outline-primary btn-lg ms-4">
-          Add to Cart
-        </button>
+        <button (click)="addItemToBasket()" class="btn btn-outline-primary btn-lg ms-4">Add to Cart</button>
       </div>
     </div>
     <div class="row mt-5">

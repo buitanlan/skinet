@@ -17,7 +17,8 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private readonly fb: UntypedFormBuilder,
     private readonly accountService: AccountService,
-    private readonly basketService: BasketService) { }
+    private readonly basketService: BasketService
+  ) {}
 
   ngOnInit(): void {
     this.createCheckoutForm();
@@ -47,12 +48,12 @@ export class CheckoutComponent implements OnInit {
 
   getAddressFromValues() {
     this.accountService.getUserAddress().subscribe({
-      next: address => {
+      next: (address) => {
         if (address) {
           this.checkoutForm?.get('addressForm')?.patchValue(address);
         }
       },
-      error: err => console.log(err)
+      error: (err) => console.log(err)
     });
   }
 
@@ -62,5 +63,4 @@ export class CheckoutComponent implements OnInit {
       this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
     }
   }
-
 }

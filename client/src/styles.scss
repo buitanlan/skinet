@@ -1,43 +1,45 @@
-
-@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css";
-@import "../node_modules/bootswatch/dist/united/bootstrap.min.css";
-@import "../node_modules/ngx-toastr/toastr.css";
-@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
- .xng-breadcrumb-root{
-     padding: 8px 16px;
-     display: inline;
-     border-radius: 0;
- }
- label.xng-breadcrumb-trail{
-     margin-bottom: 0;
-     color: orange;
- }
- .xng-breadcrumb-separator{
-     padding: 0;
- }
-.StripeElement{
-    height: 3.125em;
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+@import '../node_modules/bootswatch/dist/united/bootstrap.min.css';
+@import '../node_modules/ngx-toastr/toastr.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+.xng-breadcrumb-root {
+  padding: 8px 16px;
+  display: inline;
+  border-radius: 0;
+}
+label.xng-breadcrumb-trail {
+  margin-bottom: 0;
+  color: orange;
+}
+.xng-breadcrumb-separator {
+  padding: 0;
+}
+.StripeElement {
+  height: 3.125em;
 }
 
 //@import "~bootswatch/dist/united/variables";
 // @import "~bootstrap/scss/bootstrap";
-.product-tabset > .nav-tabs > li.open > a, .product-tabset > .nav-tabs > li:hover > a {
+.product-tabset > .nav-tabs > li.open > a,
+.product-tabset > .nav-tabs > li:hover > a {
   border: 0;
   background: none !important;
   color: #333333;
 }
 
-.product-tabset > .nav-tabs > li.open > a > i, .product-tabset > .nav-tabs > li:hover > a > i {
+.product-tabset > .nav-tabs > li.open > a > i,
+.product-tabset > .nav-tabs > li:hover > a > i {
   color: #a6a6a6;
 }
 
-.product-tabset > .nav-tabs > li.open .dropdown-menu, .product-tabset > .nav-tabs > li:hover .dropdown-menu {
+.product-tabset > .nav-tabs > li.open .dropdown-menu,
+.product-tabset > .nav-tabs > li:hover .dropdown-menu {
   margin-top: 0;
 }
 
 .product-tabset > .nav-tabs > li.active {
-  border-bottom: 4px solid #E95420;
+  border-bottom: 4px solid #e95420;
   position: relative;
 }
 
@@ -57,4 +59,3 @@
   border-top: 1px solid #eee;
   padding: 15px 0;
 }
-

@@ -12,7 +12,7 @@ import { IOrder, IOrderToCreate } from '../shared/models/order';
 export class CheckoutService {
   baseUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   createOrder(order: IOrderToCreate) {
     return this.http.post<IOrderToCreate>(this.baseUrl + 'orders', order);

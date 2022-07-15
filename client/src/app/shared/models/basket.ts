@@ -27,6 +27,6 @@ export interface IBasketTotals {
   subtotal: number;
   total: number;
 }
-export interface IBasketQuantity{
+export interface IBasketQuantity {
   quantity: number;
 }

@@ -5,7 +5,7 @@ import { CdkStepper } from '@angular/cdk/stepper';
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
-  providers: [{provide: CdkStepper , useExisting: StepperComponent}]
+  providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
 export class StepperComponent extends CdkStepper implements OnInit {
   @Input() linearModeSelected = false;
@@ -16,5 +16,4 @@ export class StepperComponent extends CdkStepper implements OnInit {
   onClick(index: number) {
     this.selectedIndex = index;
   }
-
 }

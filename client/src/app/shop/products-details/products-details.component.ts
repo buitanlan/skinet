@@ -6,7 +6,6 @@ import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../shop.service';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 
-
 @Component({
   selector: 'app-products-details',
   templateUrl: './products-details.component.html',
@@ -17,10 +16,12 @@ export class ProductsDetailsComponent implements OnInit {
   quantity = 1;
   galleryOptions!: NgxGalleryOptions[];
   galleryImages!: NgxGalleryImage[];
-  constructor(private readonly shopService: ShopService,
+  constructor(
+    private readonly shopService: ShopService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly bcService: BreadcrumbService,
-    private readonly basketService: BasketService) {
+    private readonly basketService: BasketService
+  ) {
     this.bcService.set('@productDetails', '');
   }
   ngOnInit(): void {
@@ -48,7 +49,7 @@ export class ProductsDetailsComponent implements OnInit {
       imageUrls.push({
         small: photo.pictureUrl,
         medium: photo.pictureUrl,
-        big: photo.pictureUrl,
+        big: photo.pictureUrl
       });
     }
     return imageUrls;
@@ -66,12 +67,12 @@ export class ProductsDetailsComponent implements OnInit {
   }
   loadProduct() {
     this.shopService.getProduct(Number(this.activatedRoute.snapshot.paramMap.get('id'))).subscribe({
-      next: product => {
+      next: (product) => {
         this.product = product;
         this.bcService.set('@productDetails', product.name);
         this.initializeGallery();
       },
-      error: error => console.log(error)
+      error: (error) => console.log(error)
     });
   }
 }

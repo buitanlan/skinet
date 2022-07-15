@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ShopService {
   baseUrl = environment.apiUrl;
@@ -21,13 +21,13 @@ export class ShopService {
   shopParams = new ShopParams();
   productCache = new Map();
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
   getBrand() {
     if (this.brands.length > 0) {
       return of(this.brands);
     }
     return this.http.get<IBrand[]>(this.baseUrl + 'products/brands').pipe(
-      map(response => {
+      map((response) => {
         this.brands = response;
         return response;
       })
@@ -38,28 +38,25 @@ export class ShopService {
       return of(this.types);
     }
     return this.http.get<IType[]>(this.baseUrl + 'products/types').pipe(
-      map(response => {
+      map((response) => {
         this.types = response;
         return response;
       })
     );
   }
 
-
   getProduct(id: number) {
     let product: IProduct | undefined;
     this.productCache.forEach((products: IProduct[]) => {
-      product = products.find(p => p.id === id);
+      product = products.find((p) => p.id === id);
     });
 
     if (product) {
       return of(product);
     } else {
       return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
-
     }
   }
-
 
   getProducts(useCache: boolean) {
     if (!useCache) {
@@ -89,17 +86,16 @@ export class ShopService {
     return this.http
       .get<IPagination>(this.baseUrl + 'products', {
         observe: 'response',
-        params,
+        params
       })
       .pipe(
         map((response) => {
           this.productCache.set(Object.values(this.shopParams).join('-'), response.body?.data);
-          this.pagination = response.body ?? {} as IPagination;
+          this.pagination = response.body ?? ({} as IPagination);
           return this.pagination;
         })
       );
   }
-
 
   setShopParams(params: ShopParams): void {
     this.shopParams = params;

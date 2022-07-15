@@ -12,8 +12,7 @@ export class BasketComponent implements OnInit {
   basket$!: Observable<IBasket | null>;
   basketTotalPrice$!: Observable<IBasketTotals | null>;
 
-  constructor(private readonly basketService: BasketService) {
-  }
+  constructor(private readonly basketService: BasketService) {}
 
   ngOnInit(): void {
     this.basket$ = this.basketService.basket$;
@@ -28,5 +27,4 @@ export class BasketComponent implements OnInit {
   incrementItemQuantity(item: IBasketItem) {
     this.basketService.incrementItemQuantity(item);
   }
-
 }

@@ -9,7 +9,7 @@ import { IProduct, ProductFormValues } from '../shared/models/product';
 export class AdminService {
   baseUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   createProduct(product: ProductFormValues) {
     return this.http.post(this.baseUrl + 'products', product);
@@ -39,5 +39,4 @@ export class AdminService {
   setMainPhoto(photoId: number, productId: number) {
     return this.http.post<IProduct>(this.baseUrl + 'products/' + productId + '/photo/' + photoId, {});
   }
-
 }

@@ -1,10 +1,10 @@
-export class ShopParams implements IShopParams{
+export class ShopParams implements IShopParams {
   brandName = 'all';
   typeName = 'all';
   sort = 'name';
   pageNumber = 1;
   pageSize = 6;
-  search =  '';
+  search = '';
 }
 
 export interface IShopParams {

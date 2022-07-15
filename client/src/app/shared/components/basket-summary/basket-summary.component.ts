@@ -7,14 +7,13 @@ import { IBasketItem } from '../../models/basket';
   styleUrls: ['./basket-summary.component.scss']
 })
 export class BasketSummaryComponent {
-
   @Input() isBasket = true;
   @Input() isOrder = false;
   @Input() items: any;
   @Output() decrement: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
   @Output() increment: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
   @Output() remove: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-  constructor() { }
+  constructor() {}
   removeBasketItem(item: IBasketItem) {
     this.remove.emit(item);
   }
@@ -24,5 +23,4 @@ export class BasketSummaryComponent {
   incrementItemQuantity(item: IBasketItem) {
     this.increment.emit(item);
   }
-
 }

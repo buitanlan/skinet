@@ -10,8 +10,7 @@ import { OrdersService } from './orders.service';
 export class OrdersComponent implements OnInit {
   orders: IOrder[] = [];
 
-
-  constructor(private readonly ordersService: OrdersService) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
   ngOnInit(): void {
     this.getOrders();
@@ -21,10 +20,9 @@ export class OrdersComponent implements OnInit {
       next: (orders: IOrder[]) => {
         this.orders = orders;
       },
-      error: error => {
+      error: (error) => {
         console.log(error);
       }
     });
   }
-
 }

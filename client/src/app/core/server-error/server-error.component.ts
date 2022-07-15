@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-server-error',
@@ -6,6 +6,5 @@ import { Component} from '@angular/core';
   styleUrls: ['./server-error.component.scss']
 })
 export class ServerErrorComponent {
-
-  constructor() { }
+  constructor() {}
 }

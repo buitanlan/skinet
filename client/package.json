@@ -72,7 +72,7 @@
     "typescript": "~4.7.4"
   },
   "lint-staged": {
-    "*.": "npm run format",
+    "*": "npm run format",
     "*.ts": "npm run lint"
   }
 }

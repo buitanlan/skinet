@@ -10,7 +10,7 @@ import { ShopService } from './shop.service';
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
-  styleUrls: ['./shop.component.scss'],
+  styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
   @ViewChild('search', { static: false }) searchTerm!: ElementRef;
@@ -22,7 +22,7 @@ export class ShopComponent implements OnInit {
   sortOptions = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low to High', value: 'asc' },
-    { name: 'Price: High to Low', value: 'desc' },
+    { name: 'Price: High to Low', value: 'desc' }
   ];
   constructor(
     private readonly shopService: ShopService,
@@ -32,29 +32,24 @@ export class ShopComponent implements OnInit {
     this.shopParams = this.shopService.getShopParams();
   }
 
-
   ngOnInit(): void {
     this.getBrands();
     this.getTypes();
-    this.route.params
-      .subscribe((params) => {
-        this.shopParams.pageNumber = params['page'] || 1;
-      });
-    this.route.queryParams
-      .subscribe((params) => {
-        this.shopParams.sort = params['sort'] || 'name';
-        this.shopParams.search = params['search'] || '';
-        this.shopParams.brandName = params['brand'] || 'all';
-        this.shopParams.typeName = params['type'] || 'all';
-
-      });
+    this.route.params.subscribe((params) => {
+      this.shopParams.pageNumber = params['page'] || 1;
+    });
+    this.route.queryParams.subscribe((params) => {
+      this.shopParams.sort = params['sort'] || 'name';
+      this.shopParams.search = params['search'] || '';
+      this.shopParams.brandName = params['brand'] || 'all';
+      this.shopParams.typeName = params['type'] || 'all';
+    });
     this.getProducts(true);
   }
 
-
   getProducts(useCache = false) {
     this.shopService.getProducts(useCache).subscribe({
-      next: (response:IPagination) => {
+      next: (response: IPagination) => {
         this.products = response.data;
         this.totalCount = response.count;
       },
@@ -62,22 +57,19 @@ export class ShopComponent implements OnInit {
     });
   }
 
-
   getBrands() {
     this.shopService.getBrand().subscribe({
-      next: (response: IBrand[]) => this.brands = [{id: 0, name: 'All'}, ...response],
+      next: (response: IBrand[]) => (this.brands = [{ id: 0, name: 'All' }, ...response]),
       error: (error) => console.log(error)
     });
   }
-
 
   getTypes() {
     this.shopService.getType().subscribe({
-      next: (response: IType[]) => this.types = [{id: 0, name: 'All'}, ...response],
+      next: (response: IType[]) => (this.types = [{ id: 0, name: 'All' }, ...response]),
       error: (error) => console.log(error)
     });
   }
-
 
   onBrandSelected(brandName: string) {
     const params = this.shopService.getShopParams();
@@ -87,12 +79,11 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        brand: this.shopParams.brandName,
+        brand: this.shopParams.brandName
       },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: 'merge'
     });
   }
-
 
   onTypeSelected(typeName: string) {
     const params = this.shopService.getShopParams();
@@ -102,12 +93,11 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        type: this.shopParams.typeName,
+        type: this.shopParams.typeName
       },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: 'merge'
     });
   }
-
 
   onSortSelected(event: Event) {
     const sort = (event.target as HTMLSelectElement).value;
@@ -118,12 +108,11 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        sort: this.shopParams.sort,
+        sort: this.shopParams.sort
       },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: 'merge'
     });
   }
-
 
   onPageChanged(event: number) {
     const params = this.shopService.getShopParams();
@@ -133,12 +122,10 @@ export class ShopComponent implements OnInit {
       this.shopService.setShopParams(params);
       this.getProducts(true);
       void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
-        queryParamsHandling: 'merge',
+        queryParamsHandling: 'merge'
       });
     }
   }
-
-
 
   onSearch() {
     const params = this.shopService.getShopParams();
@@ -148,19 +135,18 @@ export class ShopComponent implements OnInit {
     this.getProducts();
     void this.router.navigate(['/shop/page', this.shopParams.pageNumber], {
       queryParams: {
-        search: this.shopParams.search.toLowerCase(),
+        search: this.shopParams.search.toLowerCase()
       },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: 'merge'
     });
   }
-
 
   onReset() {
     this.searchTerm.nativeElement.value = '';
     const params = new ShopParams();
     this.shopService.setShopParams(params);
     void this.router.navigate(['/shop'], {
-      queryParams: { page: this.shopParams.pageNumber },
+      queryParams: { page: this.shopParams.pageNumber }
     });
     this.getProducts();
   }
