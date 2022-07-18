@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
-import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [SharedModule, HomeRoutingModule],
+  imports: [HomeRoutingModule, CarouselModule.forRoot()],
   exports: [HomeComponent]
 })
 export class HomeModule {}

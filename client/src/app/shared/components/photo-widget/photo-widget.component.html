@@ -24,7 +24,7 @@
   <div class="col-4">
     <h3>Step 3 - Preview & Upload</h3>
     <ng-container *ngIf="croppedImage">
-      <img [src]="croppedImage" class="img-fluid" />
+      <img [src]="croppedImage" class="img-fluid" alt="" />
       <button class="btn-block btn-primary" (click)="onUpload()">Upload Image</button>
     </ng-container>
   </div>
