@@ -23,10 +23,10 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.toastr.error(error.error.message, error.error.statusCode);
           }
           if (error.status === 404) {
-            this.router.navigateByUrl('/not-found');
+            void this.router.navigateByUrl('/not-found');
           }
           if (error.status === 500) {
-            this.router.navigateByUrl('/server-error');
+            void this.router.navigateByUrl('/server-error');
           }
         }
         return throwError(error);
