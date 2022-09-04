@@ -6,3 +6,6 @@ dist
 .history/*
 node_modules/*
 src/assets
+/Dockerfile
+/nginx.conf
+/.prettierignore

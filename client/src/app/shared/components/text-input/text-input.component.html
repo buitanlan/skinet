@@ -1,8 +1,8 @@
 <div class="form-label-group">
   <input
     [ngClass]="
-      controlDir && controlDir?.control && controlDir?.control?.touched
-        ? !controlDir?.control?.valid
+      controlDir && controlDir.control && controlDir.control.touched
+        ? !controlDir.control.valid
           ? 'is-invalid'
           : 'is-valid'
         : 'null'

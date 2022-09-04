@@ -22,7 +22,7 @@ export class TextInputComponent implements OnInit, ControlValueAccessor {
     control?.setAsyncValidators(asyncValidators);
     control?.updateValueAndValidity();
   }
-  onChange(event: any) {}
+  onChange(event: Event) {}
   onTouched() {}
   writeValue(obj: any): void {
     this.input.nativeElement.value = obj || '';
