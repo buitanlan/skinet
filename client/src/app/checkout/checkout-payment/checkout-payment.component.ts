@@ -1,19 +1,59 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from 'src/app/shared/services/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
 import { IOrderToCreate } from 'src/app/shared/models/order';
-import { CheckoutService } from '../checkout.service';
+import { CheckoutService } from '../../shared/services/checkout.service';
 import { lastValueFrom } from 'rxjs';
+import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { NgIf } from '@angular/common';
 
 declare var Stripe: (arg0: string) => any;
 
 @Component({
   selector: 'app-checkout-payment',
-  templateUrl: './checkout-payment.component.html',
-  styleUrls: ['./checkout-payment.component.scss']
+  template: `
+    <div class="mt-4" [formGroup]="checkoutForm">
+      <div class="row">
+        <div class="form-group col-12" formGroupName="paymentForm">
+          <app-text-input [label]="'Name on card'" formControlName="nameOnCard"> </app-text-input>
+        </div>
+        <div class="form-group col-6">
+          <div #cardNumber id="cardNumber" class="form-control py-3"></div>
+          <ng-container *ngIf="cardErrors">
+            <span class="text-danger">{{ cardErrors }}</span>
+          </ng-container>
+        </div>
+        <div class="form-group col-3">
+          <div #cardExpiry class="form-control py-3"></div>
+        </div>
+        <div class="form-group col-3">
+          <div #cardCvc class="form-control py-3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+      <button class="btn btn-outline-primary" cdkStepperPrevious>
+        <i class="fas fa-arrow-left"></i> Back to Review
+      </button>
+
+      <button
+        [disabled]="
+          loading || checkoutForm.get('paymentForm')?.invalid || !cardNumberValid || !cardExpiryValid || !cardCvcValid
+        "
+        class="btn btn-primary"
+        (click)="submitOrder()"
+      >
+        Submit Order <i class="fas fa-arrow-right"></i>
+        <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
+      </button>
+    </div>
+  `,
+  imports: [TextInputComponent, ReactiveFormsModule, CdkStepperModule, NgIf],
+  standalone: true
 })
 export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   @Input() checkoutForm!: UntypedFormGroup;
@@ -33,7 +73,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly basketService: BasketService,
     private readonly checkoutService: CheckoutService,
-    private readonly toastr: ToastrService,
+    private readonly toast: ToastrService,
     private readonly router: Router
   ) {}
 
@@ -94,7 +134,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
           const navigationExtras: NavigationExtras = { state: createdOrder };
           await this.router.navigate(['checkout/success'], navigationExtras);
         } else {
-          this.toastr.error(paymentResult.error.message);
+          this.toast.error(paymentResult.error.message);
         }
         this.loading = false;
       }

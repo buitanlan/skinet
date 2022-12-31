@@ -1,11 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from './account/account.service';
-import { BasketService } from './basket/basket.service';
+import { AccountService } from './shared/services/account.service';
+import { BasketService } from './shared/services/basket.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NavBarComponent } from './shared/components/nav-bar/nav-bar.component';
+import { RouterOutlet } from '@angular/router';
+import { SectionHeaderComponent } from './shared/components/section-header/section-header.component';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <ngx-spinner>
+      <h3>Loading...</h3>
+    </ngx-spinner>
+    <app-nav-bar></app-nav-bar>
+    <app-section-header></app-section-header>
+
+    <div>
+      <!-- <app-shop></app-shop> -->
+      <router-outlet></router-outlet>
+    </div>
+  `,
+  imports: [NgxSpinnerModule, NavBarComponent, RouterOutlet, SectionHeaderComponent],
+  standalone: true
 })
 export class AppComponent implements OnInit {
   title = 'SkiNet';

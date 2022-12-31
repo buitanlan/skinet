@@ -2,12 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IOrder } from 'src/app/shared/models/order';
 import { BreadcrumbService } from 'xng-breadcrumb';
-import { OrdersService } from '../orders.service';
+import { OrdersService } from '../../shared/services/orders.service';
+import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
+import { OrderTotalsComponent } from '../../shared/components/order-totals/order-totals.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-order-detailed',
-  templateUrl: './order-detailed.component.html',
-  styleUrls: ['./order-detailed.component.scss']
+  template: `
+    <div class="container mt-5">
+      <div class="row" *ngIf="order">
+        <div class="col-8">
+          <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"> </app-basket-summary>
+        </div>
+        <div class="col-4">
+          <app-order-totals [shippingPrice]="order.shippingPrice" [subtotal]="order.subtotal" [total]="order.total">
+          </app-order-totals>
+        </div>
+      </div>
+    </div>
+  `,
+  imports: [BasketSummaryComponent, OrderTotalsComponent, NgIf],
+  standalone: true
 })
 export class OrderDetailedComponent implements OnInit {
   order = {} as IOrder;
