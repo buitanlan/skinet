@@ -27,8 +27,9 @@ import { CurrencyPipe } from '@angular/common';
   standalone: true
 })
 export class OrderTotalsComponent {
-  @Input() shippingPrice = 0;
-  @Input() subtotal = 0;
-  @Input() total = 0;
-  constructor() {}
+	@Input() shippingPrice = 0;
+	@Input() subtotal = 0;
+	@Input() total = 0;
+
+	constructor() {}
 }

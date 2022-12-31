@@ -12,20 +12,20 @@ import { RouterLink } from '@angular/router';
         <div class="col-12">
           <table class="table table-hover" style="cursor: pointer">
             <thead class="thead-light">
-              <tr>
-                <th>Order</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
-              </tr>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let order of orders" routerLink="/orders/{{ order.id }}">
-                <th># {{ order.id }}</th>
-                <td>{{ order.orderDate | date : 'medium' }}</td>
-                <td>{{ order.total | currency }}</td>
-                <td>{{ order.status }}</td>
-              </tr>
+            <tr *ngFor="let order of orders" routerLink="/orders/{{ order.id }}">
+              <th># {{ order.id }}</th>
+              <td>{{ order.orderDate | date : 'medium' }}</td>
+              <td>{{ order.total | currency }}</td>
+              <td>{{ order.status }}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -36,21 +36,22 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class OrdersComponent implements OnInit {
-  orders: IOrder[] = [];
+	orders: IOrder[] = [];
 
-  constructor(private readonly ordersService: OrdersService) {}
+	constructor(private readonly ordersService: OrdersService) {}
 
-  ngOnInit(): void {
-    this.getOrders();
-  }
-  getOrders() {
-    this.ordersService.getOrdersForUser().subscribe({
-      next: (orders: IOrder[]) => {
-        this.orders = orders;
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
+	ngOnInit(): void {
+		this.getOrders();
+	}
+
+	getOrders() {
+		this.ordersService.getOrdersForUser().subscribe({
+			next: (orders: IOrder[]) => {
+				this.orders = orders;
+			},
+			error: (error) => {
+				console.log(error);
+			},
+		});
+	}
 }

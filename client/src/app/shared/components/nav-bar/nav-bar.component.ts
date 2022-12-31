@@ -17,7 +17,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
       <img src="/assets/images/logo.png" style="max-height: 70px" alt="logo" routerLink="/" class="logo" />
       <nav class="my-2 my-md-0 ms-md-3 text-uppercase" style="font-size: larger">
         <a class="p-2" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-          >Home</a
+        >Home</a
         >
         <a class="p-2" routerLink="/shop" routerLinkActive="active">Shop</a>
         <ng-container *ngIf="isAdmin$ | async">
@@ -66,20 +66,21 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
   standalone: true
 })
 export class NavBarComponent implements OnInit {
-  basket$!: Observable<IBasket | null>;
-  currentUser$!: Observable<IUser | null>;
-  basketTotalQuantity$!: Observable<IBasketQuantity | null>;
-  isAdmin$!: Observable<boolean>;
+	basket$!: Observable<IBasket | null>;
+	currentUser$!: Observable<IUser | null>;
+	basketTotalQuantity$!: Observable<IBasketQuantity | null>;
+	isAdmin$!: Observable<boolean>;
 
-  constructor(private readonly basketService: BasketService, private readonly accountService: AccountService) {}
+	constructor(private readonly basketService: BasketService, private readonly accountService: AccountService) {}
 
-  ngOnInit(): void {
-    this.basket$ = this.basketService.basket$;
-    this.currentUser$ = this.accountService.currentUser$;
-    this.basketTotalQuantity$ = this.basketService.basketTotalQuantity$;
-    this.isAdmin$ = this.accountService.isAdmin$;
-  }
-  logout() {
-    this.accountService.logout();
-  }
+	ngOnInit(): void {
+		this.basket$ = this.basketService.basket$;
+		this.currentUser$ = this.accountService.currentUser$;
+		this.basketTotalQuantity$ = this.basketService.basketTotalQuantity$;
+		this.isAdmin$ = this.accountService.isAdmin$;
+	}
+
+	logout() {
+		this.accountService.logout();
+	}
 }

@@ -8,15 +8,16 @@ import { AccountService } from 'src/app/shared/services/account.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private readonly accountService: AccountService, private readonly router: Router) {}
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.accountService.currentUser$.pipe(
-      map((auth) => {
-        if (!auth) {
-          void this.router.navigate(['account/login'], { queryParams: { returnUrl: state.url } });
-        }
-        return !!auth;
-      })
-    );
-  }
+	constructor(private readonly accountService: AccountService, private readonly router: Router) {}
+
+	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+		return this.accountService.currentUser$.pipe(
+			map((auth) => {
+				if (!auth) {
+					void this.router.navigate(['account/login'], { queryParams: { returnUrl: state.url } });
+				}
+				return !!auth;
+			}),
+		);
+	}
 }

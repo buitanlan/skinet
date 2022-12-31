@@ -11,7 +11,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-checkout-review',
   template: `
     <div class="container mt-4">
-      <app-basket-summary [isBasket]="false" [items]="(basket$ | async)?.items"> </app-basket-summary>
+      <app-basket-summary [isBasket]="false" [items]="(basket$ | async)?.items"></app-basket-summary>
     </div>
     <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
       <button class="btn btn-outline-primary" cdkStepperPrevious>
@@ -27,24 +27,25 @@ import { AsyncPipe } from '@angular/common';
   standalone: true
 })
 export class CheckoutReviewComponent implements OnInit {
-  @Input() appStepper!: CdkStepper;
-  basket$!: Observable<IBasket | null>;
+	@Input() appStepper!: CdkStepper;
+	basket$!: Observable<IBasket | null>;
 
-  constructor(private readonly basketService: BasketService, private readonly toastr: ToastrService) {}
+	constructor(private readonly basketService: BasketService, private readonly toastr: ToastrService) {}
 
-  ngOnInit(): void {
-    this.basket$ = this.basketService.basket$;
-  }
-  createPaymentIntent() {
-    return this.basketService.createPaymentIntent().subscribe({
-      next: () => {
-        this.toastr.success('Payment intent created');
-        this.appStepper.next();
-      },
-      error: (err) => {
-        console.log(err);
-        this.toastr.error(err.message);
-      }
-    });
-  }
+	ngOnInit(): void {
+		this.basket$ = this.basketService.basket$;
+	}
+
+	createPaymentIntent() {
+		return this.basketService.createPaymentIntent().subscribe({
+			next: () => {
+				this.toastr.success('Payment intent created');
+				this.appStepper.next();
+			},
+			error: (err) => {
+				console.log(err);
+				this.toastr.error(err.message);
+			},
+		});
+	}
 }

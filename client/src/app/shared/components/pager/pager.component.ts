@@ -22,12 +22,14 @@ import { FormsModule } from '@angular/forms';
   standalone: true
 })
 export class PagerComponent {
-  @Input() totalCount!: number;
-  @Input() pageSize!: number;
-  @Input() pageIndex!: number;
-  @Output() pageChanged = new EventEmitter<number>();
-  constructor() {}
-  onPaperChange(event: any) {
-    this.pageChanged.emit(event.page);
-  }
+	@Input() totalCount!: number;
+	@Input() pageSize!: number;
+	@Input() pageIndex!: number;
+	@Output() pageChanged = new EventEmitter<number>();
+
+	constructor() {}
+
+	onPaperChange(event: any) {
+		this.pageChanged.emit(event.page);
+	}
 }

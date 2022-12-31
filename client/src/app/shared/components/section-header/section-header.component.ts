@@ -29,9 +29,11 @@ import { AsyncPipe, NgIf, TitleCasePipe } from '@angular/common';
   standalone: true
 })
 export class SectionHeaderComponent implements OnInit {
-  breadcrumb$!: Observable<any[]>;
-  constructor(private readonly bcService: BreadcrumbService) {}
-  ngOnInit(): void {
-    this.breadcrumb$ = this.bcService.breadcrumbs$;
-  }
+	breadcrumb$!: Observable<any[]>;
+
+	constructor(private readonly bcService: BreadcrumbService) {}
+
+	ngOnInit(): void {
+		this.breadcrumb$ = this.bcService.breadcrumbs$;
+	}
 }

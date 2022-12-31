@@ -30,12 +30,13 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
 export class StepperComponent extends CdkStepper implements OnInit {
-  @Input() linearModeSelected = false;
+	@Input() linearModeSelected = false;
 
-  ngOnInit(): void {
-    this.linear = this.linearModeSelected;
-  }
-  onClick(index: number) {
-    this.selectedIndex = index;
-  }
+	ngOnInit(): void {
+		this.linear = this.linearModeSelected;
+	}
+
+	onClick(index: number) {
+		this.selectedIndex = index;
+	}
 }

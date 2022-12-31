@@ -39,72 +39,73 @@ import { EditProductPhotosComponent } from '../edit-product-photos/edit-product-
   standalone: true
 })
 export class EditProductComponent implements OnInit {
-  product = {} as IProduct;
+	product = {} as IProduct;
 
-  productFormValues: ProductFormValues;
-  brands = [] as IBrand[];
-  types = [] as IType[];
+	productFormValues: ProductFormValues;
+	brands = [] as IBrand[];
+	types = [] as IType[];
 
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly shopService: ShopService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
-    this.productFormValues = new ProductFormValues();
-  }
+	constructor(
+		private readonly adminService: AdminService,
+		private readonly shopService: ShopService,
+		private readonly route: ActivatedRoute,
+		private readonly router: Router,
+	) {
+		this.productFormValues = new ProductFormValues();
+	}
 
-  ngOnInit(): void {
-    const brands = this.getBrands();
-    const types = this.getTypes();
+	ngOnInit(): void {
+		const brands = this.getBrands();
+		const types = this.getTypes();
 
-    forkJoin([types, brands]).subscribe({
-      next: (results) => {
-        this.types = results[0];
-        this.brands = results[1];
-      },
-      error: (error) => console.log(error),
-      complete: () => {
-        if (this.route.snapshot.url[0].path === 'edit') {
-          this.loadProduct();
-        }
-      }
-    });
-  }
-  updatePrice(event: any) {
-    this.product.price = event;
-  }
+		forkJoin([types, brands]).subscribe({
+			next: (results) => {
+				this.types = results[0];
+				this.brands = results[1];
+			},
+			error: (error) => console.log(error),
+			complete: () => {
+				if (this.route.snapshot.url[0].path === 'edit') {
+					this.loadProduct();
+				}
+			},
+		});
+	}
 
-  loadProduct() {
-    this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: IProduct) => {
-      const productBrandId = this.brands.find((x) => x.name === response.productBrand)?.id;
-      const productTypeId = this.types.find((x) => x.name === response.productType)?.id;
-      this.product = response;
-      if (productBrandId && productTypeId) {
-        this.productFormValues = { ...response, productBrandId, productTypeId };
-      }
-    });
-  }
+	updatePrice(event: any) {
+		this.product.price = event;
+	}
 
-  getBrands() {
-    return this.shopService.getBrand();
-  }
+	loadProduct() {
+		this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: IProduct) => {
+			const productBrandId = this.brands.find((x) => x.name === response.productBrand)?.id;
+			const productTypeId = this.types.find((x) => x.name === response.productType)?.id;
+			this.product = response;
+			if (productBrandId && productTypeId) {
+				this.productFormValues = { ...response, productBrandId, productTypeId };
+			}
+		});
+	}
 
-  getTypes() {
-    return this.shopService.getType();
-  }
+	getBrands() {
+		return this.shopService.getBrand();
+	}
 
-  onSubmit(product: ProductFormValues) {
-    if (this.route.snapshot.url[0].path === 'edit') {
-      const updatedProduct = { ...this.product, ...product, price: +product.price };
-      this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe(() => {
-        void this.router.navigate(['/admin']);
-      });
-    } else {
-      const newProduct = { ...product, price: +product.price };
-      this.adminService.createProduct(newProduct).subscribe(() => {
-        void this.router.navigate(['/admin']);
-      });
-    }
-  }
+	getTypes() {
+		return this.shopService.getType();
+	}
+
+	onSubmit(product: ProductFormValues) {
+		if (this.route.snapshot.url[0].path === 'edit') {
+			const updatedProduct = { ...this.product, ...product, price: +product.price };
+			this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe(() => {
+				void this.router.navigate(['/admin']);
+			});
+		} else {
+			const newProduct = { ...product, price: +product.price };
+			this.adminService.createProduct(newProduct).subscribe(() => {
+				void this.router.navigate(['/admin']);
+			});
+		}
+	}
 }

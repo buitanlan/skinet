@@ -13,7 +13,7 @@ import { NgIf } from '@angular/common';
     <div class="container mt-5">
       <div class="row" *ngIf="order">
         <div class="col-8">
-          <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"> </app-basket-summary>
+          <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"></app-basket-summary>
         </div>
         <div class="col-4">
           <app-order-totals [shippingPrice]="order.shippingPrice" [subtotal]="order.subtotal" [total]="order.total">
@@ -26,25 +26,25 @@ import { NgIf } from '@angular/common';
   standalone: true
 })
 export class OrderDetailedComponent implements OnInit {
-  order = {} as IOrder;
+	order = {} as IOrder;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService,
-    private readonly ordersService: OrdersService
-  ) {
-    this.breadcrumbService.set('@OrderDetailed', '');
-  }
+	constructor(
+		private readonly route: ActivatedRoute,
+		private breadcrumbService: BreadcrumbService,
+		private readonly ordersService: OrdersService,
+	) {
+		this.breadcrumbService.set('@OrderDetailed', '');
+	}
 
-  ngOnInit(): void {
-    this.ordersService.getOrderDetailed(Number(this.route.snapshot.paramMap.get('id'))).subscribe({
-      next: (order: IOrder) => {
-        this.order = order;
-        this.breadcrumbService.set('@OrderDetailed', `Order# ${order.id} - ${order.status}`);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
+	ngOnInit(): void {
+		this.ordersService.getOrderDetailed(Number(this.route.snapshot.paramMap.get('id'))).subscribe({
+			next: (order: IOrder) => {
+				this.order = order;
+				this.breadcrumbService.set('@OrderDetailed', `Order# ${order.id} - ${order.status}`);
+			},
+			error: (error) => {
+				console.log(error);
+			},
+		});
+	}
 }

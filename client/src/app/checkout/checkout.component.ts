@@ -15,34 +15,35 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
-  template: `<div class="container mt-5">
-    <div class="row">
-      <div class="col-8">
-        <app-stepper [linearModeSelected]="true" #appStepper>
-          <cdk-step [label]="'Address'" [completed]="checkoutForm.get('addressForm')!.valid">
-            <app-checkout-address [checkoutForm]="checkoutForm"></app-checkout-address>
-          </cdk-step>
-          <cdk-step [label]="'Delivery'" [completed]="checkoutForm.get('deliveryForm')!.valid">
-            <app-checkout-delivery [checkoutForm]="checkoutForm"></app-checkout-delivery>
-          </cdk-step>
-          <cdk-step [label]="'Review'">
-            <app-checkout-review [appStepper]="appStepper"></app-checkout-review>
-          </cdk-step>
-          <cdk-step [label]="'Payment'">
-            <app-checkout-payment [checkoutForm]="checkoutForm"></app-checkout-payment>
-          </cdk-step>
-        </app-stepper>
+  template: `
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-8">
+          <app-stepper [linearModeSelected]="true" #appStepper>
+            <cdk-step [label]="'Address'" [completed]="checkoutForm.get('addressForm')!.valid">
+              <app-checkout-address [checkoutForm]="checkoutForm"></app-checkout-address>
+            </cdk-step>
+            <cdk-step [label]="'Delivery'" [completed]="checkoutForm.get('deliveryForm')!.valid">
+              <app-checkout-delivery [checkoutForm]="checkoutForm"></app-checkout-delivery>
+            </cdk-step>
+            <cdk-step [label]="'Review'">
+              <app-checkout-review [appStepper]="appStepper"></app-checkout-review>
+            </cdk-step>
+            <cdk-step [label]="'Payment'">
+              <app-checkout-payment [checkoutForm]="checkoutForm"></app-checkout-payment>
+            </cdk-step>
+          </app-stepper>
+        </div>
+        <div class="col-4">
+          <app-order-totals
+            *ngIf="basketTotalPrice$ | async as basketTotalPrice"
+            [shippingPrice]="basketTotalPrice.shipping"
+            [subtotal]="basketTotalPrice.subtotal"
+            [total]="basketTotalPrice.total"
+          ></app-order-totals>
+        </div>
       </div>
-      <div class="col-4">
-        <app-order-totals
-          *ngIf="basketTotalPrice$ | async as basketTotalPrice"
-          [shippingPrice]="basketTotalPrice.shipping"
-          [subtotal]="basketTotalPrice.subtotal"
-          [total]="basketTotalPrice.total"
-        ></app-order-totals>
-      </div>
-    </div>
-  </div> `,
+    </div> `,
   imports: [
     CheckoutPaymentComponent,
     CheckoutReviewComponent,
@@ -56,56 +57,56 @@ import { AsyncPipe } from '@angular/common';
   standalone: true
 })
 export class CheckoutComponent implements OnInit {
-  basketTotalPrice$!: Observable<IBasketTotals | null>;
-  checkoutForm!: UntypedFormGroup;
+	basketTotalPrice$!: Observable<IBasketTotals | null>;
+	checkoutForm!: UntypedFormGroup;
 
-  constructor(
-    private readonly fb: UntypedFormBuilder,
-    private readonly accountService: AccountService,
-    private readonly basketService: BasketService
-  ) {}
+	constructor(
+		private readonly fb: UntypedFormBuilder,
+		private readonly accountService: AccountService,
+		private readonly basketService: BasketService,
+	) {}
 
-  ngOnInit(): void {
-    this.createCheckoutForm();
-    this.getAddressFromValues();
-    this.getDeliveryMethodValue();
-    this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
-  }
+	ngOnInit(): void {
+		this.createCheckoutForm();
+		this.getAddressFromValues();
+		this.getDeliveryMethodValue();
+		this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
+	}
 
-  createCheckoutForm() {
-    this.checkoutForm = this.fb.group({
-      addressForm: this.fb.group({
-        firstName: [null, Validators.required],
-        lastName: [null, Validators.required],
-        street: [null, Validators.required],
-        city: [null, Validators.required],
-        state: [null, Validators.required],
-        zipCode: [null, Validators.required]
-      }),
-      deliveryForm: this.fb.group({
-        deliveryMethod: [null, Validators.required]
-      }),
-      paymentForm: this.fb.group({
-        nameOnCard: [null, Validators.required]
-      })
-    });
-  }
+	createCheckoutForm() {
+		this.checkoutForm = this.fb.group({
+			addressForm: this.fb.group({
+				firstName: [null, Validators.required],
+				lastName: [null, Validators.required],
+				street: [null, Validators.required],
+				city: [null, Validators.required],
+				state: [null, Validators.required],
+				zipCode: [null, Validators.required],
+			}),
+			deliveryForm: this.fb.group({
+				deliveryMethod: [null, Validators.required],
+			}),
+			paymentForm: this.fb.group({
+				nameOnCard: [null, Validators.required],
+			}),
+		});
+	}
 
-  getAddressFromValues() {
-    this.accountService.getUserAddress().subscribe({
-      next: (address) => {
-        if (address) {
-          this.checkoutForm?.get('addressForm')?.patchValue(address);
-        }
-      },
-      error: (err) => console.log(err)
-    });
-  }
+	getAddressFromValues() {
+		this.accountService.getUserAddress().subscribe({
+			next: (address) => {
+				if (address) {
+					this.checkoutForm?.get('addressForm')?.patchValue(address);
+				}
+			},
+			error: (err) => console.log(err),
+		});
+	}
 
-  getDeliveryMethodValue() {
-    const basket = this.basketService.getCurrentBasketValue();
-    if (basket?.deliveryMethodId) {
-      this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
-    }
-  }
+	getDeliveryMethodValue() {
+		const basket = this.basketService.getCurrentBasketValue();
+		if (basket?.deliveryMethodId) {
+			this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
+		}
+	}
 }

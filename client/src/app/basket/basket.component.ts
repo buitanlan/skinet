@@ -56,22 +56,25 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
   standalone: true
 })
 export class BasketComponent implements OnInit {
-  basket$!: Observable<IBasket | null>;
-  basketTotalPrice$!: Observable<IBasketTotals | null>;
+	basket$!: Observable<IBasket | null>;
+	basketTotalPrice$!: Observable<IBasketTotals | null>;
 
-  constructor(private readonly basketService: BasketService) {}
+	constructor(private readonly basketService: BasketService) {}
 
-  ngOnInit(): void {
-    this.basket$ = this.basketService.basket$;
-    this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
-  }
-  removeBasketItem(item: IBasketItem) {
-    this.basketService.removeItemFromBasket(item);
-  }
-  decrementItemQuantity(item: IBasketItem) {
-    this.basketService.decrementItemQuantity(item);
-  }
-  incrementItemQuantity(item: IBasketItem) {
-    this.basketService.incrementItemQuantity(item);
-  }
+	ngOnInit(): void {
+		this.basket$ = this.basketService.basket$;
+		this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
+	}
+
+	removeBasketItem(item: IBasketItem) {
+		this.basketService.removeItemFromBasket(item);
+	}
+
+	decrementItemQuantity(item: IBasketItem) {
+		this.basketService.decrementItemQuantity(item);
+	}
+
+	incrementItemQuantity(item: IBasketItem) {
+		this.basketService.incrementItemQuantity(item);
+	}
 }

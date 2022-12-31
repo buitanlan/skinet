@@ -9,5 +9,5 @@ import { Component } from '@angular/core';
   standalone: true
 })
 export class NotFoundComponent {
-  constructor() {}
+	constructor() {}
 }

@@ -8,16 +8,16 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-  constructor(private readonly accountService: AccountService, private readonly router: Router) {}
+	constructor(private readonly accountService: AccountService, private readonly router: Router) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.accountService.isAdmin$.pipe(
-      map((admin) => {
-        if (!admin) {
-          void this.router.navigateByUrl('/');
-        }
-        return admin;
-      })
-    );
-  }
+	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+		return this.accountService.isAdmin$.pipe(
+			map((admin) => {
+				if (!admin) {
+					void this.router.navigateByUrl('/');
+				}
+				return admin;
+			}),
+		);
+	}
 }

@@ -41,19 +41,19 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
   standalone: true
 })
 export class CheckoutDeliveryComponent implements OnInit {
-  @Input() checkoutForm!: FormGroup;
-  deliveryMethods = [] as IDeliveryMethod[];
+	@Input() checkoutForm!: FormGroup;
+	deliveryMethods = [] as IDeliveryMethod[];
 
-  constructor(private readonly checkoutService: CheckoutService, private readonly basketService: BasketService) {}
+	constructor(private readonly checkoutService: CheckoutService, private readonly basketService: BasketService) {}
 
-  ngOnInit(): void {
-    this.checkoutService.getDeliveryMethod().subscribe({
-      next: (dm: IDeliveryMethod[]) => (this.deliveryMethods = dm),
-      error: (err) => console.log(err)
-    });
-  }
+	ngOnInit(): void {
+		this.checkoutService.getDeliveryMethod().subscribe({
+			next: (dm: IDeliveryMethod[]) => (this.deliveryMethods = dm),
+			error: (err) => console.log(err),
+		});
+	}
 
-  setShippingPrice(deliveryMethod: IDeliveryMethod) {
-    this.basketService.setShippingPrice(deliveryMethod);
-  }
+	setShippingPrice(deliveryMethod: IDeliveryMethod) {
+		this.basketService.setShippingPrice(deliveryMethod);
+	}
 }

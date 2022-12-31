@@ -18,12 +18,13 @@ import { NgIf } from '@angular/common';
   standalone: true
 })
 export class CheckoutSuccessComponent {
-  order = {} as IOrder;
-  constructor(private readonly router: Router) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation && navigation.extras && navigation.extras.state;
-    if (state) {
-      this.order = state as IOrder;
-    }
-  }
+	order = {} as IOrder;
+
+	constructor(private readonly router: Router) {
+		const navigation = this.router.getCurrentNavigation();
+		const state = navigation && navigation.extras && navigation.extras.state;
+		if (state) {
+			this.order = state as IOrder;
+		}
+	}
 }

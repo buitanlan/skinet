@@ -31,10 +31,11 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class ProductItemComponent {
-  @Input() product = {} as IProduct;
-  constructor(private readonly basketService: BasketService) {}
+	@Input() product = {} as IProduct;
 
-  addItemToBasket() {
-    this.basketService.addItemToBasket(this.product);
-  }
+	constructor(private readonly basketService: BasketService) {}
+
+	addItemToBasket() {
+		this.basketService.addItemToBasket(this.product);
+	}
 }

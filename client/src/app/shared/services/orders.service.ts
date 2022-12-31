@@ -7,15 +7,15 @@ import { IOrder } from '../models/order';
   providedIn: 'root'
 })
 export class OrdersService {
-  baseUrl = environment.apiUrl;
+	baseUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient) {}
+	constructor(private readonly http: HttpClient) {}
 
-  getOrdersForUser() {
-    return this.http.get<IOrder[]>(this.baseUrl + 'orders');
-  }
+	getOrdersForUser() {
+		return this.http.get<IOrder[]>(this.baseUrl + 'orders');
+	}
 
-  getOrderDetailed(id: number) {
-    return this.http.get<IOrder>(this.baseUrl + 'orders/' + id);
-  }
+	getOrderDetailed(id: number) {
+		return this.http.get<IOrder>(this.baseUrl + 'orders/' + id);
+	}
 }

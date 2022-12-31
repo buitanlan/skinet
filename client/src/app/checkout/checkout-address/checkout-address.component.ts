@@ -56,19 +56,19 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class CheckoutAddressComponent {
-  @Input() checkoutForm!: FormGroup;
+	@Input() checkoutForm!: FormGroup;
 
-  constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {}
+	constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {}
 
-  saveUserAddress() {
-    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
-      next: (address: IAddress) => {
-        this.toastr.success('Address saved');
-        this.checkoutForm.get('addressForm')?.reset(address);
-      },
-      error: (err) => {
-        this.toastr.error(err.message);
-      }
-    });
-  }
+	saveUserAddress() {
+		this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
+			next: (address: IAddress) => {
+				this.toastr.success('Address saved');
+				this.checkoutForm.get('addressForm')?.reset(address);
+			},
+			error: (err) => {
+				this.toastr.error(err.message);
+			},
+		});
+	}
 }

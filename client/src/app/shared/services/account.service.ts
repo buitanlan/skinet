@@ -11,76 +11,78 @@ import { IUser } from '../models/user';
   providedIn: 'root'
 })
 export class AccountService {
-  baseUrl = environment.apiUrl;
-  private currentUserSource = new ReplaySubject<IUser | null>(1);
-  currentUser$ = this.currentUserSource.asObservable();
-  private isAdminSource = new ReplaySubject<boolean>(1);
-  isAdmin$ = this.isAdminSource.asObservable();
-  constructor(private readonly http: HttpClient, private router: Router) {}
+	baseUrl = environment.apiUrl;
+	private currentUserSource = new ReplaySubject<IUser | null>(1);
+	currentUser$ = this.currentUserSource.asObservable();
+	private isAdminSource = new ReplaySubject<boolean>(1);
+	isAdmin$ = this.isAdminSource.asObservable();
 
-  loadCurrentUser(token: string | null): Observable<any> {
-    if (!token) {
-      this.currentUserSource.next(null);
-      return of(null);
-    }
+	constructor(private readonly http: HttpClient, private router: Router) {}
 
-    return this.http.get<IUser>(`${this.baseUrl}account`).pipe(
-      map((user: IUser) => {
-        if (user) {
-          localStorage.setItem('token', user.token);
-          this.currentUserSource.next(user);
-          this.isAdminSource.next(this.isAdmin(user.token));
-        }
-      })
-    );
-  }
+	loadCurrentUser(token: string | null): Observable<any> {
+		if (!token) {
+			this.currentUserSource.next(null);
+			return of(null);
+		}
 
-  login(value: any) {
-    return this.http.post<IUser>(this.baseUrl + 'account/login', value).pipe(
-      map((user: IUser) => {
-        if (user) {
-          localStorage.setItem('token', user.token);
-          this.currentUserSource.next(user);
-          this.isAdminSource.next(this.isAdmin(user.token));
-        }
-      })
-    );
-  }
+		return this.http.get<IUser>(`${this.baseUrl}account`).pipe(
+			map((user: IUser) => {
+				if (user) {
+					localStorage.setItem('token', user.token);
+					this.currentUserSource.next(user);
+					this.isAdminSource.next(this.isAdmin(user.token));
+				}
+			}),
+		);
+	}
 
-  register(value: any) {
-    return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
-      map((user: IUser) => {
-        if (user) {
-          localStorage.setItem('token', user.token);
-          this.currentUserSource.next(user);
-        }
-      })
-    );
-  }
+	login(value: any) {
+		return this.http.post<IUser>(this.baseUrl + 'account/login', value).pipe(
+			map((user: IUser) => {
+				if (user) {
+					localStorage.setItem('token', user.token);
+					this.currentUserSource.next(user);
+					this.isAdminSource.next(this.isAdmin(user.token));
+				}
+			}),
+		);
+	}
 
-  logout() {
-    localStorage.removeItem('token');
-    this.currentUserSource.next(null);
-    this.isAdminSource.next(false);
-    void this.router.navigateByUrl('/');
-  }
-  checkEmailExists(email: string) {
-    return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
-  }
+	register(value: any) {
+		return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
+			map((user: IUser) => {
+				if (user) {
+					localStorage.setItem('token', user.token);
+					this.currentUserSource.next(user);
+				}
+			}),
+		);
+	}
 
-  getUserAddress() {
-    return this.http.get<IAddress>(this.baseUrl + 'account/address');
-  }
+	logout() {
+		localStorage.removeItem('token');
+		this.currentUserSource.next(null);
+		this.isAdminSource.next(false);
+		void this.router.navigateByUrl('/');
+	}
 
-  updateUserAddress(address: IAddress) {
-    return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
-  }
+	checkEmailExists(email: string) {
+		return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
+	}
 
-  isAdmin(token: string): boolean {
-    if (!token) {
-      return false;
-    }
-    const decodedToken = JSON.parse(atob(token.split('.')[1]));
-    return decodedToken.role.indexOf('Admin') > -1;
-  }
+	getUserAddress() {
+		return this.http.get<IAddress>(this.baseUrl + 'account/address');
+	}
+
+	updateUserAddress(address: IAddress) {
+		return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
+	}
+
+	isAdmin(token: string): boolean {
+		if (!token) {
+			return false;
+		}
+		const decodedToken = JSON.parse(atob(token.split('.')[1]));
+		return decodedToken.role.indexOf('Admin') > -1;
+	}
 }

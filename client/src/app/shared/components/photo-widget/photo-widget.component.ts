@@ -43,30 +43,30 @@ import { NgIf } from '@angular/common';
   standalone: true
 })
 export class PhotoWidgetComponent {
-  @Output() addFile = new EventEmitter();
-  files: File[] = [];
-  imageChangedEvent: any = '';
-  croppedImage: string | null = null;
+	@Output() addFile = new EventEmitter();
+	files: File[] = [];
+	imageChangedEvent: any = '';
+	croppedImage: string | null = null;
 
-  constructor() {}
+	constructor() {}
 
-  fileChangeEvent(file: File): void {
-    this.imageChangedEvent = file;
-  }
+	fileChangeEvent(file: File): void {
+		this.imageChangedEvent = file;
+	}
 
-  imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64 ?? null;
-  }
+	imageCropped(event: ImageCroppedEvent) {
+		this.croppedImage = event.base64 ?? null;
+	}
 
-  onSelect(event: NgxDropzoneChangeEvent) {
-    this.files = [];
-    this.files.push(...event.addedFiles);
-    this.fileChangeEvent(this.files[0]);
-  }
+	onSelect(event: NgxDropzoneChangeEvent) {
+		this.files = [];
+		this.files.push(...event.addedFiles);
+		this.fileChangeEvent(this.files[0]);
+	}
 
-  onUpload() {
-    if (this.croppedImage) {
-      this.addFile.emit(base64ToFile(this.croppedImage));
-    }
-  }
+	onUpload() {
+		if (this.croppedImage) {
+			this.addFile.emit(base64ToFile(this.croppedImage));
+		}
+	}
 }

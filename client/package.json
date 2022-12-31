@@ -7,7 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "npx eslint \"src/**/*.ts\" --quiet --fix",
-    "format": "npx prettier \"src/**/*.{js,jsx,ts,tsx,html,css,scss}\" --write",
+    "format": "npx rome format --write .",
     "prepare": "cd .. && npx husky@8.0.2 install ./client/.husky"
   },
   "private": true,
@@ -63,6 +63,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "lint-staged": "^13.1.0",
     "prettier": "^2.8.1",
+    "rome": "11.0.0",
     "typescript": "~4.8.4"
   },
   "lint-staged": {

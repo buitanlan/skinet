@@ -26,29 +26,31 @@ import { TextInputComponent } from '../../shared/components/text-input/text-inpu
   standalone: true
 })
 export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-  returnUrl!: string;
+	loginForm!: FormGroup;
+	returnUrl!: string;
 
-  constructor(
-    private readonly accountService: AccountService,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
+	constructor(
+		private readonly accountService: AccountService,
+		private readonly router: Router,
+		private readonly activatedRoute: ActivatedRoute,
+	) {}
 
-  ngOnInit() {
-    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
-    this.createLoginForm();
-  }
-  createLoginForm() {
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.pattern('^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$')]),
-      password: new FormControl('', Validators.required)
-    });
-  }
-  onSubmit() {
-    this.accountService.login(this.loginForm.value).subscribe({
-      next: () => void this.router.navigateByUrl(this.returnUrl),
-      error: (error) => console.log(error)
-    });
-  }
+	ngOnInit() {
+		this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
+		this.createLoginForm();
+	}
+
+	createLoginForm() {
+		this.loginForm = new FormGroup({
+			email: new FormControl('', [Validators.required, Validators.pattern('^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$')]),
+			password: new FormControl('', Validators.required),
+		});
+	}
+
+	onSubmit() {
+		this.accountService.login(this.loginForm.value).subscribe({
+			next: () => void this.router.navigateByUrl(this.returnUrl),
+			error: (error) => console.log(error),
+		});
+	}
 }
