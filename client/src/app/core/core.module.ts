@@ -10,14 +10,7 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
 
 @NgModule({
   declarations: [TestErrorComponent, ServerErrorComponent, NotFoundComponent],
-  imports: [
-    CommonModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true
-    })
-  ],
+  imports: [CommonModule],
   exports: []
 })
 export class CoreModule {}

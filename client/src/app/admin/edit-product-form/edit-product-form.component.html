@@ -30,7 +30,7 @@
         name="price"
         #price="ngModel"
         pattern="^\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(\.[0-9][0-9])?$"
-        [ngModel]="+product.price | number: '1.2-2'"
+        [ngModel]="+product.price | number : '1.2-2'"
         (ngModelChange)="updatePrice(+$event)"
       />
       <div *ngIf="price.invalid && (price.dirty || price.touched)" class="invalid-feedback">

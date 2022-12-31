@@ -33,7 +33,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly basketService: BasketService,
     private readonly checkoutService: CheckoutService,
-    private readonly toastr: ToastrService,
+    private readonly toast: ToastrService,
     private readonly router: Router
   ) {}
 
@@ -94,7 +94,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
           const navigationExtras: NavigationExtras = { state: createdOrder };
           await this.router.navigate(['checkout/success'], navigationExtras);
         } else {
-          this.toastr.error(paymentResult.error.message);
+          this.toast.error(paymentResult.error.message);
         }
         this.loading = false;
       }

@@ -10,6 +10,7 @@ import { LoadingInterceptor } from './core/interceptors/loading.interceptors';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { SectionHeaderModule } from './core/section-header/section-header.module';
 import { NavBarModule } from './core/nav-bar/nav-bar.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +21,11 @@ import { NavBarModule } from './core/nav-bar/nav-bar.module';
     HttpClientModule,
     NavBarModule,
     SectionHeaderModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true
+    })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

@@ -6,7 +6,7 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
   {
     path: 'home',
@@ -64,7 +64,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
