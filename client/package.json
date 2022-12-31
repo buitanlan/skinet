@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.0.0",
+  "version": "15.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,8 +8,7 @@
     "test": "ng test",
     "lint": "npx eslint \"src/**/*.ts\" --quiet --fix",
     "format": "npx prettier \"src/**/*.{js,jsx,ts,tsx,html,css,scss}\" --write",
-    "e2e": "ng e2e",
-    "prepare": "cd .. && husky install ./client/.husky"
+    "prepare": "cd .. && npx husky@8.0.2 install ./client/.husky"
   },
   "private": true,
   "dependencies": {

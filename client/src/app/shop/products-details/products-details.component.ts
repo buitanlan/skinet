@@ -1,15 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from 'src/app/shared/services/basket.service';
 import { IProduct } from 'src/app/shared/models/product';
 import { BreadcrumbService } from 'xng-breadcrumb';
-import { ShopService } from '../shop.service';
-import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryImageSize, NgxGalleryOptions } from '@kolkov/ngx-gallery';
+import { ShopService } from '../../shared/services/shop.service';
+import {
+  NgxGalleryAnimation,
+  NgxGalleryImage,
+  NgxGalleryImageSize,
+  NgxGalleryModule,
+  NgxGalleryOptions
+} from '@kolkov/ngx-gallery';
+import { CurrencyPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-products-details',
-  templateUrl: './products-details.component.html',
-  styleUrls: ['./products-details.component.scss']
+  template: `
+    <div class="container">
+      <div class="row" *ngIf="product">
+        <div class="col-6">
+          <ngx-gallery
+            [options]="galleryOptions"
+            [images]="galleryImages"
+            style="display: inline-block; margin-bottom: 20px"
+          >
+          </ngx-gallery>
+        </div>
+        <div class="col-6 mt-5">
+          <h3>
+            {{ product.name }}
+          </h3>
+          <p style="font-size: 1.5em">{{ product.price | currency }}</p>
+          <div class="d-flex justify-content-start align-items-center">
+            <i
+              (click)="decrementQuantity()"
+              class="fas fa-minus-circle text-warning me-2"
+              style="cursor: pointer; font-size: 2em"
+            ></i>
+            <span class="font-weight-bold" style="font-size: 1.5em">{{ quantity }}</span>
+            <i
+              (click)="incrementQuantity()"
+              class="fas fa-plus-circle text-warning mx-2"
+              style="cursor: pointer; font-size: 2em"
+            ></i>
+            <button (click)="addItemToBasket()" class="btn btn-outline-primary btn-lg ms-4">Add to Cart</button>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-12 ms-3">
+            <h4>Description</h4>
+            <p>{{ product.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  imports: [CurrencyPipe, NgIf, NgxGalleryModule],
+  standalone: true
 })
 export class ProductsDetailsComponent implements OnInit {
   product = {} as IProduct;

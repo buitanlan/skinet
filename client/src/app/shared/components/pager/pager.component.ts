@@ -1,9 +1,25 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pager',
-  templateUrl: './pager.component.html',
-  styleUrls: ['./pager.component.scss']
+  template: `
+    <pagination
+      [boundaryLinks]="true"
+      [totalItems]="totalCount"
+      [(ngModel)]="pageIndex"
+      (pageChanged)="onPaperChange($event)"
+      [itemsPerPage]="this.pageSize"
+      previousText="&lsaquo;"
+      nextText="&rsaquo;"
+      firstText="&laquo;"
+      lastText="&raquo;"
+    >
+    </pagination>
+  `,
+  imports: [PaginationModule, FormsModule],
+  standalone: true
 })
 export class PagerComponent {
   @Input() totalCount!: number;

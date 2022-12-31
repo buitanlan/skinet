@@ -1,13 +1,30 @@
-import { CdkStepper } from '@angular/cdk/stepper';
+import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from 'src/app/shared/services/basket.service';
 import { IBasket } from 'src/app/shared/models/basket';
+import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
+import { AsyncPipe } from '@angular/common';
+
 @Component({
   selector: 'app-checkout-review',
-  templateUrl: './checkout-review.component.html',
-  styleUrls: ['./checkout-review.component.scss']
+  template: `
+    <div class="container mt-4">
+      <app-basket-summary [isBasket]="false" [items]="(basket$ | async)?.items"> </app-basket-summary>
+    </div>
+    <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+      <button class="btn btn-outline-primary" cdkStepperPrevious>
+        <i class="fas fa-arrow-left"> </i> Back to Delivery
+      </button>
+
+      <button class="btn btn-primary" (click)="createPaymentIntent()">
+        Go to Payment <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  `,
+  imports: [CdkStepperModule, BasketSummaryComponent, AsyncPipe],
+  standalone: true
 })
 export class CheckoutReviewComponent implements OnInit {
   @Input() appStepper!: CdkStepper;

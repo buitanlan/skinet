@@ -4,13 +4,39 @@ import { forkJoin } from 'rxjs';
 import { IBrand } from 'src/app/shared/models/brand';
 import { IProduct, ProductFormValues } from 'src/app/shared/models/product';
 import { IType } from 'src/app/shared/models/type';
-import { ShopService } from 'src/app/shop/shop.service';
-import { AdminService } from '../admin.service';
+import { ShopService } from 'src/app/shared/services/shop.service';
+import { AdminService } from '../../shared/services/admin.service';
+import { EditProductFormComponent } from '../edit-product-form/edit-product-form.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { EditProductPhotosComponent } from '../edit-product-photos/edit-product-photos.component';
 
 @Component({
   selector: 'app-edit-product',
-  templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.scss']
+  template: `
+    <section class="product-edit mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="tab-panel">
+              <tabset class="product-tabset">
+                <tab heading="Edit Product">
+                  <div class="col-lg-8">
+                    <app-edit-product-form [product]="productFormValues" [brands]="brands" [types]="types">
+                    </app-edit-product-form>
+                  </div>
+                </tab>
+                <tab heading="Edit Photos">
+                  <app-edit-product-photos [product]="product"></app-edit-product-photos>
+                </tab>
+              </tabset>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+  imports: [EditProductFormComponent, TabsModule, EditProductPhotosComponent],
+  standalone: true
 })
 export class EditProductComponent implements OnInit {
   product = {} as IProduct;

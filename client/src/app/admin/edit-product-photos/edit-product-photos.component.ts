@@ -1,13 +1,72 @@
 import { Component, Input } from '@angular/core';
 import { IProduct } from '../../shared/models/product';
-import { AdminService } from '../admin.service';
+import { AdminService } from '../../shared/services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { NgForOf, NgIf } from '@angular/common';
+import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo-widget.component';
 
 @Component({
   selector: 'app-edit-product-photos',
-  templateUrl: './edit-product-photos.component.html',
-  styleUrls: ['./edit-product-photos.component.scss']
+  template: `
+    <div class="py-5">
+      <div class="container">
+        <ng-container *ngIf="!addPhotoMode">
+          <div class="d-flex justify-content-between mb-3">
+            <h3>Product Photos</h3>
+            <button class="btn btn-primary" (click)="addPhotoModeToggle()">Add New Photo</button>
+          </div>
+          <div class="row">
+            <div class="col-3" *ngFor="let photo of product?.photos">
+              <div class="card">
+                <img
+                  class="card-img-top"
+                  width="100%"
+                  height="225"
+                  src="{{ photo.pictureUrl }}"
+                  alt="{{ photo.fileName }}"
+                />
+                <div class="btn-group" style="width: 100%">
+                  <button
+                    type="button"
+                    (click)="setMainPhoto(photo.id)"
+                    [disabled]="photo.isMain"
+                    class="{{ photo.isMain ? 'btn btn-success' : 'btn btn-outline-success' }}"
+                    style="width: 50%"
+                  >
+                    Set Main
+                  </button>
+                  <button
+                    (click)="deletePhoto(photo.id)"
+                    type="button"
+                    [disabled]="photo.isMain"
+                    class="btn btn-outline-danger"
+                    style="width: 50%"
+                  >
+                    <i class="fa fa-trash"></i>      
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="addPhotoMode">
+          <div class="d-flex justify-content-between mb-3">
+            <h3 class="text-primary">Add new product image</h3>
+            <button class="btn btn-outline-secondary" (click)="addPhotoModeToggle()">Cancel</button>
+          </div>
+          <div class="progress form-group" *ngIf="progress > 0">
+            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+              {{ progress }}%
+            </div>
+          </div>
+          <app-photo-widget (addFile)="uploadFile($event)"></app-photo-widget>
+        </ng-container>
+      </div>
+    </div>
+  `,
+  imports: [NgIf, NgForOf, PhotoWidgetComponent],
+  standalone: true
 })
 export class EditProductPhotosComponent {
   @Input() product = {} as IProduct;
