@@ -1,22 +1,18 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
 import { delay, finalize } from 'rxjs/operators';
 import { BusyService } from '../services/busy.service';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-@Injectable()
-export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private readonly busyService: BusyService) {}
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method === 'POST' && req.url.includes('orders'))
-      if (req.url.includes('emailexists')) {
-        return next.handle(req);
-      }
-    return next.handle(req).pipe(
-      delay(300),
-      finalize(() => {
-        this.busyService.idle();
-      })
-    );
-  }
-}
+export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
+  const busyService = inject(BusyService);
+  if (req.method === 'POST' && req.url.includes('orders'))
+    if (req.url.includes('emailexists')) {
+      return next(req);
+    }
+  return next(req).pipe(
+    delay(300),
+    finalize(() => {
+      busyService.idle();
+    })
+  );
+};

@@ -3,10 +3,10 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app/app.route';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
-import { ErrorInterceptor } from './app/shared/interceptors/error.interceptor';
-import { LoadingInterceptor } from './app/shared/interceptors/loading.interceptors';
-import { JwtInterceptor } from './app/shared/interceptors/jwt.interceptor';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
+import { loadingInterceptor } from './app/shared/interceptors/loading.interceptors';
+import { jwtInterceptor } from './app/shared/interceptors/jwt.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 
 bootstrapApplication(AppComponent, {
@@ -18,9 +18,6 @@ bootstrapApplication(AppComponent, {
         preventDuplicates: true
       })
     ]),
-    provideHttpClient(),
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor]))
   ]
 }).catch((err) => console.error(err));
