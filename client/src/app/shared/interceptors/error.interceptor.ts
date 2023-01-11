@@ -1,37 +1,34 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-@Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
-	constructor(private readonly router: Router, private readonly toastr: ToastrService) {}
-
-	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		return next.handle(req).pipe(
-			catchError((error) => {
-				if (error) {
-					if (error.status === 400) {
-						if (error.error.errors) {
-							throw error.error;
-						} else {
-							this.toastr.error(error.error.message, error.error.statusCode);
-						}
-					}
-					if (error.status === 401) {
-						this.toastr.error(error.error.message, error.error.statusCode);
-					}
-					if (error.status === 404) {
-						void this.router.navigateByUrl('/not-found');
-					}
-					if (error.status === 500) {
-						void this.router.navigateByUrl('/server-error');
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+	const router = inject(Router);
+	const toastr = inject(ToastrService);
+	return next(req).pipe(
+		catchError((error) => {
+			if (error) {
+				if (error.status === 400) {
+					if (error.error.errors) {
+						throw error.error;
+					} else {
+						toastr.error(error.error.message, error.error.statusCode);
 					}
 				}
-				return throwError(error);
-			}),
-		);
-	}
-}
+				if (error.status === 401) {
+					toastr.error(error.error.message, error.error.statusCode);
+				}
+				if (error.status === 404) {
+					void router.navigateByUrl('/not-found');
+				}
+				if (error.status === 500) {
+					void router.navigateByUrl('/server-error');
+				}
+			}
+			return throwError(error);
+		}),
+	);
+};
