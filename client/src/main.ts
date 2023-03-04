@@ -8,10 +8,12 @@ import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
 import { loadingInterceptor } from './app/shared/interceptors/loading.interceptors';
 import { jwtInterceptor } from './app/shared/interceptors/jwt.interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
 	providers: [
 		importProvidersFrom([
+			BrowserAnimationsModule,
 			RouterModule.forRoot(routes),
 			ToastrModule.forRoot({
 				positionClass: 'toast-bottom-right',
@@ -20,4 +22,4 @@ bootstrapApplication(AppComponent, {
 		]),
 		provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
 	],
-}).catch((err) => console.error(err));
+}).catch(console.error);

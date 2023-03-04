@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IOrder } from 'src/app/shared/models/order';
+import { Order } from 'src/app/shared/models/order';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { OrdersService } from '../../shared/services/orders.service';
 import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
@@ -16,7 +16,7 @@ import { NgIf } from '@angular/common';
           <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"></app-basket-summary>
         </div>
         <div class="col-4">
-          <app-order-totals [shippingPrice]="order.shippingPrice" [subtotal]="order.subtotal" [total]="order.total">
+          <app-order-totals>
           </app-order-totals>
         </div>
       </div>
@@ -26,7 +26,7 @@ import { NgIf } from '@angular/common';
   standalone: true
 })
 export class OrderDetailedComponent implements OnInit {
-	order = {} as IOrder;
+	order = {} as Order;
 
 	constructor(
 		private readonly route: ActivatedRoute,
@@ -38,7 +38,7 @@ export class OrderDetailedComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.ordersService.getOrderDetailed(Number(this.route.snapshot.paramMap.get('id'))).subscribe({
-			next: (order: IOrder) => {
+			next: (order: Order) => {
 				this.order = order;
 				this.breadcrumbService.set('@OrderDetailed', `Order# ${order.id} - ${order.status}`);
 			},

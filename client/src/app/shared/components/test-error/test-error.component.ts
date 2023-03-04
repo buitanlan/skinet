@@ -7,10 +7,10 @@ import { NgForOf, NgIf } from '@angular/common';
   selector: 'app-test-error',
   template: `
     <div class="container mt-5">
-      <button (click)="get500Error()" class="btn btn-outline-primary ms-3">Test 500 Error</button>
-      <button (click)="get404Error()" class="btn btn-outline-primary ms-3">Test 404 Error</button>
-      <button (click)="get400Error()" class="btn btn-outline-primary ms-3">Test 400 Error</button>
-      <button (click)="get400ValidationError()" class="btn btn-outline-primary ms-3">Test 500 Validation</button>
+      <button (click)="get500Error()" class="btn btn-outline-primary me-3">Test 500 Error</button>
+      <button (click)="get404Error()" class="btn btn-outline-primary me-3">Test 404 Error</button>
+      <button (click)="get400Error()" class="btn btn-outline-primary me-3">Test 400 Error</button>
+      <button (click)="get400ValidationError()" class="btn btn-outline-primary me-3">Test 500 Validation</button>
       <div class="div row mt-5" *ngIf="validationErrors">
         <ul class="text-danger">
           <li *ngFor="let error of validationErrors">{{ error }}</li>

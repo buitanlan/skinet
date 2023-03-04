@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { BasketService } from 'src/app/shared/services/basket.service';
-import { IBasket, IBasketQuantity } from 'src/app/shared/models/basket';
-import { IUser } from 'src/app/shared/models/user';
+import { Basket, BasketQuantity } from 'src/app/shared/models/basket';
+import { User } from 'src/app/shared/models/user';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -27,7 +27,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
       </nav>
       <div class="d-flex align-items-center">
         <a routerLink="/basket" class="position-relative">
-          <i class="fas fa-shopping-cart ms-5 text-dark cart"></i>
+          <i class="fas fa-shopping-cart me-5 text-dark cart"></i>
           <div *ngIf="basket$ | async as basket">
             <div *ngIf="basketTotalQuantity$ | async as totalQuantity" class="cart-no">
               {{ totalQuantity.quantity }}
@@ -35,25 +35,25 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
           </div>
         </a>
         <ng-template #loading>
-          <a routerLink="/account/login" class="btn btn-outline-secondary ms-2">Login</a>
-          <a routerLink="/account/register" class="btn btn-outline-secondary ms-3">Sign up</a>
+          <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
+          <a routerLink="/account/register" class="btn btn-outline-secondary me-3">Sign up</a>
         </ng-template>
 
         <ng-container *ngIf="currentUser$ | async as currentUser; else loading">
-          <div class="dropdown ms-3 ms-5" dropdown>
+          <div class="dropdown me-3 me-5" dropdown>
             <a class="dropdown-toggle" style="cursor: pointer" dropdownToggle>
               <strong>Welcome {{ currentUser.displayName }}</strong>
             </a>
             <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer" *dropdownMenu>
               <a routerLink="/basket" class="dropdown-item d-flex align-items-center py-2">
-                <i class="fas fa-shopping-cart ms-3"></i> View Basket
+                <i class="fas fa-shopping-cart me-3"></i> View Basket
               </a>
               <a routerLink="/orders" class="dropdown-item d-flex align-items-center py-2">
-                <i class="fas fa-history ms-3"></i> View Orders
+                <i class="fas fa-history me-3"></i> View Orders
               </a>
               <div class="dropdown-divider"></div>
               <a (click)="logout()" class="dropdown-item d-flex align-items-center py-2">
-                <i class="fas fa-sign-out-alt ms-3"></i> Log Out
+                <i class="fas fa-sign-out-alt me-3"></i> Log Out
               </a>
             </div>
           </div>
@@ -66,12 +66,12 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
   standalone: true
 })
 export class NavBarComponent implements OnInit {
-	basket$!: Observable<IBasket | null>;
-	currentUser$!: Observable<IUser | null>;
-	basketTotalQuantity$!: Observable<IBasketQuantity | null>;
+	basket$!: Observable<Basket | null>;
+	currentUser$!: Observable<User | null>;
+	basketTotalQuantity$!: Observable<BasketQuantity | null>;
 	isAdmin$!: Observable<boolean>;
-
-	constructor(private readonly basketService: BasketService, private readonly accountService: AccountService) {}
+	readonly basketService = inject(BasketService);
+	readonly accountService = inject(AccountService);
 
 	ngOnInit(): void {
 		this.basket$ = this.basketService.basket$;

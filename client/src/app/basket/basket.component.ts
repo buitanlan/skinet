@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IBasket, IBasketItem, IBasketTotals } from '../shared/models/basket';
+import { Basket, BasketItem, IBasketTotals } from '../shared/models/basket';
 import { BasketService } from '../shared/services/basket.service';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { OrderTotalsComponent } from '../shared/components/order-totals/order-totals.component';
@@ -36,12 +36,7 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
 
             <div class="row">
               <div class="col-6 offset-6">
-                <app-order-totals
-                  *ngIf="basketTotalPrice$ | async as basketTotalPrice"
-                  [shippingPrice]="basketTotalPrice.shipping"
-                  [subtotal]="basketTotalPrice.subtotal"
-                  [total]="basketTotalPrice.total"
-                >
+                <app-order-totals>
                 </app-order-totals>
                 <a routerLink="/checkout" class="btn btn-outline-primary py-2 btn-block"> Proceed to checkout </a>
               </div>
@@ -56,7 +51,7 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
   standalone: true
 })
 export class BasketComponent implements OnInit {
-	basket$!: Observable<IBasket | null>;
+	basket$!: Observable<Basket | null>;
 	basketTotalPrice$!: Observable<IBasketTotals | null>;
 
 	constructor(private readonly basketService: BasketService) {}
@@ -66,15 +61,15 @@ export class BasketComponent implements OnInit {
 		this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
 	}
 
-	removeBasketItem(item: IBasketItem) {
+	removeBasketItem(item: BasketItem) {
 		this.basketService.removeItemFromBasket(item);
 	}
 
-	decrementItemQuantity(item: IBasketItem) {
+	decrementItemQuantity(item: BasketItem) {
 		this.basketService.decrementItemQuantity(item);
 	}
 
-	incrementItemQuantity(item: IBasketItem) {
+	incrementItemQuantity(item: BasketItem) {
 		this.basketService.incrementItemQuantity(item);
 	}
 }

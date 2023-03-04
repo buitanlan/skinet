@@ -4,15 +4,15 @@ import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IAddress } from '../models/address';
-import { IUser } from '../models/user';
+import { Address } from '../models/address';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 	baseUrl = environment.apiUrl;
-	private currentUserSource = new ReplaySubject<IUser | null>(1);
+	private currentUserSource = new ReplaySubject<User | null>(1);
 	currentUser$ = this.currentUserSource.asObservable();
 	private isAdminSource = new ReplaySubject<boolean>(1);
 	isAdmin$ = this.isAdminSource.asObservable();
@@ -25,8 +25,8 @@ export class AccountService {
 			return of(null);
 		}
 
-		return this.http.get<IUser>(`${this.baseUrl}account`).pipe(
-			map((user: IUser) => {
+		return this.http.get<User>(`${this.baseUrl}account`).pipe(
+			map((user: User) => {
 				if (user) {
 					localStorage.setItem('token', user.token);
 					this.currentUserSource.next(user);
@@ -37,8 +37,8 @@ export class AccountService {
 	}
 
 	login(value: any) {
-		return this.http.post<IUser>(this.baseUrl + 'account/login', value).pipe(
-			map((user: IUser) => {
+		return this.http.post<User>(this.baseUrl + 'account/login', value).pipe(
+			map((user: User) => {
 				if (user) {
 					localStorage.setItem('token', user.token);
 					this.currentUserSource.next(user);
@@ -49,8 +49,8 @@ export class AccountService {
 	}
 
 	register(value: any) {
-		return this.http.post<IUser>(this.baseUrl + 'account/register', value).pipe(
-			map((user: IUser) => {
+		return this.http.post<User>(this.baseUrl + 'account/register', value).pipe(
+			map((user: User) => {
 				if (user) {
 					localStorage.setItem('token', user.token);
 					this.currentUserSource.next(user);
@@ -71,11 +71,11 @@ export class AccountService {
 	}
 
 	getUserAddress() {
-		return this.http.get<IAddress>(this.baseUrl + 'account/address');
+		return this.http.get<Address>(this.baseUrl + 'account/address');
 	}
 
-	updateUserAddress(address: IAddress) {
-		return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
+	updateUserAddress(address: Address) {
+		return this.http.put<Address>(this.baseUrl + 'account/address', address);
 	}
 
 	isAdmin(token: string): boolean {

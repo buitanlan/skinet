@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IBrand } from '../shared/models/brand';
-import { IPagination } from '../shared/models/pagination';
-import { IProduct } from '../shared/models/product';
+import { Brand } from '../shared/models/brand';
+import { Pagination } from '../shared/models/pagination';
+import { Product } from '../shared/models/product';
 import { ShopParams } from '../shared/models/shopParams';
-import { IType } from '../shared/models/type';
+import { Type } from '../shared/models/type';
 import { ShopService } from '../shared/services/shop.service';
 import { NgForOf, NgIf } from '@angular/common';
 import { PagingHeaderComponent } from '../shared/components/paging-header/paging-header.component';
@@ -16,11 +16,13 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-shop',
   template: `
     <div class="container mt-3">
-      <div class="row">
+      <div class="row" *ngIf="types.length > 0 && brands.length > 0">
         <section class="col-3">
-          <h5 class="text-warning ms-4 mt-4 mb-3">Sort</h5>
-          <select class="custom-select mb-4" (change)="onSortSelected($event)" [(ngModel)]="this.shopParams.sort">
-            <option *ngFor="let sort of sortOptions" [value]="sort.value">
+          <h5 class="text-warning ms-3">Sort</h5>
+          <select class="custom-select mb-4" (change)="onSortSelected($event)">
+            <option *ngFor="let sort of sortOptions"
+                    [selected]="shopParams.sort === sort.value"
+                    [value]="sort.value">
               {{ sort.name }}
             </option>
           </select>
@@ -57,26 +59,25 @@ import { FormsModule } from '@angular/forms';
               [pageNumber]="this.shopParams.pageNumber"
             ></app-paging-header>
 
-            <div class="form-inline mt-2" *ngIf="products">
+            <div class="d-flex mt-2">
               <input
                 (keyup.enter)="onSearch()"
                 class="form-control me-2"
                 #search
-                style="width: 300px"
                 placeholder="Search"
                 type="text"
               />
-              <button (click)="onSearch()" class="btn btn-outline-primary my-2">Search</button>
-              <button (click)="onReset()" class="btn btn-outline-success ms-2 my-2">Reset</button>
+              <button (click)="onSearch()" class="btn btn-outline-primary mx-2">Search</button>
+              <button (click)="onReset()" class="btn btn-outline-success">Reset</button>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row row-cols-3 g-3 mb-4">
             <div class="col-4" *ngFor="let item of products">
               <app-product-item [product]="item"></app-product-item>
             </div>
           </div>
-          <div class="d-flex justify-content-center my-3" *ngIf="totalCount > 0">
+          <div class="d-flex justify-content-center" *ngIf="totalCount > 0">
             <app-pager
               [pageIndex]="this.shopParams.pageNumber"
               [pageSize]="shopParams.pageSize"
@@ -94,9 +95,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ShopComponent implements OnInit {
 	@ViewChild('search', { static: false }) searchTerm!: ElementRef;
-	products: IProduct[] = [];
-	brands: IBrand[] = [];
-	types: IType[] = [];
+	products: Product[] = [];
+	brands: Brand[] = [];
+	types: Type[] = [];
 	shopParams = new ShopParams();
 	totalCount = 0;
 	sortOptions = [
@@ -130,7 +131,7 @@ export class ShopComponent implements OnInit {
 
 	getProducts(useCache = false) {
 		this.shopService.getProducts(useCache).subscribe({
-			next: (response: IPagination) => {
+			next: (response: Pagination) => {
 				this.products = response.data;
 				this.totalCount = response.count;
 			},
@@ -140,14 +141,14 @@ export class ShopComponent implements OnInit {
 
 	getBrands() {
 		this.shopService.getBrand().subscribe({
-			next: (response: IBrand[]) => (this.brands = [{ id: 0, name: 'All' }, ...response]),
+			next: (response: Brand[]) => (this.brands = [{ id: 0, name: 'All' }, ...response]),
 			error: (error) => console.log(error),
 		});
 	}
 
 	getTypes() {
 		this.shopService.getType().subscribe({
-			next: (response: IType[]) => (this.types = [{ id: 0, name: 'All' }, ...response]),
+			next: (response: Type[]) => (this.types = [{ id: 0, name: 'All' }, ...response]),
 			error: (error) => console.log(error),
 		});
 	}

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { IProduct, ProductFormValues } from '../models/product';
+import { Product, ProductFormValues } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +37,6 @@ export class AdminService {
 	}
 
 	setMainPhoto(photoId: number, productId: number) {
-		return this.http.post<IProduct>(this.baseUrl + 'products/' + productId + '/photo/' + photoId, {});
+		return this.http.post<Product>(this.baseUrl + 'products/' + productId + '/photo/' + photoId, {});
 	}
 }

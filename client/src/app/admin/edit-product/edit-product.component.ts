@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { IBrand } from 'src/app/shared/models/brand';
-import { IProduct, ProductFormValues } from 'src/app/shared/models/product';
-import { IType } from 'src/app/shared/models/type';
+import { Brand } from 'src/app/shared/models/brand';
+import { Product, ProductFormValues } from 'src/app/shared/models/product';
+import { Type } from 'src/app/shared/models/type';
 import { ShopService } from 'src/app/shared/services/shop.service';
 import { AdminService } from '../../shared/services/admin.service';
 import { EditProductFormComponent } from '../edit-product-form/edit-product-form.component';
@@ -39,11 +39,11 @@ import { EditProductPhotosComponent } from '../edit-product-photos/edit-product-
   standalone: true
 })
 export class EditProductComponent implements OnInit {
-	product = {} as IProduct;
+	product = {} as Product;
 
 	productFormValues: ProductFormValues;
-	brands = [] as IBrand[];
-	types = [] as IType[];
+	brands = [] as Brand[];
+	types = [] as Type[];
 
 	constructor(
 		private readonly adminService: AdminService,
@@ -77,7 +77,7 @@ export class EditProductComponent implements OnInit {
 	}
 
 	loadProduct() {
-		this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: IProduct) => {
+		this.shopService.getProduct(Number(this.route.snapshot.paramMap.get('id'))).subscribe((response: Product) => {
 			const productBrandId = this.brands.find((x) => x.name === response.productBrand)?.id;
 			const productTypeId = this.types.find((x) => x.name === response.productType)?.id;
 			this.product = response;
