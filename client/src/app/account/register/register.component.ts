@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormGroup, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { of, timer } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { debounce, debounceTime, of, take, timer } from 'rxjs';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { AccountService } from '../../shared/services/account.service';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
 import { NgForOf, NgIf } from '@angular/common';
@@ -32,52 +32,41 @@ import { NgForOf, NgIf } from '@angular/common';
   imports: [TextInputComponent, ReactiveFormsModule, NgForOf, NgIf],
   standalone: true
 })
-export class RegisterComponent implements OnInit {
-	registerForm!: FormGroup;
-	errors!: string;
+export class RegisterComponent {
+	errors!: string[];
+	complexPassword =
+		"(?=^.{6,10}$)(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*s).*$";
 
 	constructor(
 		private readonly fb: UntypedFormBuilder,
-		private accountService: AccountService,
+		private readonly accountService: AccountService,
 		private readonly router: Router,
 	) {}
 
-	ngOnInit(): void {
-		this.createRegisterForm();
-	}
-
-	createRegisterForm() {
-		this.registerForm = this.fb.group({
-			displayName: [null, [Validators.required]],
-			email: [
-				null,
-				[Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')],
-				[this.validateEmailNotToken()],
-			],
-			password: [null, [Validators.required]],
-		});
-	}
+	registerForm = this.fb.group({
+		displayName: ['', [Validators.required]],
+		email: ['', [Validators.required, Validators.email], [this.validateEmailNotToken()]],
+		password: ['', [Validators.required, Validators.pattern(this.complexPassword)]],
+	});
 
 	onSubmit() {
 		this.accountService.register(this.registerForm.value).subscribe({
 			next: () => void this.router.navigateByUrl('/shop'),
-			error: (error) => {
-				this.errors = error.errors;
-			},
+			error: (error) => (this.errors = error.errors),
 		});
 	}
 
 	validateEmailNotToken(): AsyncValidatorFn {
 		return (control) => {
-			return timer(500).pipe(
+			return control.valueChanges.pipe(
+				debounceTime(1000),
+				take(1),
 				switchMap(() => {
-					if (!control.value) {
-						return of(null);
-					}
 					return this.accountService.checkEmailExists(control.value).pipe(
 						map((res) => {
 							return res ? { emailExists: true } : null;
 						}),
+						finalize(() => control.markAsTouched()),
 					);
 				}),
 			);

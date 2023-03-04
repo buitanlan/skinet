@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IBasketItem } from '../../models/basket';
+import { BasketItem } from '../../models/basket';
 import { CurrencyPipe, NgForOf, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -38,7 +38,7 @@ import { RouterLink } from '@angular/router';
                   class="img-fluid"
                   style="max-height: 50px"
                 />
-                <div class="ms-3 d-inline-block align-middle">
+                <div class="me-3 d-inline-block align-middle">
                   <h5 class="mb-0">
                     <a routerLink="/shop/{{ item.id }}" class="text-dark"> {{ item.productName }}</a>
                   </h5>
@@ -58,7 +58,7 @@ import { RouterLink } from '@angular/router';
                 <i
                   *ngIf="isBasket"
                   (click)="decrementItemQuantity(item)"
-                  class="fas fa-minus-circle text-warning ms-2"
+                  class="fas fa-minus-circle text-warning me-2"
                   style="cursor: pointer; font-size: 2em"
                 ></i>
                 <span class="font-weight-bold" style="font-size: 1.5em">{{ item.quantity }}</span>
@@ -96,21 +96,21 @@ export class BasketSummaryComponent {
 	@Input() isBasket = true;
 	@Input() isOrder = false;
 	@Input() items: any;
-	@Output() decrement: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-	@Output() increment: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
-	@Output() remove: EventEmitter<IBasketItem> = new EventEmitter<IBasketItem>();
+	@Output() decrement: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
+	@Output() increment: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
+	@Output() remove: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
 
 	constructor() {}
 
-	removeBasketItem(item: IBasketItem) {
+	removeBasketItem(item: BasketItem) {
 		this.remove.emit(item);
 	}
 
-	decrementItemQuantity(item: IBasketItem) {
+	decrementItemQuantity(item: BasketItem) {
 		this.decrement.emit(item);
 	}
 
-	incrementItemQuantity(item: IBasketItem) {
+	incrementItemQuantity(item: BasketItem) {
 		this.increment.emit(item);
 	}
 }

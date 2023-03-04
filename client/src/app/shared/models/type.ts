@@ -1,4 +1,4 @@
-export interface IType {
-  id: number;
-  name: string;
+export interface Type {
+	id: number;
+	name: string;
 }

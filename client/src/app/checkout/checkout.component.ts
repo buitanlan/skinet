@@ -11,7 +11,7 @@ import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery
 import { CheckoutAddressComponent } from './checkout-address/checkout-address.component';
 import { StepperComponent } from '../shared/components/stepper/stepper.component';
 import { OrderTotalsComponent } from '../shared/components/order-totals/order-totals.component';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -29,18 +29,13 @@ import { AsyncPipe } from '@angular/common';
             <cdk-step [label]="'Review'">
               <app-checkout-review [appStepper]="appStepper"></app-checkout-review>
             </cdk-step>
-            <cdk-step [label]="'Payment'">
+            <cdk-step [label]="'Payment'" [completed]="checkoutForm.get('paymentForm')?.valid">
               <app-checkout-payment [checkoutForm]="checkoutForm"></app-checkout-payment>
             </cdk-step>
           </app-stepper>
         </div>
         <div class="col-4">
-          <app-order-totals
-            *ngIf="basketTotalPrice$ | async as basketTotalPrice"
-            [shippingPrice]="basketTotalPrice.shipping"
-            [subtotal]="basketTotalPrice.subtotal"
-            [total]="basketTotalPrice.total"
-          ></app-order-totals>
+          <app-order-totals></app-order-totals>
         </div>
       </div>
     </div> `,
@@ -52,7 +47,8 @@ import { AsyncPipe } from '@angular/common';
     CheckoutAddressComponent,
     StepperComponent,
     OrderTotalsComponent,
-    AsyncPipe
+    AsyncPipe,
+    NgIf
   ],
   standalone: true
 })
@@ -76,18 +72,18 @@ export class CheckoutComponent implements OnInit {
 	createCheckoutForm() {
 		this.checkoutForm = this.fb.group({
 			addressForm: this.fb.group({
-				firstName: [null, Validators.required],
-				lastName: [null, Validators.required],
-				street: [null, Validators.required],
-				city: [null, Validators.required],
-				state: [null, Validators.required],
-				zipCode: [null, Validators.required],
+				firstName: ['', Validators.required],
+				lastName: ['', Validators.required],
+				street: ['', Validators.required],
+				city: ['', Validators.required],
+				state: ['', Validators.required],
+				zipCode: ['', Validators.required],
 			}),
 			deliveryForm: this.fb.group({
-				deliveryMethod: [null, Validators.required],
+				deliveryMethod: ['', Validators.required],
 			}),
 			paymentForm: this.fb.group({
-				nameOnCard: [null, Validators.required],
+				nameOnCard: ['', Validators.required],
 			}),
 		});
 	}

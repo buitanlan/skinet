@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { BasketService } from 'src/app/shared/services/basket.service';
-import { IBasket } from 'src/app/shared/models/basket';
+import { Basket } from 'src/app/shared/models/basket';
 import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
 import { AsyncPipe } from '@angular/common';
 
@@ -28,7 +28,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class CheckoutReviewComponent implements OnInit {
 	@Input() appStepper!: CdkStepper;
-	basket$!: Observable<IBasket | null>;
+	basket$!: Observable<Basket | null>;
 
 	constructor(private readonly basketService: BasketService, private readonly toastr: ToastrService) {}
 

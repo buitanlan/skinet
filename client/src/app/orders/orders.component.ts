@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IOrder } from '../shared/models/order';
+import { Order } from '../shared/models/order';
 import { OrdersService } from '../shared/services/orders.service';
 import { CurrencyPipe, DatePipe, NgForOf } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -36,7 +36,7 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class OrdersComponent implements OnInit {
-	orders: IOrder[] = [];
+	orders: Order[] = [];
 
 	constructor(private readonly ordersService: OrdersService) {}
 
@@ -46,7 +46,7 @@ export class OrdersComponent implements OnInit {
 
 	getOrders() {
 		this.ordersService.getOrdersForUser().subscribe({
-			next: (orders: IOrder[]) => {
+			next: (orders: Order[]) => {
 				this.orders = orders;
 			},
 			error: (error) => {

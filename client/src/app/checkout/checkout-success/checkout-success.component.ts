@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IOrder } from 'src/app/shared/models/order';
+import { Order } from 'src/app/shared/models/order';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -18,13 +18,13 @@ import { NgIf } from '@angular/common';
   standalone: true
 })
 export class CheckoutSuccessComponent {
-	order = {} as IOrder;
+	order = {} as Order;
 
 	constructor(private readonly router: Router) {
 		const navigation = this.router.getCurrentNavigation();
 		const state = navigation && navigation.extras && navigation.extras.state;
 		if (state) {
-			this.order = state as IOrder;
+			this.order = state as Order;
 		}
 	}
 }

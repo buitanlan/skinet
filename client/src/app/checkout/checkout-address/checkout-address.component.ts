@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from 'src/app/shared/services/account.service';
-import { IAddress } from 'src/app/shared/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RouterLink } from '@angular/router';
@@ -62,7 +62,7 @@ export class CheckoutAddressComponent {
 
 	saveUserAddress() {
 		this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
-			next: (address: IAddress) => {
+			next: (address: Address) => {
 				this.toastr.success('Address saved');
 				this.checkoutForm.get('addressForm')?.reset(address);
 			},

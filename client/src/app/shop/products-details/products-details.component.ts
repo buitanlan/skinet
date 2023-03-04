@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BasketService } from 'src/app/shared/services/basket.service';
-import { IProduct } from 'src/app/shared/models/product';
+import { Product } from 'src/app/shared/models/product';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../../shared/services/shop.service';
 import {
@@ -18,7 +18,7 @@ import { CurrencyPipe, NgIf } from '@angular/common';
   template: `
     <div class="container">
       <div class="row" *ngIf="product">
-        <div class="col-6">
+        <div class="col-6 mt-5">
           <ngx-gallery
             [options]="galleryOptions"
             [images]="galleryImages"
@@ -47,7 +47,7 @@ import { CurrencyPipe, NgIf } from '@angular/common';
           </div>
         </div>
         <div class="row mt-5">
-          <div class="col-12 ms-3">
+          <div class="col-12 me-3">
             <h4>Description</h4>
             <p>{{ product.description }}</p>
           </div>
@@ -59,7 +59,7 @@ import { CurrencyPipe, NgIf } from '@angular/common';
   standalone: true
 })
 export class ProductsDetailsComponent implements OnInit {
-	product = {} as IProduct;
+	product = {} as Product;
 	quantity = 1;
 	galleryOptions!: NgxGalleryOptions[];
 	galleryImages!: NgxGalleryImage[];

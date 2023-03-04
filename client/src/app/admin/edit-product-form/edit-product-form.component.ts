@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ProductFormValues } from '../../shared/models/product';
-import { IBrand } from '../../shared/models/brand';
+import { Brand } from '../../shared/models/brand';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../shared/services/admin.service';
-import { IType } from 'src/app/shared/models/type';
+import { Type } from 'src/app/shared/models/type';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -97,8 +97,8 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 })
 export class EditProductFormComponent {
 	@Input() product = new ProductFormValues();
-	@Input() brands: IBrand[] = [];
-	@Input() types: IType[] = [];
+	@Input() brands: Brand[] = [];
+	@Input() types: Type[] = [];
 	min = 1;
 
 	constructor(

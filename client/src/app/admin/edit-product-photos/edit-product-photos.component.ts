@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IProduct } from '../../shared/models/product';
+import { Product } from '../../shared/models/product';
 import { AdminService } from '../../shared/services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
@@ -69,7 +69,7 @@ import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo
   standalone: true
 })
 export class EditProductPhotosComponent {
-	@Input() product = {} as IProduct;
+	@Input() product = {} as Product;
 	progress = 0;
 	addPhotoMode = false;
 
@@ -121,7 +121,7 @@ export class EditProductPhotosComponent {
 	}
 
 	setMainPhoto(photoId: number) {
-		this.adminService.setMainPhoto(photoId, this.product.id).subscribe((product: IProduct) => {
+		this.adminService.setMainPhoto(photoId, this.product.id).subscribe((product: Product) => {
 			this.product = product;
 		});
 	}

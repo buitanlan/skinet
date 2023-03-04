@@ -15,10 +15,7 @@ import { SectionHeaderComponent } from './shared/components/section-header/secti
     <app-nav-bar></app-nav-bar>
     <app-section-header></app-section-header>
 
-    <div>
-      <!-- <app-shop></app-shop> -->
-      <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
   `,
   imports: [NgxSpinnerModule, NavBarComponent, RouterOutlet, SectionHeaderComponent],
   standalone: true
