@@ -2,21 +2,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Helpers;
 
-public class MaxFileSizeAttribute : ValidationAttribute
+public class MaxFileSizeAttribute(int maxFileSize) : ValidationAttribute
 {
-    private readonly int _maxFileSize;
-    public MaxFileSizeAttribute(int maxFileSize)
-    {
-        _maxFileSize = maxFileSize;
-    }
-
     protected override ValidationResult IsValid(
         object value, ValidationContext validationContext)
     {
         var file = value as IFormFile;
         if (file is { })
         {
-            if (file.Length > _maxFileSize)
+            if (file.Length > maxFileSize)
             {
                 return new ValidationResult(GetErrorMessage());
             }
@@ -27,6 +21,6 @@ public class MaxFileSizeAttribute : ValidationAttribute
 
     private string GetErrorMessage()
     {
-        return $"Maximum allowed file size is { _maxFileSize} bytes.";
+        return $"Maximum allowed file size is { maxFileSize} bytes.";
     }
 }

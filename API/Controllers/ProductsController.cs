@@ -10,20 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class ProductsController : BaseApiController
+public class ProductsController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
-    private readonly IPhotoService _photoService;
-
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    public ProductsController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService)
-    {
-        _photoService = photoService;
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
-
     [Cached(600)]
     [HttpGet]
     public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
@@ -31,9 +19,9 @@ public class ProductsController : BaseApiController
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
         var countSpec = new ProductWithFiltersForCountSpecification(productParams);
-        var totalItems = await _unitOfWork.Repository<Product>().CountAsync(countSpec);
-        var products = await _unitOfWork.Repository<Product>().ListAsync(spec);
-        var data = _mapper
+        var totalItems = await unitOfWork.Repository<Product>().CountAsync(countSpec);
+        var products = await unitOfWork.Repository<Product>().ListAsync(spec);
+        var data = mapper
             .Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
         return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex,
         productParams.PageSize, totalItems, data));
@@ -47,9 +35,9 @@ public class ProductsController : BaseApiController
     public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(id);
-        var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
+        var product = await unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
         if (product is null) return NotFound(new ApiResponse(404));
-        return _mapper.Map<Product, ProductToReturnDto>(product);
+        return mapper.Map<Product, ProductToReturnDto>(product);
     }
 
 
@@ -57,7 +45,7 @@ public class ProductsController : BaseApiController
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
     {
-        return Ok(await _unitOfWork.Repository<ProductBrand>().ListAllAsync());
+        return Ok(await unitOfWork.Repository<ProductBrand>().ListAllAsync());
     }
 
 
@@ -65,7 +53,7 @@ public class ProductsController : BaseApiController
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
     {
-        return Ok(await _unitOfWork.Repository<ProductType>().ListAllAsync());
+        return Ok(await unitOfWork.Repository<ProductType>().ListAllAsync());
     }
 
 
@@ -73,10 +61,10 @@ public class ProductsController : BaseApiController
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Product>> CreateProduct(ProductCreateDto productToCreate)
     {
-        var product = _mapper.Map<ProductCreateDto, Product>(productToCreate);
+        var product = mapper.Map<ProductCreateDto, Product>(productToCreate);
 
-        _unitOfWork.Repository<Product>().Add(product);
-        var result = await _unitOfWork.Complete();
+        unitOfWork.Repository<Product>().Add(product);
+        var result = await unitOfWork.Complete();
 
         if (result <= 0) return BadRequest(new ApiResponse(400, "Problem creating product"));
 
@@ -88,12 +76,12 @@ public class ProductsController : BaseApiController
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Product>> UpdateProduct(int id, ProductCreateDto productToUpdate)
     {
-        var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+        var product = await unitOfWork.Repository<Product>().GetByIdAsync(id);
 
-        _mapper.Map(productToUpdate, product);
+        mapper.Map(productToUpdate, product);
 
-        _unitOfWork.Repository<Product>().Update(product);
-        var result = await _unitOfWork.Complete();
+        unitOfWork.Repository<Product>().Update(product);
+        var result = await unitOfWork.Complete();
 
         if (result <= 0) return BadRequest(new ApiResponse(400, "Problem updating product"));
 
@@ -105,18 +93,18 @@ public class ProductsController : BaseApiController
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Product>> DeleteProduct(int id)
     {
-        var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+        var product = await unitOfWork.Repository<Product>().GetByIdAsync(id);
         if (product?.Photos is {})
             foreach (var photo in product.Photos)
             {
                 if (photo.Id > 18)
                 {
-                    _photoService.DeleteFromDisk(photo);
+                    photoService.DeleteFromDisk(photo);
                 }
             }
 
-        _unitOfWork.Repository<Product>().Delete(product);
-        var result = await _unitOfWork.Complete();
+        unitOfWork.Repository<Product>().Delete(product);
+        var result = await unitOfWork.Complete();
 
         if (result <= 0) return BadRequest(new ApiResponse(400, "Problem deleting product"));
 
@@ -129,22 +117,22 @@ public class ProductsController : BaseApiController
     public async Task<ActionResult<ProductToReturnDto>> AddProductPhoto(int id, [FromForm] ProductPhotoDto photoDto)
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(id);
-        var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
+        var product = await unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
-        if (photoDto.Photo?.Length <= 0) return _mapper.Map<Product, ProductToReturnDto>(product);
-        var photo = await _photoService.SaveToDiskAsync(photoDto.Photo);
+        if (photoDto.Photo?.Length <= 0) return mapper.Map<Product, ProductToReturnDto>(product);
+        var photo = await photoService.SaveToDiskAsync(photoDto.Photo);
 
         {
             product?.AddPhoto(photo.PictureUrl, photo.FileName);
 
-            if (product != null) _unitOfWork.Repository<Product>().Update(product);
+            if (product != null) unitOfWork.Repository<Product>().Update(product);
 
-            var result = await _unitOfWork.Complete();
+            var result = await unitOfWork.Complete();
 
             if (result <= 0) return BadRequest(new ApiResponse(400, "Problem adding photo product"));
         }
 
-        return _mapper.Map<Product, ProductToReturnDto>(product);
+        return mapper.Map<Product, ProductToReturnDto>(product);
     }
 
 
@@ -153,7 +141,7 @@ public class ProductsController : BaseApiController
     public async Task<ActionResult> DeleteProductPhoto(int id, int photoId)
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(id);
-        var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
+        var product = await unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
         var photo = product.Photos.SingleOrDefault(x => x.Id == photoId);
 
@@ -163,7 +151,7 @@ public class ProductsController : BaseApiController
                 return BadRequest(new ApiResponse(400,
                     "You cannot delete the main photo"));
 
-            _photoService.DeleteFromDisk(photo);
+            photoService.DeleteFromDisk(photo);
         }
         else
         {
@@ -172,9 +160,9 @@ public class ProductsController : BaseApiController
 
         product.RemovePhoto(photoId);
 
-        _unitOfWork.Repository<Product>().Update(product);
+        unitOfWork.Repository<Product>().Update(product);
 
-        var result = await _unitOfWork.Complete();
+        var result = await unitOfWork.Complete();
 
         if (result <= 0) return BadRequest(new ApiResponse(400, "Problem adding photo product"));
 
@@ -188,18 +176,18 @@ public class ProductsController : BaseApiController
     public async Task<ActionResult<ProductToReturnDto>> SetMainPhoto(int id, int photoId)
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(id);
-        var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
+        var product = await unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
         if (product.Photos.All(x => x.Id != photoId)) return NotFound();
 
         product.SetMainPhoto(photoId);
 
-        _unitOfWork.Repository<Product>().Update(product);
+        unitOfWork.Repository<Product>().Update(product);
 
-        var result = await _unitOfWork.Complete();
+        var result = await unitOfWork.Complete();
 
         if (result <= 0) return BadRequest(new ApiResponse(400, "Problem adding photo product"));
 
-        return _mapper.Map<Product, ProductToReturnDto>(product);
+        return mapper.Map<Product, ProductToReturnDto>(product);
     }
 }
