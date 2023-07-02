@@ -8,22 +8,15 @@ using Order = Core.Entities.OrderAggregate.Order;
 
 namespace API.Controllers;
 
-public class PaymentsController : BaseApiController
+public class PaymentsController(IPaymentService paymentService, ILogger<IPaymentService> logger) : BaseApiController
 {
-    private readonly IPaymentService _paymentService;
-    private const string WhSecret = "whsec_UI63M9JxKIjGakHuEQgpEPeTLOaMnpJx";
-    private readonly ILogger<IPaymentService> _logger;
-    public PaymentsController(IPaymentService paymentService, ILogger<IPaymentService> logger)
-    {
-        _logger = logger;
-        _paymentService = paymentService;
-    }
+    private const string WhSecret = "whsecUI63M9JxKIjGakHuEQgpEPeTLOaMnpJx";
 
     [Authorize]
     [HttpPost("{basketId}")]
     public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
     {
-        var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId);
+        var basket = await paymentService.CreateOrUpdatePaymentIntent(basketId);
         if (basket is null) return BadRequest(new ApiResponse(400, "Problem with your basket"));
         return basket;
     }
@@ -38,18 +31,18 @@ public class PaymentsController : BaseApiController
 
         switch (stripeEvent.Type)
         {
-            case "payment_intent_succeeded":
+            case "paymentintentsucceeded":
                 intent = (PaymentIntent)stripeEvent.Data.Object;
-                _logger.LogInformation("Payment Succeeded: ", intent.Id);
-                order = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id);
-                _logger.LogInformation("Order updated to payment received: ", order.Id);
+                logger.LogInformation("Payment Succeeded: ", intent.Id);
+                order = await paymentService.UpdateOrderPaymentSucceeded(intent.Id);
+                logger.LogInformation("Order updated to payment received: ", order.Id);
                 break;
 
-            case "payment_intent_failed":
+            case "paymentintentfailed":
                 intent = (PaymentIntent)stripeEvent.Data.Object;
-                _logger.LogInformation("Payment Failed: ", intent.Id);
-                order = await _paymentService.UpdateOrderPaymentFailed(intent.Id);
-                _logger.LogInformation("Payment Failed: ", order.Id);
+                logger.LogInformation("Payment Failed: ", intent.Id);
+                order = await paymentService.UpdateOrderPaymentFailed(intent.Id);
+                logger.LogInformation("Payment Failed: ", order.Id);
                 break;
         }
         return new EmptyResult();

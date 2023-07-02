@@ -2,10 +2,4 @@ using Core.Entities.OrderAggregate;
 
 namespace Core.Specifications;
 
-public class OrderByPaymentIntentIdWithItemsSpecification : BaseSpecification<Order>
-{
-    public OrderByPaymentIntentIdWithItemsSpecification(string paymentIntentId)
-        : base(o => o.PaymentIntentId == paymentIntentId)
-    {
-    }
-}
+public class OrderByPaymentIntentIdWithItemsSpecification(string paymentIntentId) : BaseSpecification<Order>(o => o.PaymentIntentId == paymentIntentId);
