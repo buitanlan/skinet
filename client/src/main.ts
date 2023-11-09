@@ -11,15 +11,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
-	providers: [
-		importProvidersFrom([
-			BrowserAnimationsModule,
-			RouterModule.forRoot(routes),
-			ToastrModule.forRoot({
-				positionClass: 'toast-bottom-right',
-				preventDuplicates: true,
-			}),
-		]),
-		provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
-	],
+  providers: [
+    importProvidersFrom([
+      BrowserAnimationsModule,
+      RouterModule.forRoot(routes),
+      ToastrModule.forRoot({
+        positionClass: 'toast-bottom-right',
+        preventDuplicates: true
+      })
+    ]),
+    provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor]))
+  ]
 }).catch(console.error);

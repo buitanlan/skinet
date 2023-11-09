@@ -8,7 +8,8 @@ import { BasketService } from '../../services/basket.service';
     <div class="bg-light px-4 px-3 py-3 text-uppercase fw-bold">Order Summary</div>
     <div class="p-4">
       <p class="fst-italic mb-4">Shipping costs will be added depending on choices made during checkout</p>
-      <ul class="list-unstyled mb-4 " *ngIf=" (basketService.basketTotalPrice$ | async) as totals">
+      @if ( (basketService.basketTotalPrice$ | async); as totals) {
+      <ul class="list-unstyled mb-4 ">
         <li class="d-flex justify-content-between py-3 border-bottom">
           <strong class="text-muted">Order subtotal</strong>
           <strong>{{ totals.subtotal | currency }}</strong>
@@ -22,11 +23,12 @@ import { BasketService } from '../../services/basket.service';
           <strong>{{ totals.total | currency }}</strong>
         </li>
       </ul>
+      }
     </div>
   `,
   imports: [CurrencyPipe, AsyncPipe, NgIf],
   standalone: true
 })
 export class OrderTotalsComponent {
-	readonly basketService = inject(BasketService);
+  readonly basketService = inject(BasketService);
 }

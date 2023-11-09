@@ -3,12 +3,12 @@ import { ShopComponent } from './shop.component';
 import { ProductsDetailsComponent } from './products-details/products-details.component';
 
 export const routes: Routes = [
-	{ path: '', component: ShopComponent },
-	{ path: 'page/:page', component: ShopComponent },
+  { path: '', component: ShopComponent },
+  { path: 'page/:page', component: ShopComponent },
 
-	{
-		path: ':id',
-		component: ProductsDetailsComponent,
-		data: { breadcrumb: { alias: 'productDetails' } },
-	},
+  {
+    path: ':id',
+    component: ProductsDetailsComponent,
+    data: { breadcrumb: { alias: 'productDetails' } }
+  }
 ];

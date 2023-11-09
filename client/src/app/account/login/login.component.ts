@@ -26,31 +26,31 @@ import { TextInputComponent } from '../../shared/components/text-input/text-inpu
   standalone: true
 })
 export class LoginComponent implements OnInit {
-	loginForm!: FormGroup;
-	returnUrl!: string;
+  loginForm!: FormGroup;
+  returnUrl!: string;
 
-	constructor(
-		private readonly accountService: AccountService,
-		private readonly router: Router,
-		private readonly activatedRoute: ActivatedRoute,
-	) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute
+  ) {}
 
-	ngOnInit() {
-		this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
-		this.createLoginForm();
-	}
+  ngOnInit() {
+    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
+    this.createLoginForm();
+  }
 
-	createLoginForm() {
-		this.loginForm = new FormGroup({
-			email: new FormControl('', [Validators.required, Validators.email]),
-			password: new FormControl('', Validators.required),
-		});
-	}
+  createLoginForm() {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required)
+    });
+  }
 
-	onSubmit() {
-		this.accountService.login(this.loginForm.value).subscribe({
-			next: () => void this.router.navigateByUrl(this.returnUrl),
-			error: (error) => console.log(error),
-		});
-	}
+  onSubmit() {
+    this.accountService.login(this.loginForm.value).subscribe({
+      next: () => void this.router.navigateByUrl(this.returnUrl),
+      error: (error) => console.log(error)
+    });
+  }
 }

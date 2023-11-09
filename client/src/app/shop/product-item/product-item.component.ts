@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { BasketService } from 'src/app/shared/services/basket.service';
-import { Product } from 'src/app/shared/models/product';
+import { Component, inject, Input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { BasketService } from '../../shared/services/basket.service';
+import { Product } from '../../shared/models/product';
 
 @Component({
   selector: 'app-product-item',
@@ -31,11 +31,11 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class ProductItemComponent {
-	@Input() product!: Product;
+  @Input() product!: Product;
 
-	constructor(private readonly basketService: BasketService) {}
+  readonly basketService = inject(BasketService);
 
-	addItemToBasket() {
-		this.basketService.addItemToBasket(this.product);
-	}
+  addItemToBasket() {
+    this.basketService.addItemToBasket(this.product);
+  }
 }

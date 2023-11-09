@@ -11,15 +11,9 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
   selector: 'app-basket',
   template: `
     <div class="container mt-5">
-      <div class="col-4 offset-4">
-        <ng-template #loading>
-          <i class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
-
-          <p class="d-flex justify-content-center">Your cart is empty!</p>
-          <a routerLink="/shop" class="d-flex justify-content-center btn btn-outline-primary"> Keep shopping </a>
-        </ng-template>
-      </div>
-      <div *ngIf="basket$ | async as basket; else loading">
+      <div class="col-4 offset-4"></div>
+      @if (basket$ | async; as basket) {
+      <div>
         <div class="pb-5">
           <div class="container">
             <div class="row">
@@ -36,14 +30,21 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
 
             <div class="row">
               <div class="col-6 offset-6">
-                <app-order-totals>
-                </app-order-totals>
+                <app-order-totals> </app-order-totals>
                 <a routerLink="/checkout" class="btn btn-outline-primary py-2 btn-block"> Proceed to checkout </a>
               </div>
             </div>
           </div>
         </div>
       </div>
+      } @else {
+
+      <i class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
+
+      <p class="d-flex justify-content-center">Your cart is empty!</p>
+      <a routerLink="/shop" class="d-flex justify-content-center btn btn-outline-primary"> Keep shopping </a>
+
+      }
     </div>
   `,
   styleUrls: ['./basket.component.scss'],
@@ -51,25 +52,25 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
   standalone: true
 })
 export class BasketComponent implements OnInit {
-	basket$!: Observable<Basket | null>;
-	basketTotalPrice$!: Observable<IBasketTotals | null>;
+  basket$!: Observable<Basket | null>;
+  basketTotalPrice$!: Observable<IBasketTotals | null>;
 
-	constructor(private readonly basketService: BasketService) {}
+  constructor(private readonly basketService: BasketService) {}
 
-	ngOnInit(): void {
-		this.basket$ = this.basketService.basket$;
-		this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
-	}
+  ngOnInit(): void {
+    this.basket$ = this.basketService.basket$;
+    this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
+  }
 
-	removeBasketItem(item: BasketItem) {
-		this.basketService.removeItemFromBasket(item);
-	}
+  removeBasketItem(item: BasketItem) {
+    this.basketService.removeItemFromBasket(item);
+  }
 
-	decrementItemQuantity(item: BasketItem) {
-		this.basketService.decrementItemQuantity(item);
-	}
+  decrementItemQuantity(item: BasketItem) {
+    this.basketService.decrementItemQuantity(item);
+  }
 
-	incrementItemQuantity(item: BasketItem) {
-		this.basketService.incrementItemQuantity(item);
-	}
+  incrementItemQuantity(item: BasketItem) {
+    this.basketService.incrementItemQuantity(item);
+  }
 }
