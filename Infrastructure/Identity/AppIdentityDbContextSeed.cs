@@ -11,36 +11,36 @@ public class AppIdentityDbContextSeed
         if (!await userManager.Users.AnyAsync())
         {
             var users = new List<AppUser>
+            {
+                new()
                 {
-                    new()
+                    DisplayName = "Bob",
+                    Email = "bob@test.com",
+                    UserName = "bob@test.com",
+                    Address = new Address
                     {
-                        DisplayName = "Bob",
-                        Email = "bob@test.com",
-                        UserName = "bob@test.com",
-                        Address = new Address
-                        {
-                            FirstName = "Bob",
-                            LastName = "Bobbity",
-                            Street = "10 Thw Street",
-                            City = "New York",
-                            State = "NY",
-                            ZipCode = "90210"
-                        }
-                    },
-                    new()
-                    {
-                        DisplayName = "Admin",
-                        Email = "admin@test.com",
-                        UserName = "admin@test.com"
+                        FirstName = "Bob",
+                        LastName = "Bobbity",
+                        Street = "10 Thw Street",
+                        City = "New York",
+                        State = "NY",
+                        ZipCode = "90210"
                     }
+                },
+                new()
+                {
+                    DisplayName = "Admin",
+                    Email = "admin@test.com",
+                    UserName = "admin@test.com"
+                }
 
-                };
+            };
 
             var roles = new List<AppRole>
-                {
-                    new() { Name = "Admin"},
-                    new() { Name = "Member"}
-                };
+            {
+                new() { Name = "Admin"},
+                new() { Name = "Member"}
+            };
 
             foreach (var role in roles)
             {

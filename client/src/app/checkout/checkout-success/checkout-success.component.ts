@@ -11,9 +11,10 @@ import { Order } from '../../shared/models/order';
       <h2>Thank you.You order is confirmed</h2>
       <p class="mb-4">Your order shopped yet, but this is to be expected as we are not a real store</p>
       @if (order) {
-      <button routerLink="/orders/{{ order.id }}" class="btn btn-outline-success">View your order</button>
-      } @if (!order) {
-      <button routerLink="/orders" class="btn btn-outline-success">View your orders</button>
+        <button routerLink="/orders/{{ order.id }}" class="btn btn-outline-success">View your order</button>
+      }
+      @if (!order) {
+        <button routerLink="/orders" class="btn btn-outline-success">View your orders</button>
       }
     </div>
   `,

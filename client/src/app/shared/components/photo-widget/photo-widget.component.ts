@@ -32,10 +32,8 @@ import { NgIf } from '@angular/common';
       <div class="col-4">
         <h3>Step 3 - Preview & Upload</h3>
         @if (croppedImage) {
-
-        <img [src]="croppedImage" class="img-fluid" alt="" />
-        <button class="btn-block btn-primary" (click)="onUpload()">Upload Image</button>
-
+          <img [src]="croppedImage" class="img-fluid" alt="" />
+          <button class="btn-block btn-primary" (click)="onUpload()">Upload Image</button>
         }
       </div>
     </div>

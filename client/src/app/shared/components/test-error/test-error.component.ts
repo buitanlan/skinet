@@ -12,13 +12,13 @@ import { environment } from '../../../../environments/environment';
       <button (click)="get400Error()" class="btn btn-outline-primary me-3">Test 400 Error</button>
       <button (click)="get400ValidationError()" class="btn btn-outline-primary me-3">Test 500 Validation</button>
       @if (validationErrors) {
-      <div class="div row mt-5">
-        <ul class="text-danger">
-          @for (error of validationErrors; track error) {
-          <li>{{ error }}</li>
-          }
-        </ul>
-      </div>
+        <div class="div row mt-5">
+          <ul class="text-danger">
+            @for (error of validationErrors; track error) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+        </div>
       }
     </div>
   `,

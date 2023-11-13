@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CheckoutService } from '../../shared/services/checkout.service';
@@ -8,11 +8,11 @@ import { TextInputComponent } from '../../shared/components/text-input/text-inpu
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { NgIf } from '@angular/common';
 import {
+  loadStripe,
+  Stripe,
   StripeCardCvcElement,
   StripeCardExpiryElement,
-  StripeCardNumberElement,
-  Stripe,
-  loadStripe
+  StripeCardNumberElement
 } from '@stripe/stripe-js';
 import { BasketService } from '../../shared/services/basket.service';
 import { Basket } from '../../shared/models/basket';
@@ -22,34 +22,34 @@ import { OrderToCreate } from '../../shared/models/order';
   selector: 'app-checkout-payment',
   template: `
     @if (checkoutForm) {
-    <div class="mt-4" [formGroup]="checkoutForm">
-      <div class="row">
-        <div class="form-group col-12" formGroupName="paymentForm">
-          <app-text-input [label]="'Name on card'" formControlName="nameOnCard"></app-text-input>
+      <div class="mt-4" [formGroup]="checkoutForm">
+        <div class="row">
+          <div class="form-group col-12" formGroupName="paymentForm">
+            <app-text-input [label]="'Name on card'" formControlName="nameOnCard"></app-text-input>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <div class="form-floating">
+              <div class="form-control" #cardNumber></div>
+              <label>Card Number</label>
+              <span class="text-danger">{{ cardErrors }}</span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-floating">
+              <div class="form-control" #cardExpiry></div>
+              <label>Card Expiry</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-floating">
+              <div class="form-control" #cardCvc></div>
+              <label>Card Cvc</label>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-6">
-          <div class="form-floating">
-            <div class="form-control" #cardNumber></div>
-            <label>Card Number</label>
-            <span class="text-danger">{{ cardErrors }}</span>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="form-floating">
-            <div class="form-control" #cardExpiry></div>
-            <label>Card Expiry</label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="form-floating">
-            <div class="form-control" #cardCvc></div>
-            <label>Card Cvc</label>
-          </div>
-        </div>
-      </div>
-    </div>
     }
     <div class="d-flex justify-content-between flex-row mb-5">
       <button class="btn btn-outline-primary" cdkStepperPrevious>
@@ -59,7 +59,7 @@ import { OrderToCreate } from '../../shared/models/order';
       <button [disabled]="loading || !paymentFormComplete" class="btn btn-primary" (click)="submitOrder()">
         Submit Order <i class="fas fa-arrow-right"></i>
         @if (loading) {
-        <i class="fas fa-spinner fa-spin"></i>
+          <i class="fas fa-spinner fa-spin"></i>
         }
       </button>
     </div>

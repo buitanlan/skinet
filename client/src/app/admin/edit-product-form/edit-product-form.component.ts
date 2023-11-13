@@ -27,11 +27,11 @@ import { Type } from '../../shared/models/type';
             [(ngModel)]="product.name"
           />
           @if (name.invalid && (name.dirty || name.touched)) {
-          <div class="invalid-feedback">
-            @if (name.errors?.['required']) {
-            <div>Product Name is required</div>
-            }
-          </div>
+            <div class="invalid-feedback">
+              @if (name.errors?.['required']) {
+                <div>Product Name is required</div>
+              }
+            </div>
           }
         </div>
         <div class="form-group col-md-6">
@@ -51,15 +51,17 @@ import { Type } from '../../shared/models/type';
             (ngModelChange)="updatePrice(+$event)"
           />
           @if (price.invalid && (price.dirty || price.touched)) {
-          <div class="invalid-feedback">
-            @if (price.errors?.['required']) {
-            <div>Product price is required</div>
-            } @if (price.errors?.['pattern']) {
-            <div>Product price needs to be decimal value</div>
-            } @if (price.errors?.['min']) {
-            <div>Product price must be greater than zero</div>
-            }
-          </div>
+            <div class="invalid-feedback">
+              @if (price.errors?.['required']) {
+                <div>Product price is required</div>
+              }
+              @if (price.errors?.['pattern']) {
+                <div>Product price needs to be decimal value</div>
+              }
+              @if (price.errors?.['min']) {
+                <div>Product price must be greater than zero</div>
+              }
+            </div>
           }
         </div>
       </div>
@@ -77,11 +79,11 @@ import { Type } from '../../shared/models/type';
             rows="3"
           ></textarea>
           @if (description.invalid && (description.dirty || description.touched)) {
-          <div class="invalid-feedback">
-            @if (description.errors?.['required']) {
-            <div>Product price is required</div>
-            }
-          </div>
+            <div class="invalid-feedback">
+              @if (description.errors?.['required']) {
+                <div>Product price is required</div>
+              }
+            </div>
           }
         </div>
       </div>
@@ -90,9 +92,9 @@ import { Type } from '../../shared/models/type';
           <label for="brand">Brand</label>
           <select id="brand" class="form-control" name="productBrandId" [(ngModel)]="product.productBrandId" required>
             @for (brand of brands; track brand) {
-            <option [selected]="product.productBrandId === brand.id" [ngValue]="brand.id">
-              {{ brand.name }}
-            </option>
+              <option [selected]="product.productBrandId === brand.id" [ngValue]="brand.id">
+                {{ brand.name }}
+              </option>
             }
           </select>
         </div>
@@ -100,9 +102,9 @@ import { Type } from '../../shared/models/type';
           <label for="type">Type</label>
           <select id="type" class="form-control" name="productTypeId" [(ngModel)]="product.productTypeId" required>
             @for (type of types; track type) {
-            <option [selected]="product.productTypeId === type.id" [ngValue]="type.id">
-              {{ type.name }}
-            </option>
+              <option [selected]="product.productTypeId === type.id" [ngValue]="type.id">
+                {{ type.name }}
+              </option>
             }
           </select>
         </div>

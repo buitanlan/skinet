@@ -13,21 +13,21 @@ import { BasketService } from '../../shared/services/basket.service';
       <h4 class="mb-3">Choose your delivery mothod</h4>
       <div class="row me-5" formGroupName="deliveryForm">
         @for (method of deliveryMethods; track method) {
-        <div class="col-6 form-group">
-          <input
-            type="radio"
-            id="{{ method.id }}"
-            (click)="setShippingPrice(method)"
-            value="{{ method.id }}"
-            formControlName="deliveryMethod"
-            class="custom-control-input"
-          />
-          <label for="{{ method.id }}" class="custom-control-label">
-            <strong>{{ method.shortName }} - {{ method.price | currency }}</strong>
-            <br />
-            <span class="label-description">{{ method.description }}</span>
-          </label>
-        </div>
+          <div class="col-6 form-group">
+            <input
+              type="radio"
+              id="{{ method.id }}"
+              (click)="setShippingPrice(method)"
+              value="{{ method.id }}"
+              formControlName="deliveryMethod"
+              class="custom-control-input"
+            />
+            <label for="{{ method.id }}" class="custom-control-label">
+              <strong>{{ method.shortName }} - {{ method.price | currency }}</strong>
+              <br />
+              <span class="label-description">{{ method.description }}</span>
+            </label>
+          </div>
         }
       </div>
     </div>

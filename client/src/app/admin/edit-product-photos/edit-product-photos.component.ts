@@ -12,62 +12,59 @@ import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo
     <div class="py-5">
       <div class="container">
         @if (!addPhotoMode) {
-
-        <div class="d-flex justify-content-between mb-3">
-          <h3>Product Photos</h3>
-          <button class="btn btn-primary" (click)="addPhotoModeToggle()">Add New Photo</button>
-        </div>
-        <div class="row">
-          @for (photo of product.photos; track photo) {
-          <div class="col-3">
-            <div class="card">
-              <img
-                class="card-img-top"
-                width="100%"
-                height="225"
-                src="{{ photo.pictureUrl }}"
-                alt="{{ photo.fileName }}"
-              />
-              <div class="btn-group" style="width: 100%">
-                <button
-                  type="button"
-                  (click)="setMainPhoto(photo.id)"
-                  [disabled]="photo.isMain"
-                  class="{{ photo.isMain ? 'btn btn-success' : 'btn btn-outline-success' }}"
-                  style="width: 50%"
-                >
-                  Set Main
-                </button>
-                <button
-                  (click)="deletePhoto(photo.id)"
-                  type="button"
-                  [disabled]="photo.isMain"
-                  class="btn btn-outline-danger"
-                  style="width: 50%"
-                >
-                  <i class="fa fa-trash"></i>      
-                </button>
+          <div class="d-flex justify-content-between mb-3">
+            <h3>Product Photos</h3>
+            <button class="btn btn-primary" (click)="addPhotoModeToggle()">Add New Photo</button>
+          </div>
+          <div class="row">
+            @for (photo of product.photos; track photo) {
+              <div class="col-3">
+                <div class="card">
+                  <img
+                    class="card-img-top"
+                    width="100%"
+                    height="225"
+                    src="{{ photo.pictureUrl }}"
+                    alt="{{ photo.fileName }}"
+                  />
+                  <div class="btn-group" style="width: 100%">
+                    <button
+                      type="button"
+                      (click)="setMainPhoto(photo.id)"
+                      [disabled]="photo.isMain"
+                      class="{{ photo.isMain ? 'btn btn-success' : 'btn btn-outline-success' }}"
+                      style="width: 50%"
+                    >
+                      Set Main
+                    </button>
+                    <button
+                      (click)="deletePhoto(photo.id)"
+                      type="button"
+                      [disabled]="photo.isMain"
+                      class="btn btn-outline-danger"
+                      style="width: 50%"
+                    >
+                      <i class="fa fa-trash"></i>      
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+        @if (addPhotoMode) {
+          <div class="d-flex justify-content-between mb-3">
+            <h3 class="text-primary">Add new product image</h3>
+            <button class="btn btn-outline-secondary" (click)="addPhotoModeToggle()">Cancel</button>
+          </div>
+          @if (progress > 0) {
+            <div class="progress form-group">
+              <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+                {{ progress }}%
               </div>
             </div>
-          </div>
           }
-        </div>
-
-        } @if (addPhotoMode) {
-
-        <div class="d-flex justify-content-between mb-3">
-          <h3 class="text-primary">Add new product image</h3>
-          <button class="btn btn-outline-secondary" (click)="addPhotoModeToggle()">Cancel</button>
-        </div>
-        @if (progress > 0) {
-        <div class="progress form-group">
-          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
-            {{ progress }}%
-          </div>
-        </div>
-        }
-        <app-photo-widget (addFile)="uploadFile($event)"></app-photo-widget>
-
+          <app-photo-widget (addFile)="uploadFile($event)"></app-photo-widget>
         }
       </div>
     </div>

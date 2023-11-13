@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Self, ViewChild } from '@angular/core';
+import { Component, Input, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 
@@ -14,17 +14,20 @@ import { NgClass, NgIf } from '@angular/common';
         [ngClass]="control.touched ? (control.invalid ? 'is-invalid' : 'is-valid') : null"
       />
       @if (control.status === 'PENDING') {
-      <div class="fa fa-spinner fa-spin loader"></div>
+        <div class="fa fa-spinner fa-spin loader"></div>
       }
       <label for="floatingInput">{{ label }}</label>
       @if (control.errors?.['required']) {
-      <div class="invalid-feedback">Please enter your {{ label }}</div>
-      } @if (control.errors?.['email']) {
-      <div class="invalid-feedback">Invalid email address</div>
-      } @if (control.errors?.['pattern']) {
-      <div class="invalid-feedback">Password not complex enough</div>
-      } @if (control.errors?.['emailExists']) {
-      <div class="invalid-feedback">Email address is taken</div>
+        <div class="invalid-feedback">Please enter your {{ label }}</div>
+      }
+      @if (control.errors?.['email']) {
+        <div class="invalid-feedback">Invalid email address</div>
+      }
+      @if (control.errors?.['pattern']) {
+        <div class="invalid-feedback">Password not complex enough</div>
+      }
+      @if (control.errors?.['emailExists']) {
+        <div class="invalid-feedback">Email address is taken</div>
       }
     </div>
   `,

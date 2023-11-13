@@ -8,16 +8,16 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
     <div class="container">
       <ul class="nav nav-pills nav-justified">
         @for (step of steps; track step; let i = $index) {
-        <li class="nav-item">
-          <button
-            (click)="onClick(i)"
-            [class.active]="selectedIndex === i"
-            class="nav-link py-3 text-uppercase font-weight-bold btn-block"
-            style="padding: 1.2em"
-          >
-            {{ step.label }}
-          </button>
-        </li>
+          <li class="nav-item">
+            <button
+              (click)="onClick(i)"
+              [class.active]="selectedIndex === i"
+              class="nav-link py-3 text-uppercase font-weight-bold btn-block"
+              style="padding: 1.2em"
+            >
+              {{ step.label }}
+            </button>
+          </li>
         }
       </ul>
       <div>

@@ -17,77 +17,77 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="container mt-3">
       @if (types.length > 0 && brands.length > 0) {
-      <div class="row">
-        <section class="col-3">
-          <h5 class="text-warning ms-3">Sort</h5>
-          <select class="custom-select mb-4" (change)="onSortSelected($event)">
-            @for (sort of sortOptions; track sort) {
-            <option [selected]="shopParams.sort === sort.value" [value]="sort.value">
-              {{ sort.name }}
-            </option>
-            }
-          </select>
-          <h5 class="text-warning ms-3">Brands</h5>
-          <ul class="list-group my-3">
-            @for (brand of brands; track brand) {
-            <li
-              class="list-group-item"
-              [class.active]="brand.name.toLowerCase() === this.shopParams.brandName"
-              [value]="brand.id"
-              (click)="onBrandSelected(brand.name.toLowerCase())"
-            >
-              {{ brand.name }}
-            </li>
-            }
-          </ul>
-          <h5 class="text-warning ms-3">Types</h5>
-          <ul class="list-group my-3">
-            @for (type of types; track type) {
-            <li
-              class="list-group-item"
-              [class.active]="type.name.toLowerCase() === this.shopParams.typeName"
-              [value]="type.id"
-              (click)="onTypeSelected(type.name.toLowerCase())"
-            >
-              {{ type.name }}
-            </li>
-            }
-          </ul>
-        </section>
-        <section class="col-9">
-          <div class="d-flex justify-content-between align-items-center pb-2">
-            <app-paging-header
-              [totalCount]="this.totalCount"
-              [pageSize]="this.shopParams.pageSize"
-              [pageNumber]="this.shopParams.pageNumber"
-            ></app-paging-header>
+        <div class="row">
+          <section class="col-3">
+            <h5 class="text-warning ms-3">Sort</h5>
+            <select class="custom-select mb-4" (change)="onSortSelected($event)">
+              @for (sort of sortOptions; track sort) {
+                <option [selected]="shopParams.sort === sort.value" [value]="sort.value">
+                  {{ sort.name }}
+                </option>
+              }
+            </select>
+            <h5 class="text-warning ms-3">Brands</h5>
+            <ul class="list-group my-3">
+              @for (brand of brands; track brand) {
+                <li
+                  class="list-group-item"
+                  [class.active]="brand.name.toLowerCase() === this.shopParams.brandName"
+                  [value]="brand.id"
+                  (click)="onBrandSelected(brand.name.toLowerCase())"
+                >
+                  {{ brand.name }}
+                </li>
+              }
+            </ul>
+            <h5 class="text-warning ms-3">Types</h5>
+            <ul class="list-group my-3">
+              @for (type of types; track type) {
+                <li
+                  class="list-group-item"
+                  [class.active]="type.name.toLowerCase() === this.shopParams.typeName"
+                  [value]="type.id"
+                  (click)="onTypeSelected(type.name.toLowerCase())"
+                >
+                  {{ type.name }}
+                </li>
+              }
+            </ul>
+          </section>
+          <section class="col-9">
+            <div class="d-flex justify-content-between align-items-center pb-2">
+              <app-paging-header
+                [totalCount]="this.totalCount"
+                [pageSize]="this.shopParams.pageSize"
+                [pageNumber]="this.shopParams.pageNumber"
+              ></app-paging-header>
 
-            <div class="d-flex mt-2">
-              <input (keyup.enter)="onSearch()" class="form-control me-2" #search placeholder="Search" type="text" />
-              <button (click)="onSearch()" class="btn btn-outline-primary mx-2">Search</button>
-              <button (click)="onReset()" class="btn btn-outline-success">Reset</button>
+              <div class="d-flex mt-2">
+                <input (keyup.enter)="onSearch()" class="form-control me-2" #search placeholder="Search" type="text" />
+                <button (click)="onSearch()" class="btn btn-outline-primary mx-2">Search</button>
+                <button (click)="onReset()" class="btn btn-outline-success">Reset</button>
+              </div>
             </div>
-          </div>
 
-          <div class="row row-cols-3 g-3 mb-4">
-            @for (item of products; track item) {
-            <div class="col-4">
-              <app-product-item [product]="item"></app-product-item>
+            <div class="row row-cols-3 g-3 mb-4">
+              @for (item of products; track item) {
+                <div class="col-4">
+                  <app-product-item [product]="item"></app-product-item>
+                </div>
+              }
             </div>
+            @if (totalCount > 0) {
+              <div class="d-flex justify-content-center">
+                <app-pager
+                  [pageIndex]="this.shopParams.pageNumber"
+                  [pageSize]="shopParams.pageSize"
+                  [totalCount]="totalCount"
+                  (pageChanged)="onPageChanged($event)"
+                ></app-pager>
+              </div>
             }
-          </div>
-          @if (totalCount > 0) {
-          <div class="d-flex justify-content-center">
-            <app-pager
-              [pageIndex]="this.shopParams.pageNumber"
-              [pageSize]="shopParams.pageSize"
-              [totalCount]="totalCount"
-              (pageChanged)="onPageChanged($event)"
-            ></app-pager>
-          </div>
-          }
-        </section>
-      </div>
+          </section>
+        </div>
       }
     </div>
   `,

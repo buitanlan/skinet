@@ -12,14 +12,14 @@ import { Order } from '../../shared/models/order';
   template: `
     <div class="container mt-5">
       @if (order) {
-      <div class="row">
-        <div class="col-8">
-          <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"></app-basket-summary>
+        <div class="row">
+          <div class="col-8">
+            <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"></app-basket-summary>
+          </div>
+          <div class="col-4">
+            <app-order-totals> </app-order-totals>
+          </div>
         </div>
-        <div class="col-4">
-          <app-order-totals> </app-order-totals>
-        </div>
-      </div>
       }
     </div>
   `,

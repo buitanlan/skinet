@@ -13,37 +13,34 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
     <div class="container mt-5">
       <div class="col-4 offset-4"></div>
       @if (basket$ | async; as basket) {
-      <div>
-        <div class="pb-5">
-          <div class="container">
-            <div class="row">
-              <div class="col-12 py-5 mb-1">
-                <app-basket-summary
-                  (decrement)="decrementItemQuantity($event)"
-                  (increment)="incrementItemQuantity($event)"
-                  (remove)="removeBasketItem($event)"
-                  [items]="basket.items"
-                >
-                </app-basket-summary>
+        <div>
+          <div class="pb-5">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 py-5 mb-1">
+                  <app-basket-summary
+                    (decrement)="decrementItemQuantity($event)"
+                    (increment)="incrementItemQuantity($event)"
+                    (remove)="removeBasketItem($event)"
+                    [items]="basket.items"
+                  >
+                  </app-basket-summary>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div class="col-6 offset-6">
-                <app-order-totals> </app-order-totals>
-                <a routerLink="/checkout" class="btn btn-outline-primary py-2 btn-block"> Proceed to checkout </a>
+              <div class="row">
+                <div class="col-6 offset-6">
+                  <app-order-totals> </app-order-totals>
+                  <a routerLink="/checkout" class="btn btn-outline-primary py-2 btn-block"> Proceed to checkout </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       } @else {
-
-      <i class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
-
-      <p class="d-flex justify-content-center">Your cart is empty!</p>
-      <a routerLink="/shop" class="d-flex justify-content-center btn btn-outline-primary"> Keep shopping </a>
-
+        <i class="fas fa-shopping-cart fa-7x my-3 d-flex justify-content-center"></i>
+        <p class="d-flex justify-content-center">Your cart is empty!</p>
+        <a routerLink="/shop" class="d-flex justify-content-center btn btn-outline-primary"> Keep shopping </a>
       }
     </div>
   `,

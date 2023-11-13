@@ -21,12 +21,12 @@ import { RouterLink } from '@angular/router';
             </thead>
             <tbody>
               @for (order of orders; track order) {
-              <tr routerLink="/orders/{{ order.id }}">
-                <th># {{ order.id }}</th>
-                <td>{{ order.orderDate | date: 'medium' }}</td>
-                <td>{{ order.total | currency }}</td>
-                <td>{{ order.status }}</td>
-              </tr>
+                <tr routerLink="/orders/{{ order.id }}">
+                  <th># {{ order.id }}</th>
+                  <td>{{ order.orderDate | date: 'medium' }}</td>
+                  <td>{{ order.total | currency }}</td>
+                  <td>{{ order.status }}</td>
+                </tr>
               }
             </tbody>
           </table>

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { AsyncValidatorFn, FormGroup, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { AsyncValidatorFn, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounce, debounceTime, of, take, timer } from 'rxjs';
+import { debounceTime, take } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 import { AccountService } from '../../shared/services/account.service';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
@@ -20,11 +20,11 @@ import { NgForOf, NgIf } from '@angular/common';
           <app-text-input formControlName="email" [label]="'Email Address'"></app-text-input>
           <app-text-input formControlName="password" [label]="'Password'" [type]="'password'"></app-text-input>
           @if (errors) {
-          <ul class="text-danger list-unstyled">
-            @for (error of errors; track error) {
-            <li>{{ error }}</li>
-            }
-          </ul>
+            <ul class="text-danger list-unstyled">
+              @for (error of errors; track error) {
+                <li>{{ error }}</li>
+              }
+            </ul>
           }
           <button [disabled]="registerForm.invalid" class="btn btn-lg btn-primary btn-block" type="submit">
             Register
