@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BasketService } from 'src/app/shared/services/basket.service';
-import { DeliveryMethod } from 'src/app/shared/models/deliveryMethod';
 import { CheckoutService } from '../../shared/services/checkout.service';
 import { CurrencyPipe, NgForOf } from '@angular/common';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { DeliveryMethod } from '../../shared/models/deliveryMethod';
+import { BasketService } from '../../shared/services/basket.service';
 
 @Component({
   selector: 'app-checkout-delivery',
@@ -12,21 +12,23 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     <div class="mt-4" [formGroup]="checkoutForm">
       <h4 class="mb-3">Choose your delivery mothod</h4>
       <div class="row me-5" formGroupName="deliveryForm">
-        <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
-          <input
-            type="radio"
-            id="{{ method.id }}"
-            (click)="setShippingPrice(method)"
-            value="{{ method.id }}"
-            formControlName="deliveryMethod"
-            class="custom-control-input"
-          />
-          <label for="{{ method.id }}" class="custom-control-label">
-            <strong>{{ method.shortName }} - {{ method.price | currency }}</strong>
-            <br />
-            <span class="label-description">{{ method.description }}</span>
-          </label>
-        </div>
+        @for (method of deliveryMethods; track method) {
+          <div class="col-6 form-group">
+            <input
+              type="radio"
+              id="{{ method.id }}"
+              (click)="setShippingPrice(method)"
+              value="{{ method.id }}"
+              formControlName="deliveryMethod"
+              class="custom-control-input"
+            />
+            <label for="{{ method.id }}" class="custom-control-label">
+              <strong>{{ method.shortName }} - {{ method.price | currency }}</strong>
+              <br />
+              <span class="label-description">{{ method.description }}</span>
+            </label>
+          </div>
+        }
       </div>
     </div>
     <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
@@ -41,19 +43,22 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
   standalone: true
 })
 export class CheckoutDeliveryComponent implements OnInit {
-	@Input() checkoutForm!: FormGroup;
-	deliveryMethods = [] as DeliveryMethod[];
+  @Input() checkoutForm!: FormGroup;
+  deliveryMethods = [] as DeliveryMethod[];
 
-	constructor(private readonly checkoutService: CheckoutService, private readonly basketService: BasketService) {}
+  constructor(
+    private readonly checkoutService: CheckoutService,
+    private readonly basketService: BasketService
+  ) {}
 
-	ngOnInit(): void {
-		this.checkoutService.getDeliveryMethod().subscribe({
-			next: (dm: DeliveryMethod[]) => (this.deliveryMethods = dm),
-			error: (err) => console.log(err),
-		});
-	}
+  ngOnInit(): void {
+    this.checkoutService.getDeliveryMethod().subscribe({
+      next: (dm: DeliveryMethod[]) => (this.deliveryMethods = dm),
+      error: (err) => console.log(err)
+    });
+  }
 
-	setShippingPrice(deliveryMethod: DeliveryMethod) {
-		this.basketService.setShippingPrice(deliveryMethod);
-	}
+  setShippingPrice(deliveryMethod: DeliveryMethod) {
+    this.basketService.setShippingPrice(deliveryMethod);
+  }
 }

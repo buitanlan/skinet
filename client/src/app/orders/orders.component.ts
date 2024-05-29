@@ -12,20 +12,22 @@ import { RouterLink } from '@angular/router';
         <div class="col-12">
           <table class="table table-hover" style="cursor: pointer">
             <thead class="thead-light">
-            <tr>
-              <th>Order</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Status</th>
-            </tr>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let order of orders" routerLink="/orders/{{ order.id }}">
-              <th># {{ order.id }}</th>
-              <td>{{ order.orderDate | date : 'medium' }}</td>
-              <td>{{ order.total | currency }}</td>
-              <td>{{ order.status }}</td>
-            </tr>
+              @for (order of orders; track order) {
+                <tr routerLink="/orders/{{ order.id }}">
+                  <th># {{ order.id }}</th>
+                  <td>{{ order.orderDate | date: 'medium' }}</td>
+                  <td>{{ order.total | currency }}</td>
+                  <td>{{ order.status }}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -36,22 +38,22 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class OrdersComponent implements OnInit {
-	orders: Order[] = [];
+  orders: Order[] = [];
 
-	constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) {}
 
-	ngOnInit(): void {
-		this.getOrders();
-	}
+  ngOnInit(): void {
+    this.getOrders();
+  }
 
-	getOrders() {
-		this.ordersService.getOrdersForUser().subscribe({
-			next: (orders: Order[]) => {
-				this.orders = orders;
-			},
-			error: (error) => {
-				console.log(error);
-			},
-		});
-	}
+  getOrders() {
+    this.ordersService.getOrdersForUser().subscribe({
+      next: (orders: Order[]) => {
+        this.orders = orders;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
 }

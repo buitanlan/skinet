@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Self, ViewChild } from '@angular/core';
+import { Component, Input, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 
@@ -7,18 +7,28 @@ import { NgClass, NgIf } from '@angular/common';
   template: `
     <div class="form-floating mb-3">
       <input
-        type="{{type}}"
+        type="{{ type }}"
         [formControl]="control"
-        placeholder="{{label}}"
+        placeholder="{{ label }}"
         class="form-control"
-        [ngClass]="(control.touched) ? control.invalid ? 'is-invalid' : 'is-valid' : null"
-      >
-      <div *ngIf="control.status === 'PENDING'" class="fa fa-spinner fa-spin loader"></div>
-      <label for="floatingInput">{{label}}</label>
-      <div *ngIf="control.errors?.['required']" class="invalid-feedback">Please enter your {{label}}</div>
-      <div *ngIf="control.errors?.['email']" class="invalid-feedback">Invalid email address</div>
-      <div *ngIf="control.errors?.['pattern']" class="invalid-feedback">Password not complex enough</div>
-      <div *ngIf="control.errors?.['emailExists']" class="invalid-feedback">Email address is taken</div>
+        [ngClass]="control.touched ? (control.invalid ? 'is-invalid' : 'is-valid') : null"
+      />
+      @if (control.status === 'PENDING') {
+        <div class="fa fa-spinner fa-spin loader"></div>
+      }
+      <label for="floatingInput">{{ label }}</label>
+      @if (control.errors?.['required']) {
+        <div class="invalid-feedback">Please enter your {{ label }}</div>
+      }
+      @if (control.errors?.['email']) {
+        <div class="invalid-feedback">Invalid email address</div>
+      }
+      @if (control.errors?.['pattern']) {
+        <div class="invalid-feedback">Password not complex enough</div>
+      }
+      @if (control.errors?.['emailExists']) {
+        <div class="invalid-feedback">Email address is taken</div>
+      }
     </div>
   `,
   styleUrls: ['./text-input.component.scss'],
@@ -26,20 +36,20 @@ import { NgClass, NgIf } from '@angular/common';
   standalone: true
 })
 export class TextInputComponent implements ControlValueAccessor {
-	@Input() type = 'text';
-	@Input() label!: string;
+  @Input() type = 'text';
+  @Input() label!: string;
 
-	constructor(@Self() public controlDir: NgControl) {
-		this.controlDir.valueAccessor = this;
-	}
+  constructor(@Self() public controlDir: NgControl) {
+    this.controlDir.valueAccessor = this;
+  }
 
-	writeValue(obj: any): void {}
+  writeValue(obj: any): void {}
 
-	registerOnChange(fn: any): void {}
+  registerOnChange(fn: any): void {}
 
-	registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {}
 
-	get control(): FormControl {
-		return this.controlDir.control as FormControl;
-	}
+  get control(): FormControl {
+    return this.controlDir.control as FormControl;
+  }
 }

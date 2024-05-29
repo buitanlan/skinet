@@ -2,10 +2,10 @@ import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { BasketService } from 'src/app/shared/services/basket.service';
-import { Basket } from 'src/app/shared/models/basket';
 import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
 import { AsyncPipe } from '@angular/common';
+import { BasketService } from '../../shared/services/basket.service';
+import { Basket } from '../../shared/models/basket';
 
 @Component({
   selector: 'app-checkout-review',
@@ -27,25 +27,28 @@ import { AsyncPipe } from '@angular/common';
   standalone: true
 })
 export class CheckoutReviewComponent implements OnInit {
-	@Input() appStepper!: CdkStepper;
-	basket$!: Observable<Basket | null>;
+  @Input() appStepper!: CdkStepper;
+  basket$!: Observable<Basket | null>;
 
-	constructor(private readonly basketService: BasketService, private readonly toastr: ToastrService) {}
+  constructor(
+    private readonly basketService: BasketService,
+    private readonly toastr: ToastrService
+  ) {}
 
-	ngOnInit(): void {
-		this.basket$ = this.basketService.basket$;
-	}
+  ngOnInit(): void {
+    this.basket$ = this.basketService.basket$;
+  }
 
-	createPaymentIntent() {
-		return this.basketService.createPaymentIntent().subscribe({
-			next: () => {
-				this.toastr.success('Payment intent created');
-				this.appStepper.next();
-			},
-			error: (err) => {
-				console.log(err);
-				this.toastr.error(err.message);
-			},
-		});
-	}
+  createPaymentIntent() {
+    return this.basketService.createPaymentIntent().subscribe({
+      next: () => {
+        this.toastr.success('Payment intent created');
+        this.appStepper.next();
+      },
+      error: (err) => {
+        console.log(err);
+        this.toastr.error(err.message);
+      }
+    });
+  }
 }

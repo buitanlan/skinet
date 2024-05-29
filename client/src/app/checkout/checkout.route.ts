@@ -3,6 +3,6 @@ import { CheckoutSuccessComponent } from './checkout-success/checkout-success.co
 import { CheckoutComponent } from './checkout.component';
 
 export const routes: Routes = [
-	{ path: '', component: CheckoutComponent },
-	{ path: 'success', component: CheckoutSuccessComponent },
+  { path: '', component: CheckoutComponent },
+  { path: 'success', component: CheckoutSuccessComponent }
 ];

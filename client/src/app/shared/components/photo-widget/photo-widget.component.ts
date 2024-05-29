@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
-import { base64ToFile, ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { base64ToFile, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -31,42 +31,42 @@ import { NgIf } from '@angular/common';
       </div>
       <div class="col-4">
         <h3>Step 3 - Preview & Upload</h3>
-        <ng-container *ngIf="croppedImage">
+        @if (croppedImage) {
           <img [src]="croppedImage" class="img-fluid" alt="" />
           <button class="btn-block btn-primary" (click)="onUpload()">Upload Image</button>
-        </ng-container>
+        }
       </div>
     </div>
   `,
   styleUrls: ['./photo-widget.component.scss'],
-  imports: [ImageCropperModule, NgxDropzoneModule, NgIf],
+  imports: [ImageCropperComponent, NgxDropzoneModule, NgIf],
   standalone: true
 })
 export class PhotoWidgetComponent {
-	@Output() addFile = new EventEmitter();
-	files: File[] = [];
-	imageChangedEvent: any = '';
-	croppedImage: string | null = null;
+  @Output() addFile = new EventEmitter();
+  files: File[] = [];
+  imageChangedEvent: any = '';
+  croppedImage: string | null = null;
 
-	constructor() {}
+  constructor() {}
 
-	fileChangeEvent(file: File): void {
-		this.imageChangedEvent = file;
-	}
+  fileChangeEvent(file: File): void {
+    this.imageChangedEvent = file;
+  }
 
-	imageCropped(event: ImageCroppedEvent) {
-		this.croppedImage = event.base64 ?? null;
-	}
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64 ?? null;
+  }
 
-	onSelect(event: NgxDropzoneChangeEvent) {
-		this.files = [];
-		this.files.push(...event.addedFiles);
-		this.fileChangeEvent(this.files[0]);
-	}
+  onSelect(event: NgxDropzoneChangeEvent) {
+    this.files = [];
+    this.files.push(...event.addedFiles);
+    this.fileChangeEvent(this.files[0]);
+  }
 
-	onUpload() {
-		if (this.croppedImage) {
-			this.addFile.emit(base64ToFile(this.croppedImage));
-		}
-	}
+  onUpload() {
+    if (this.croppedImage) {
+      this.addFile.emit(base64ToFile(this.croppedImage));
+    }
+  }
 }

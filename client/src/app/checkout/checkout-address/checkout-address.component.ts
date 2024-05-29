@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { AccountService } from 'src/app/shared/services/account.service';
-import { Address } from 'src/app/shared/models/address';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RouterLink } from '@angular/router';
+import { AccountService } from '../../shared/services/account.service';
+import { Address } from '../../shared/models/address';
 
 @Component({
   selector: 'app-checkout-address',
@@ -56,19 +56,22 @@ import { RouterLink } from '@angular/router';
   standalone: true
 })
 export class CheckoutAddressComponent {
-	@Input() checkoutForm!: FormGroup;
+  @Input() checkoutForm!: FormGroup;
 
-	constructor(private readonly accountService: AccountService, private readonly toastr: ToastrService) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly toastr: ToastrService
+  ) {}
 
-	saveUserAddress() {
-		this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
-			next: (address: Address) => {
-				this.toastr.success('Address saved');
-				this.checkoutForm.get('addressForm')?.reset(address);
-			},
-			error: (err) => {
-				this.toastr.error(err.message);
-			},
-		});
-	}
+  saveUserAddress() {
+    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
+      next: (address: Address) => {
+        this.toastr.success('Address saved');
+        this.checkoutForm.get('addressForm')?.reset(address);
+      },
+      error: (err) => {
+        this.toastr.error(err.message);
+      }
+    });
+  }
 }

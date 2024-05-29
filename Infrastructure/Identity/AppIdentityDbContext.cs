@@ -4,10 +4,4 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity;
 
-public class AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : IdentityDbContext<AppUser, AppRole, string>(options)
-{
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-    }
-}
+public class AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : IdentityDbContext<AppUser, AppRole, string>(options);

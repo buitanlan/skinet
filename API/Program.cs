@@ -83,7 +83,7 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSerilogRequestLogging();
-app.UseSwaggerDocumention();
+app.UseSwaggerDocumentation();
 app.MapControllers();
 app.MapFallbackToController("Index", "Fallback");
 app.Run();

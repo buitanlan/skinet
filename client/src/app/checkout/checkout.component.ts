@@ -38,7 +38,8 @@ import { AsyncPipe, NgIf } from '@angular/common';
           <app-order-totals></app-order-totals>
         </div>
       </div>
-    </div> `,
+    </div>
+  `,
   imports: [
     CheckoutPaymentComponent,
     CheckoutReviewComponent,
@@ -53,56 +54,59 @@ import { AsyncPipe, NgIf } from '@angular/common';
   standalone: true
 })
 export class CheckoutComponent implements OnInit {
-	basketTotalPrice$!: Observable<IBasketTotals | null>;
-	checkoutForm!: UntypedFormGroup;
+  basketTotalPrice$!: Observable<IBasketTotals | null>;
+  checkoutForm!: UntypedFormGroup;
 
-	constructor(
-		private readonly fb: UntypedFormBuilder,
-		private readonly accountService: AccountService,
-		private readonly basketService: BasketService,
-	) {}
+  constructor(
+    private readonly fb: UntypedFormBuilder,
+    private readonly accountService: AccountService,
+    private readonly basketService: BasketService
+  ) {}
 
-	ngOnInit(): void {
-		this.createCheckoutForm();
-		this.getAddressFromValues();
-		this.getDeliveryMethodValue();
-		this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
-	}
+  ngOnInit(): void {
+    this.createCheckoutForm();
+    this.getAddressFromValues();
+    this.getDeliveryMethodValue();
+    this.basketTotalPrice$ = this.basketService.basketTotalPrice$;
+  }
 
-	createCheckoutForm() {
-		this.checkoutForm = this.fb.group({
-			addressForm: this.fb.group({
-				firstName: ['', Validators.required],
-				lastName: ['', Validators.required],
-				street: ['', Validators.required],
-				city: ['', Validators.required],
-				state: ['', Validators.required],
-				zipCode: ['', Validators.required],
-			}),
-			deliveryForm: this.fb.group({
-				deliveryMethod: ['', Validators.required],
-			}),
-			paymentForm: this.fb.group({
-				nameOnCard: ['', Validators.required],
-			}),
-		});
-	}
+  createCheckoutForm() {
+    this.checkoutForm = this.fb.group({
+      addressForm: this.fb.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        street: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        zipCode: ['', Validators.required]
+      }),
+      deliveryForm: this.fb.group({
+        deliveryMethod: ['', Validators.required]
+      }),
+      paymentForm: this.fb.group({
+        nameOnCard: ['', Validators.required]
+      })
+    });
+  }
 
-	getAddressFromValues() {
-		this.accountService.getUserAddress().subscribe({
-			next: (address) => {
-				if (address) {
-					this.checkoutForm?.get('addressForm')?.patchValue(address);
-				}
-			},
-			error: (err) => console.log(err),
-		});
-	}
+  getAddressFromValues() {
+    this.accountService.getUserAddress().subscribe({
+      next: (address) => {
+        if (address) {
+          this.checkoutForm?.get('addressForm')?.patchValue(address);
+        }
+      },
+      error: (err) => console.log(err)
+    });
+  }
 
-	getDeliveryMethodValue() {
-		const basket = this.basketService.getCurrentBasketValue();
-		if (basket?.deliveryMethodId) {
-			this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
-		}
-	}
+  getDeliveryMethodValue() {
+    const basket = this.basketService.getCurrentBasketValue();
+    if (basket?.deliveryMethodId) {
+      this.checkoutForm
+        ?.get('deliveryForm')
+        ?.get('deliveryMethod')
+        ?.patchValue(basket?.deliveryMethodId?.toString());
+    }
+  }
 }

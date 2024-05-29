@@ -7,16 +7,18 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
   template: `
     <div class="container">
       <ul class="nav nav-pills nav-justified">
-        <li class="nav-item" *ngFor="let step of steps; let i = index">
-          <button
-            (click)="onClick(i)"
-            [class.active]="selectedIndex === i"
-            class="nav-link py-3 text-uppercase font-weight-bold btn-block"
-            style="padding: 1.2em"
-          >
-            {{ step.label }}
-          </button>
-        </li>
+        @for (step of steps; track step; let i = $index) {
+          <li class="nav-item">
+            <button
+              (click)="onClick(i)"
+              [class.active]="selectedIndex === i"
+              class="nav-link py-3 text-uppercase font-weight-bold btn-block"
+              style="padding: 1.2em"
+            >
+              {{ step.label }}
+            </button>
+          </li>
+        }
       </ul>
       <div>
         <ng-container [ngTemplateOutlet]="selected?.content ?? null"></ng-container>
@@ -30,13 +32,13 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
 export class StepperComponent extends CdkStepper implements OnInit {
-	@Input() linearModeSelected = false;
+  @Input() linearModeSelected = false;
 
-	ngOnInit(): void {
-		this.linear = this.linearModeSelected;
-	}
+  ngOnInit(): void {
+    this.linear = this.linearModeSelected;
+  }
 
-	onClick(index: number) {
-		this.selectedIndex = index;
-	}
+  onClick(index: number) {
+    this.selectedIndex = index;
+  }
 }

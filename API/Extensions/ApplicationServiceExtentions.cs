@@ -19,7 +19,7 @@ public static class ApplicationServicesExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IPhotoService, PhotoService>();
-        services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.Configure<IdentityOptions>(opt =>
         {
             // Default Password settings.
