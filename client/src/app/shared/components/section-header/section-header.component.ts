@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
+import { BreadcrumbComponent, BreadcrumbService } from 'xng-breadcrumb';
 import { AsyncPipe, NgIf, TitleCasePipe } from '@angular/common';
 
 @Component({
@@ -23,7 +23,7 @@ import { AsyncPipe, NgIf, TitleCasePipe } from '@angular/common';
       }
     }
   `,
-  imports: [BreadcrumbModule, AsyncPipe, TitleCasePipe, NgIf],
+  imports: [BreadcrumbComponent, AsyncPipe, TitleCasePipe, NgIf],
   standalone: true
 })
 export class SectionHeaderComponent implements OnInit {

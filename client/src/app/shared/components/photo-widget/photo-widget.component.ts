@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
-import { base64ToFile, ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { base64ToFile, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -39,7 +39,7 @@ import { NgIf } from '@angular/common';
     </div>
   `,
   styleUrls: ['./photo-widget.component.scss'],
-  imports: [ImageCropperModule, NgxDropzoneModule, NgIf],
+  imports: [ImageCropperComponent, NgxDropzoneModule, NgIf],
   standalone: true
 })
 export class PhotoWidgetComponent {
