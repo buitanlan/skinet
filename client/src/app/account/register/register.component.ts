@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AsyncValidatorFn, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime, take } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 import { AccountService } from '../../shared/services/account.service';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
-import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -33,20 +32,16 @@ import { NgForOf, NgIf } from '@angular/common';
       </div>
     </div>
   `,
-  imports: [TextInputComponent, ReactiveFormsModule, NgForOf, NgIf],
+  imports: [TextInputComponent, ReactiveFormsModule],
   standalone: true
 })
 export class RegisterComponent {
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly accountService = inject(AccountService);
+  private readonly router = inject(Router);
   errors!: string[];
   complexPassword =
     "(?=^.{6,10}$)(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*s).*$";
-
-  constructor(
-    private readonly fb: UntypedFormBuilder,
-    private readonly accountService: AccountService,
-    private readonly router: Router
-  ) {}
-
   registerForm = this.fb.group({
     displayName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email], [this.validateEmailNotToken()]],

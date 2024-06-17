@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { DeliveryMethod } from '../models/deliveryMethod';
 import { OrderToCreate } from '../models/order';
@@ -9,9 +9,8 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class CheckoutService {
+  private readonly http = inject(HttpClient);
   baseUrl = environment.apiUrl;
-
-  constructor(private readonly http: HttpClient) {}
 
   createOrder(order: OrderToCreate) {
     return this.http.post<OrderToCreate>(this.baseUrl + 'orders', order);

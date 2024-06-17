@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, viewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '../shared/models/brand';
 import { Pagination } from '../shared/models/pagination';
@@ -6,7 +6,7 @@ import { Product } from '../shared/models/product';
 import { ShopParams } from '../shared/models/shopParams';
 import { Type } from '../shared/models/type';
 import { ShopService } from '../shared/services/shop.service';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PagingHeaderComponent } from '../shared/components/paging-header/paging-header.component';
 import { ProductItemComponent } from './product-item/product-item.component';
 import { PagerComponent } from '../shared/components/pager/pager.component';
@@ -92,11 +92,14 @@ import { FormsModule } from '@angular/forms';
     </div>
   `,
   styleUrls: ['./shop.component.scss'],
-  imports: [NgForOf, PagingHeaderComponent, ProductItemComponent, PagerComponent, FormsModule, NgIf],
+  imports: [PagingHeaderComponent, ProductItemComponent, PagerComponent, FormsModule],
   standalone: true
 })
 export class ShopComponent implements OnInit {
-  @ViewChild('search', { static: false }) searchTerm!: ElementRef;
+  private readonly shopService = inject(ShopService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  searchTerm = viewChild<ElementRef>('search');
   products: Product[] = [];
   brands: Brand[] = [];
   types: Type[] = [];
@@ -108,11 +111,7 @@ export class ShopComponent implements OnInit {
     { name: 'Price: High to Low', value: 'desc' }
   ];
 
-  constructor(
-    private readonly shopService: ShopService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
+  constructor() {
     this.shopParams = this.shopService.getShopParams();
   }
 
@@ -213,7 +212,7 @@ export class ShopComponent implements OnInit {
 
   onSearch() {
     const params = this.shopService.getShopParams();
-    params.search = this.searchTerm.nativeElement.value;
+    params.search = this.searchTerm()!.nativeElement.value;
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
     this.getProducts();
@@ -226,7 +225,7 @@ export class ShopComponent implements OnInit {
   }
 
   onReset() {
-    this.searchTerm.nativeElement.value = '';
+    this.searchTerm()!.nativeElement.value = '';
     const params = new ShopParams();
     this.shopService.setShopParams(params);
     void this.router.navigate(['/shop'], {

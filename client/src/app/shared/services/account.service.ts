@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,16 +11,13 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class AccountService {
+  private readonly http = inject(HttpClient);
+  private router = inject(Router);
   baseUrl = environment.apiUrl;
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   private isAdminSource = new ReplaySubject<boolean>(1);
   isAdmin$ = this.isAdminSource.asObservable();
-
-  constructor(
-    private readonly http: HttpClient,
-    private router: Router
-  ) {}
 
   loadCurrentUser(token: string | null): Observable<any> {
     if (!token) {

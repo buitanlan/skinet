@@ -25,6 +25,4 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
   imports: [CarouselModule],
   standalone: true
 })
-export class HomeComponent {
-  constructor() {}
-}
+export class HomeComponent {}

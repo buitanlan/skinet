@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../shared/services/account.service';
@@ -26,14 +26,11 @@ import { TextInputComponent } from '../../shared/components/text-input/text-inpu
   standalone: true
 })
 export class LoginComponent implements OnInit {
+  private readonly accountService = inject(AccountService);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
   loginForm!: FormGroup;
   returnUrl!: string;
-
-  constructor(
-    private readonly accountService: AccountService,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';

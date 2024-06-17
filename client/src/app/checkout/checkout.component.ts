@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AccountService } from '../shared/services/account.service';
@@ -11,7 +11,7 @@ import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery
 import { CheckoutAddressComponent } from './checkout-address/checkout-address.component';
 import { StepperComponent } from '../shared/components/stepper/stepper.component';
 import { OrderTotalsComponent } from '../shared/components/order-totals/order-totals.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -48,20 +48,16 @@ import { AsyncPipe, NgIf } from '@angular/common';
     CheckoutAddressComponent,
     StepperComponent,
     OrderTotalsComponent,
-    AsyncPipe,
-    NgIf
+    AsyncPipe
   ],
   standalone: true
 })
 export class CheckoutComponent implements OnInit {
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly accountService = inject(AccountService);
+  private readonly basketService = inject(BasketService);
   basketTotalPrice$!: Observable<IBasketTotals | null>;
   checkoutForm!: UntypedFormGroup;
-
-  constructor(
-    private readonly fb: UntypedFormBuilder,
-    private readonly accountService: AccountService,
-    private readonly basketService: BasketService
-  ) {}
 
   ngOnInit(): void {
     this.createCheckoutForm();
@@ -103,10 +99,7 @@ export class CheckoutComponent implements OnInit {
   getDeliveryMethodValue() {
     const basket = this.basketService.getCurrentBasketValue();
     if (basket?.deliveryMethodId) {
-      this.checkoutForm
-        ?.get('deliveryForm')
-        ?.get('deliveryMethod')
-        ?.patchValue(basket?.deliveryMethodId?.toString());
+      this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket?.deliveryMethodId?.toString());
     }
   }
 }

@@ -1,24 +1,25 @@
-import { Component, Input, Self } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-text-input',
+
   template: `
     <div class="form-floating mb-3">
       <input
-        type="{{ type }}"
+        type="{{ type() }}"
         [formControl]="control"
-        placeholder="{{ label }}"
+        placeholder="{{ label() }}"
         class="form-control"
         [ngClass]="control.touched ? (control.invalid ? 'is-invalid' : 'is-valid') : null"
       />
       @if (control.status === 'PENDING') {
         <div class="fa fa-spinner fa-spin loader"></div>
       }
-      <label for="floatingInput">{{ label }}</label>
+      <label for="floatingInput">{{ label() }}</label>
       @if (control.errors?.['required']) {
-        <div class="invalid-feedback">Please enter your {{ label }}</div>
+        <div class="invalid-feedback">Please enter your {{ label() }}</div>
       }
       @if (control.errors?.['email']) {
         <div class="invalid-feedback">Invalid email address</div>
@@ -32,14 +33,15 @@ import { NgClass, NgIf } from '@angular/common';
     </div>
   `,
   styleUrls: ['./text-input.component.scss'],
-  imports: [NgClass, NgIf, ReactiveFormsModule],
+  imports: [NgClass, ReactiveFormsModule],
   standalone: true
 })
 export class TextInputComponent implements ControlValueAccessor {
-  @Input() type = 'text';
-  @Input() label!: string;
+  public controlDir = inject(NgControl, { self: true });
+  type = input('text');
+  label = input<string>();
 
-  constructor(@Self() public controlDir: NgControl) {
+  constructor() {
     this.controlDir.valueAccessor = this;
   }
 

@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, inject, model } from '@angular/core';
 import { Product } from '../../shared/models/product';
 import { AdminService } from '../../shared/services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { NgForOf, NgIf } from '@angular/common';
 import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo-widget.component';
 
 @Component({
   selector: 'app-edit-product-photos',
+
   template: `
     <div class="py-5">
       <div class="container">
@@ -17,7 +17,7 @@ import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo
             <button class="btn btn-primary" (click)="addPhotoModeToggle()">Add New Photo</button>
           </div>
           <div class="row">
-            @for (photo of product.photos; track photo) {
+            @for (photo of product().photos; track photo) {
               <div class="col-3">
                 <div class="card">
                   <img
@@ -69,25 +69,22 @@ import { PhotoWidgetComponent } from '../../shared/components/photo-widget/photo
       </div>
     </div>
   `,
-  imports: [NgIf, NgForOf, PhotoWidgetComponent],
+  imports: [PhotoWidgetComponent],
   standalone: true
 })
 export class EditProductPhotosComponent {
-  @Input() product = {} as Product;
+  private readonly adminService = inject(AdminService);
+  private readonly toast = inject(ToastrService);
+  product = model<Product>({} as Product);
   progress = 0;
   addPhotoMode = false;
-
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly toast: ToastrService
-  ) {}
 
   addPhotoModeToggle() {
     this.addPhotoMode = !this.addPhotoMode;
   }
 
   uploadFile(file: File) {
-    this.adminService.uploadImage(file, this.product.id).subscribe({
+    this.adminService.uploadImage(file, this.product().id).subscribe({
       next: (event: HttpEvent<any>) => {
         switch (event.type) {
           case HttpEventType.UploadProgress:
@@ -115,10 +112,10 @@ export class EditProductPhotosComponent {
   }
 
   deletePhoto(photoId: number) {
-    this.adminService.deleteProductPhoto(photoId, this.product.id).subscribe({
+    this.adminService.deleteProductPhoto(photoId, this.product().id).subscribe({
       next: () => {
-        const photoIndex = this.product.photos.findIndex((x) => x.id === photoId);
-        this.product.photos.splice(photoIndex, 1);
+        const photoIndex = this.product().photos.findIndex((x) => x.id === photoId);
+        this.product().photos.splice(photoIndex, 1);
       },
       error: (error) => {
         this.toast.error('Problem deleting photo');
@@ -128,8 +125,10 @@ export class EditProductPhotosComponent {
   }
 
   setMainPhoto(photoId: number) {
-    this.adminService.setMainPhoto(photoId, this.product.id).subscribe((product: Product) => {
-      this.product = product;
+    this.adminService.setMainPhoto(photoId, this.product().id).subscribe((product: Product) => {
+      this.product.set(product);
     });
   }
+
+  protected readonly File = File;
 }

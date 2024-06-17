@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Product } from '../shared/models/product';
 import { ShopParams } from '../shared/models/shopParams';
 import { ShopService } from '../shared/services/shop.service';
 import { AdminService } from '../shared/services/admin.service';
 import { PagingHeaderComponent } from '../shared/components/paging-header/paging-header.component';
 import { RouterLink } from '@angular/router';
-import { CurrencyPipe, NgForOf, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { PagerComponent } from '../shared/components/pager/pager.component';
 
 @Component({
@@ -96,18 +96,17 @@ import { PagerComponent } from '../shared/components/pager/pager.component';
       </section>
     }
   `,
-  imports: [PagingHeaderComponent, RouterLink, NgIf, CurrencyPipe, NgForOf, PagerComponent],
+  imports: [PagingHeaderComponent, RouterLink, CurrencyPipe, PagerComponent],
   standalone: true
 })
 export class AdminComponent implements OnInit {
+  private readonly shopService = inject(ShopService);
+  private readonly adminService = inject(AdminService);
   products: Product[] = {} as Product[];
   totalCount = 0;
   shopParams: ShopParams;
 
-  constructor(
-    private readonly shopService: ShopService,
-    private readonly adminService: AdminService
-  ) {
+  constructor() {
     this.shopParams = this.shopService.getShopParams();
   }
 

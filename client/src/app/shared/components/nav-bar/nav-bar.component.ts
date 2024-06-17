@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Basket, BasketQuantity } from '../../models/basket';
 import { User } from '../../models/user';
@@ -65,7 +65,7 @@ import { BasketService } from '../../services/basket.service';
     </div>
   `,
   styleUrls: ['./nav-bar.component.scss'],
-  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgIf, BsDropdownModule],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, BsDropdownModule],
   standalone: true
 })
 export class NavBarComponent implements OnInit {

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AsyncPipe, CurrencyPipe, NgIf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { BasketService } from '../../services/basket.service';
 
 @Component({
@@ -26,7 +26,7 @@ import { BasketService } from '../../services/basket.service';
       }
     </div>
   `,
-  imports: [CurrencyPipe, AsyncPipe, NgIf],
+  imports: [CurrencyPipe, AsyncPipe],
   standalone: true
 })
 export class OrderTotalsComponent {

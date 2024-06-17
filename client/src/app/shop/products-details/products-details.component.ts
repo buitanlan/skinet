@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../../shared/services/shop.service';
@@ -9,7 +9,7 @@ import {
   NgxGalleryModule,
   NgxGalleryOptions
 } from '@kolkov/ngx-gallery';
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { BasketService } from '../../shared/services/basket.service';
 import { Product } from '../../shared/models/product';
 
@@ -57,21 +57,20 @@ import { Product } from '../../shared/models/product';
       }
     </div>
   `,
-  imports: [CurrencyPipe, NgIf, NgxGalleryModule],
+  imports: [CurrencyPipe, NgxGalleryModule],
   standalone: true
 })
 export class ProductsDetailsComponent implements OnInit {
+  private readonly shopService = inject(ShopService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly bcService = inject(BreadcrumbService);
+  private readonly basketService = inject(BasketService);
   product = {} as Product;
   quantity = 1;
   galleryOptions!: NgxGalleryOptions[];
   galleryImages!: NgxGalleryImage[];
 
-  constructor(
-    private readonly shopService: ShopService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly bcService: BreadcrumbService,
-    private readonly basketService: BasketService
-  ) {
+  constructor() {
     this.bcService.set('@productDetails', '');
   }
 

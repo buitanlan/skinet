@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { Component, inject } from '@angular/core';
+
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -22,14 +22,13 @@ import { environment } from '../../../../environments/environment';
       }
     </div>
   `,
-  imports: [NgIf, NgForOf],
+  imports: [],
   standalone: true
 })
 export class TestErrorComponent {
+  private readonly http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   validationErrors: any;
-
-  constructor(private readonly http: HttpClient) {}
 
   get404Error() {
     this.http.get(this.baseUrl + 'products/42').subscribe({

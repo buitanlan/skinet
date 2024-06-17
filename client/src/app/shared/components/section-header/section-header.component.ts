@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BreadcrumbComponent, BreadcrumbService } from 'xng-breadcrumb';
-import { AsyncPipe, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-section-header',
@@ -23,13 +23,12 @@ import { AsyncPipe, NgIf, TitleCasePipe } from '@angular/common';
       }
     }
   `,
-  imports: [BreadcrumbComponent, AsyncPipe, TitleCasePipe, NgIf],
+  imports: [BreadcrumbComponent, AsyncPipe, TitleCasePipe],
   standalone: true
 })
 export class SectionHeaderComponent implements OnInit {
+  private readonly bcService = inject(BreadcrumbService);
   breadcrumb$!: Observable<any[]>;
-
-  constructor(private readonly bcService: BreadcrumbService) {}
 
   ngOnInit(): void {
     this.breadcrumb$ = this.bcService.breadcrumbs$;

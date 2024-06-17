@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Product, ProductFormValues } from '../models/product';
 import { environment } from '../../../environments/environment';
 
@@ -7,9 +7,8 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class AdminService {
+  private readonly http = inject(HttpClient);
   baseUrl = environment.apiUrl;
-
-  constructor(private readonly http: HttpClient) {}
 
   createProduct(product: ProductFormValues) {
     return this.http.post(this.baseUrl + 'products', product);

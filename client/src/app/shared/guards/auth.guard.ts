@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,10 +8,8 @@ import { AccountService } from '../services/account.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(
-    private readonly accountService: AccountService,
-    private readonly router: Router
-  ) {}
+  private readonly accountService = inject(AccountService);
+  private readonly router = inject(Router);
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.accountService.currentUser$.pipe(

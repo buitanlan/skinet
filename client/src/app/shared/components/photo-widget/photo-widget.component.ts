@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
 import { base64ToFile, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-photo-widget',
@@ -39,16 +38,14 @@ import { NgIf } from '@angular/common';
     </div>
   `,
   styleUrls: ['./photo-widget.component.scss'],
-  imports: [ImageCropperComponent, NgxDropzoneModule, NgIf],
+  imports: [ImageCropperComponent, NgxDropzoneModule],
   standalone: true
 })
 export class PhotoWidgetComponent {
-  @Output() addFile = new EventEmitter();
+  addFile = output<File>();
   files: File[] = [];
   imageChangedEvent: any = '';
   croppedImage: string | null = null;
-
-  constructor() {}
 
   fileChangeEvent(file: File): void {
     this.imageChangedEvent = file;
@@ -66,7 +63,8 @@ export class PhotoWidgetComponent {
 
   onUpload() {
     if (this.croppedImage) {
-      this.addFile.emit(base64ToFile(this.croppedImage));
+      const base64 = base64ToFile(this.croppedImage) as File;
+      this.addFile.emit(base64);
     }
   }
 }

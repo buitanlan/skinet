@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AdminService } from '../../shared/services/admin.service';
@@ -39,18 +39,17 @@ import { Type } from '../../shared/models/type';
   standalone: true
 })
 export class EditProductComponent implements OnInit {
+  private readonly adminService = inject(AdminService);
+  private readonly shopService = inject(ShopService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   product = {} as Product;
 
   productFormValues: ProductFormValues;
   brands = [] as Brand[];
   types = [] as Type[];
 
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly shopService: ShopService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
+  constructor() {
     this.productFormValues = new ProductFormValues();
   }
 

@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BusyService {
+  private readonly spinnerService = inject(NgxSpinnerService);
   busyRequestCount = 0;
-
-  constructor(private readonly spinnerService: NgxSpinnerService) {}
 
   busy() {
     this.busyRequestCount++;

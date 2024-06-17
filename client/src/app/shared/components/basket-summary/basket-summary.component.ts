@@ -1,15 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { BasketItem } from '../../models/basket';
-import { CurrencyPipe, NgForOf, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-basket-summary',
+
   template: `
-    @if (items.length > 0) {
+    @if (items().length > 0) {
       <div class="table-responsive">
         <table class="table table-borderless">
-          <thead [class.thead-light]="isBasket || isOrder" class="border-0 py-2">
+          <thead [class.thead-light]="isBasket() || isOrder()" class="border-0 py-2">
             <tr>
               <th scope="col">
                 <div class="p-2 px-3 text-uppercase">Product</div>
@@ -23,7 +24,7 @@ import { RouterLink } from '@angular/router';
               <th scope="col">
                 <div class="py-2 text-uppercase">Total</div>
               </th>
-              @if (isBasket) {
+              @if (isBasket()) {
                 <th scope="col">
                   <div class="py-2 text-uppercase">Remove</div>
                 </th>
@@ -31,7 +32,7 @@ import { RouterLink } from '@angular/router';
             </tr>
           </thead>
           <tbody>
-            @for (item of items; track item) {
+            @for (item of items(); track item) {
               <tr>
                 <th scope="row">
                   <div class="p-0 d-flex">
@@ -57,8 +58,8 @@ import { RouterLink } from '@angular/router';
                   </strong>
                 </td>
                 <td class="align-middle">
-                  <div class="d-flex align-items-center" [class.justify-content-center]="!isBasket">
-                    @if (isBasket) {
+                  <div class="d-flex align-items-center" [class.justify-content-center]="!isBasket()">
+                    @if (isBasket()) {
                       <i
                         (click)="decrementItemQuantity(item)"
                         class="fas fa-minus-circle text-warning me-2"
@@ -66,7 +67,7 @@ import { RouterLink } from '@angular/router';
                       ></i>
                     }
                     <span class="font-weight-bold" style="font-size: 1.5em">{{ item.quantity }}</span>
-                    @if (isBasket) {
+                    @if (isBasket()) {
                       <i
                         (click)="incrementItemQuantity(item)"
                         class="fas fa-plus-circle text-warning mx-2"
@@ -80,7 +81,7 @@ import { RouterLink } from '@angular/router';
                 </td>
                 <td class="align-middle text-center">
                   <a class="text-danger">
-                    @if (isBasket) {
+                    @if (isBasket()) {
                       <i
                         (click)="removeBasketItem(item)"
                         class="fas fa-trash"
@@ -96,18 +97,16 @@ import { RouterLink } from '@angular/router';
       </div>
     }
   `,
-  imports: [NgIf, NgForOf, CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe, RouterLink],
   standalone: true
 })
 export class BasketSummaryComponent {
-  @Input() isBasket = true;
-  @Input() isOrder = false;
-  @Input() items: any;
-  @Output() decrement: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
-  @Output() increment: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
-  @Output() remove: EventEmitter<BasketItem> = new EventEmitter<BasketItem>();
-
-  constructor() {}
+  isBasket = input(true);
+  isOrder = input(false);
+  items = input<any>();
+  decrement = output<BasketItem>();
+  increment = output<BasketItem>();
+  remove = output<BasketItem>();
 
   removeBasketItem(item: BasketItem) {
     this.remove.emit(item);

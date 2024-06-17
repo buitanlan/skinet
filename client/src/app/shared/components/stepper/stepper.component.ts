@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
-import { NgForOf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-stepper',
@@ -27,15 +27,15 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
   `,
   styleUrls: ['./stepper.component.scss'],
   standalone: true,
-  imports: [NgTemplateOutlet, NgForOf],
+  imports: [NgTemplateOutlet],
 
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
 export class StepperComponent extends CdkStepper implements OnInit {
-  @Input() linearModeSelected = false;
+  linearModeSelected = input(false);
 
   ngOnInit(): void {
-    this.linear = this.linearModeSelected;
+    this.linear = this.linearModeSelected();
   }
 
   onClick(index: number) {

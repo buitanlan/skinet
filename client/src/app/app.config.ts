@@ -21,4 +21,4 @@ export const appConfig: ApplicationConfig = {
     ]),
     provideHttpClient(withFetch(), withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor]))
   ]
-}
+};

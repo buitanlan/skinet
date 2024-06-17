@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
@@ -9,13 +9,14 @@ import { Address } from '../../shared/models/address';
 
 @Component({
   selector: 'app-checkout-address',
+
   template: `
-    <div class="mt-4" [formGroup]="checkoutForm">
+    <div class="mt-4" [formGroup]="checkoutForm()!">
       <div class="d-flex justify-content-between align-items-center">
         <h4>Shipping address</h4>
         <button
           (click)="saveUserAddress()"
-          [disabled]="!checkoutForm.get('addressForm')?.valid || !checkoutForm.get('addressForm')?.dirty"
+          [disabled]="!checkoutForm()!.get('addressForm')?.valid || !checkoutForm()!.get('addressForm')?.dirty"
           class="btn btn-outline-success mb-3"
         >
           Save as default address
@@ -47,7 +48,7 @@ import { Address } from '../../shared/models/address';
         <i class="fas fa-arrow-left"></i> Back to Basket
       </button>
 
-      <button [disabled]="checkoutForm.get('addressForm')?.invalid" class="btn btn-primary" cdkStepperNext>
+      <button [disabled]="checkoutForm()!.get('addressForm')?.invalid" class="btn btn-primary" cdkStepperNext>
         Go to Delivery <i class="fas fa-arrow-right"></i>
       </button>
     </div>
@@ -56,18 +57,15 @@ import { Address } from '../../shared/models/address';
   standalone: true
 })
 export class CheckoutAddressComponent {
-  @Input() checkoutForm!: FormGroup;
-
-  constructor(
-    private readonly accountService: AccountService,
-    private readonly toastr: ToastrService
-  ) {}
+  private readonly accountService = inject(AccountService);
+  private readonly toastr = inject(ToastrService);
+  checkoutForm = input<FormGroup>();
 
   saveUserAddress() {
-    this.accountService.updateUserAddress(this.checkoutForm.get('addressForm')?.value).subscribe({
+    this.accountService.updateUserAddress(this.checkoutForm()!.get('addressForm')?.value).subscribe({
       next: (address: Address) => {
         this.toastr.success('Address saved');
-        this.checkoutForm.get('addressForm')?.reset(address);
+        this.checkoutForm()!.get('addressForm')?.reset(address);
       },
       error: (err) => {
         this.toastr.error(err.message);

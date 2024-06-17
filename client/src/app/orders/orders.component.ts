@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Order } from '../shared/models/order';
 import { OrdersService } from '../shared/services/orders.service';
-import { CurrencyPipe, DatePipe, NgForOf } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -34,13 +34,12 @@ import { RouterLink } from '@angular/router';
       </div>
     </div>
   `,
-  imports: [NgForOf, DatePipe, CurrencyPipe, RouterLink],
+  imports: [DatePipe, CurrencyPipe, RouterLink],
   standalone: true
 })
 export class OrdersComponent implements OnInit {
+  private readonly ordersService = inject(OrdersService);
   orders: Order[] = [];
-
-  constructor(private readonly ordersService: OrdersService) {}
 
   ngOnInit(): void {
     this.getOrders();

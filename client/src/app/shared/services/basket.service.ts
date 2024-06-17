@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Basket, BasketItem, BasketQuantity, IBasketTotals } from '../models/basket';
@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class BasketService {
+  private readonly http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   private basketSource = new BehaviorSubject<Basket | null>(null);
   basket$ = this.basketSource.asObservable();
@@ -19,8 +20,6 @@ export class BasketService {
   private basketTotalQuantitySource = new BehaviorSubject<BasketQuantity | null>(null);
   basketTotalQuantity$ = this.basketTotalQuantitySource.asObservable();
   shipping = 0;
-
-  constructor(private readonly http: HttpClient) {}
 
   createPaymentIntent() {
     return this.http.post<Basket>(this.baseUrl + 'payments/' + this.getCurrentBasketValue()?.id, {}).pipe(

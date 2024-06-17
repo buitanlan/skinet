@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Basket, BasketItem, IBasketTotals } from '../shared/models/basket';
 import { BasketService } from '../shared/services/basket.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { OrderTotalsComponent } from '../shared/components/order-totals/order-totals.component';
 import { RouterLink } from '@angular/router';
 import { BasketSummaryComponent } from '../shared/components/basket-summary/basket-summary.component';
@@ -45,14 +45,13 @@ import { BasketSummaryComponent } from '../shared/components/basket-summary/bask
     </div>
   `,
   styleUrls: ['./basket.component.scss'],
-  imports: [NgIf, OrderTotalsComponent, AsyncPipe, RouterLink, BasketSummaryComponent],
+  imports: [OrderTotalsComponent, AsyncPipe, RouterLink, BasketSummaryComponent],
   standalone: true
 })
 export class BasketComponent implements OnInit {
+  private readonly basketService = inject(BasketService);
   basket$!: Observable<Basket | null>;
   basketTotalPrice$!: Observable<IBasketTotals | null>;
-
-  constructor(private readonly basketService: BasketService) {}
 
   ngOnInit(): void {
     this.basket$ = this.basketService.basket$;

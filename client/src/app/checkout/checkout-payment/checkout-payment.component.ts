@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, input, viewChild, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +6,6 @@ import { CheckoutService } from '../../shared/services/checkout.service';
 import { lastValueFrom } from 'rxjs';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { NgIf } from '@angular/common';
 import {
   loadStripe,
   Stripe,
@@ -20,9 +19,10 @@ import { OrderToCreate } from '../../shared/models/order';
 
 @Component({
   selector: 'app-checkout-payment',
+
   template: `
-    @if (checkoutForm) {
-      <div class="mt-4" [formGroup]="checkoutForm">
+    @if (checkoutForm()) {
+      <div class="mt-4" [formGroup]="checkoutForm()!">
         <div class="row">
           <div class="form-group col-12" formGroupName="paymentForm">
             <app-text-input [label]="'Name on card'" formControlName="nameOnCard"></app-text-input>
@@ -64,14 +64,18 @@ import { OrderToCreate } from '../../shared/models/order';
       </button>
     </div>
   `,
-  imports: [TextInputComponent, ReactiveFormsModule, CdkStepperModule, NgIf],
+  imports: [TextInputComponent, ReactiveFormsModule, CdkStepperModule],
   standalone: true
 })
 export class CheckoutPaymentComponent implements OnInit {
-  @Input() checkoutForm!: FormGroup;
-  @ViewChild('cardNumber', { static: true }) cardNumberElement!: ElementRef;
-  @ViewChild('cardExpiry', { static: true }) cardExpiryElement!: ElementRef;
-  @ViewChild('cardCvc', { static: true }) cardCvcElement!: ElementRef;
+  private readonly basketService = inject(BasketService);
+  private readonly checkoutService = inject(CheckoutService);
+  private readonly toastr = inject(ToastrService);
+  private readonly router = inject(Router);
+  checkoutForm = input<FormGroup>();
+  cardNumberElement = viewChild<ElementRef>('cardNumber');
+  cardExpiryElement = viewChild<ElementRef>('cardExpiry');
+  cardCvcElement = viewChild<ElementRef>('cardCvc');
   stripe: Stripe | null = null;
   cardNumber?: StripeCardNumberElement;
   cardExpiry?: StripeCardExpiryElement;
@@ -82,13 +86,6 @@ export class CheckoutPaymentComponent implements OnInit {
   cardErrors: any;
   loading = false;
 
-  constructor(
-    private readonly basketService: BasketService,
-    private readonly checkoutService: CheckoutService,
-    private readonly toastr: ToastrService,
-    private readonly router: Router
-  ) {}
-
   ngOnInit(): void {
     loadStripe(
       'pk_test_51HgMIsDINKKez9i6TlUBPF7GNwy3ztZVjnlSXn0Kl8vXRq7PqQ0jd00ne6hlyAsE0ZX0UVPUGIvBFKaC3EsZbEho0003KxxGAY'
@@ -97,7 +94,7 @@ export class CheckoutPaymentComponent implements OnInit {
       const elements = stripe?.elements();
       if (elements) {
         this.cardNumber = elements.create('cardNumber');
-        this.cardNumber?.mount(this.cardNumberElement?.nativeElement);
+        this.cardNumber?.mount(this.cardNumberElement()?.nativeElement);
         this.cardNumber?.on('change', (event) => {
           this.cardNumberComplete = event.complete;
           if (event.error) this.cardErrors = event.error.message;
@@ -105,7 +102,7 @@ export class CheckoutPaymentComponent implements OnInit {
         });
 
         this.cardExpiry = elements.create('cardExpiry');
-        this.cardExpiry.mount(this.cardExpiryElement?.nativeElement);
+        this.cardExpiry.mount(this.cardExpiryElement()?.nativeElement);
         this.cardExpiry.on('change', (event) => {
           this.cardExpiryComplete = event.complete;
           if (event.error) this.cardErrors = event.error.message;
@@ -113,7 +110,7 @@ export class CheckoutPaymentComponent implements OnInit {
         });
 
         this.cardCvc = elements.create('cardCvc');
-        this.cardCvc.mount(this.cardCvcElement?.nativeElement);
+        this.cardCvc.mount(this.cardCvcElement()?.nativeElement);
         this.cardCvc.on('change', (event) => {
           this.cardCvcComplete = event.complete;
           if (event.error) this.cardErrors = event.error.message;
@@ -125,7 +122,7 @@ export class CheckoutPaymentComponent implements OnInit {
 
   get paymentFormComplete() {
     return (
-      this.checkoutForm?.get('paymentForm')?.valid &&
+      this.checkoutForm()?.get('paymentForm')?.valid &&
       this.cardNumberComplete &&
       this.cardExpiryComplete &&
       this.cardCvcComplete
@@ -163,7 +160,7 @@ export class CheckoutPaymentComponent implements OnInit {
       payment_method: {
         card: this.cardNumber!,
         billing_details: {
-          name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+          name: this.checkoutForm()?.get('paymentForm')?.get('nameOnCard')?.value
         }
       }
     });
@@ -179,8 +176,8 @@ export class CheckoutPaymentComponent implements OnInit {
   private getOrderToCreate(basket: Basket) {
     return {
       basketId: basket.id,
-      deliveryMethodId: +this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value,
-      shipToAddress: this.checkoutForm?.get('addressForm')?.value
+      deliveryMethodId: +this.checkoutForm()?.get('deliveryForm')?.get('deliveryMethod')?.value,
+      shipToAddress: this.checkoutForm()?.get('addressForm')?.value
     } as OrderToCreate;
   }
 }

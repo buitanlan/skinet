@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AccountService } from './shared/services/account.service';
 import { BasketService } from './shared/services/basket.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -21,12 +21,9 @@ import { SectionHeaderComponent } from './shared/components/section-header/secti
   standalone: true
 })
 export class AppComponent implements OnInit {
+  private readonly basketService = inject(BasketService);
+  private readonly accountService = inject(AccountService);
   title = 'SkiNet';
-
-  constructor(
-    private readonly basketService: BasketService,
-    private readonly accountService: AccountService
-  ) {}
 
   ngOnInit(): void {
     this.loadBasket();

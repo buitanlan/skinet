@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pager',
+
   template: `
     <pagination
       [boundaryLinks]="true"
-      [totalItems]="totalCount"
+      [totalItems]="totalCount()"
       [(ngModel)]="pageIndex"
       (pageChanged)="onPaperChange($event)"
-      [itemsPerPage]="this.pageSize"
+      [itemsPerPage]="this.pageSize()"
       previousText="&lsaquo;"
       nextText="&rsaquo;"
       firstText="&laquo;"
@@ -22,12 +23,10 @@ import { FormsModule } from '@angular/forms';
   standalone: true
 })
 export class PagerComponent {
-  @Input() totalCount!: number;
-  @Input() pageSize!: number;
-  @Input() pageIndex!: number;
-  @Output() pageChanged = new EventEmitter<number>();
-
-  constructor() {}
+  totalCount = input.required<number>();
+  pageSize = input.required<number>();
+  pageIndex = input.required<number>();
+  pageChanged = output<number>();
 
   onPaperChange(event: any) {
     this.pageChanged.emit(event.page);

@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { ProductFormValues } from '../../shared/models/product';
 import { Brand } from '../../shared/models/brand';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../shared/services/admin.service';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { Type } from '../../shared/models/type';
 
 @Component({
   selector: 'app-edit-product-form',
+
   template: `
     <form class="mt-4" #productForm="ngForm" (ngSubmit)="onSubmit(productForm.valid && productForm.value)">
       <div class="form-row">
@@ -24,7 +25,7 @@ import { Type } from '../../shared/models/type';
             placeholder="Product Name"
             name="name"
             #name="ngModel"
-            [(ngModel)]="product.name"
+            [(ngModel)]="product().name"
           />
           @if (name.invalid && (name.dirty || name.touched)) {
             <div class="invalid-feedback">
@@ -47,7 +48,7 @@ import { Type } from '../../shared/models/type';
             name="price"
             #price="ngModel"
             pattern="^\\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(\\.[0-9][0-9])?$"
-            [ngModel]="+product.price | number: '1.2-2'"
+            [ngModel]="+product().price | number: '1.2-2'"
             (ngModelChange)="updatePrice(+$event)"
           />
           @if (price.invalid && (price.dirty || price.touched)) {
@@ -74,7 +75,7 @@ import { Type } from '../../shared/models/type';
             #description="ngModel"
             class="form-control"
             id="description"
-            [(ngModel)]="product.description"
+            [(ngModel)]="product().description"
             name="description"
             rows="3"
           ></textarea>
@@ -90,9 +91,9 @@ import { Type } from '../../shared/models/type';
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="brand">Brand</label>
-          <select id="brand" class="form-control" name="productBrandId" [(ngModel)]="product.productBrandId" required>
-            @for (brand of brands; track brand) {
-              <option [selected]="product.productBrandId === brand.id" [ngValue]="brand.id">
+          <select id="brand" class="form-control" name="productBrandId" [(ngModel)]="product().productBrandId" required>
+            @for (brand of brands(); track brand) {
+              <option [selected]="product().productBrandId === brand.id" [ngValue]="brand.id">
                 {{ brand.name }}
               </option>
             }
@@ -100,9 +101,9 @@ import { Type } from '../../shared/models/type';
         </div>
         <div class="form-group col-md-6">
           <label for="type">Type</label>
-          <select id="type" class="form-control" name="productTypeId" [(ngModel)]="product.productTypeId" required>
-            @for (type of types; track type) {
-              <option [selected]="product.productTypeId === type.id" [ngValue]="type.id">
+          <select id="type" class="form-control" name="productTypeId" [(ngModel)]="product().productTypeId" required>
+            @for (type of types(); track type) {
+              <option [selected]="product().productTypeId === type.id" [ngValue]="type.id">
                 {{ type.name }}
               </option>
             }
@@ -112,24 +113,21 @@ import { Type } from '../../shared/models/type';
       <button [disabled]="!productForm.valid" type="submit" class="btn btn-primary my-3 float-right">Submit</button>
     </form>
   `,
-  imports: [FormsModule, NgClass, CurrencyMaskModule, DecimalPipe, NgIf, NgForOf],
+  imports: [FormsModule, NgClass, CurrencyMaskModule, DecimalPipe],
   standalone: true
 })
 export class EditProductFormComponent {
-  @Input() product = new ProductFormValues();
-  @Input() brands: Brand[] = [];
-  @Input() types: Type[] = [];
+  private readonly route = inject(ActivatedRoute);
+  private readonly adminService = inject(AdminService);
+  private readonly router = inject(Router);
+  product = input(new ProductFormValues());
+  brands = input<Brand[]>([]);
+  types = input<Type[]>([]);
   min = 1;
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly adminService: AdminService,
-    private readonly router: Router
-  ) {}
 
   onSubmit(product: ProductFormValues) {
     if (this.route.snapshot.url[0].path === 'edit') {
-      const updatedProduct = { ...this.product, ...product, price: +product.price };
+      const updatedProduct = { ...this.product(), ...product, price: +product.price };
       this.adminService.updateProduct(updatedProduct, Number(this.route.snapshot.paramMap.get('id'))).subscribe(() => {
         void this.router.navigate(['/admin']);
       });
@@ -142,6 +140,6 @@ export class EditProductFormComponent {
   }
 
   updatePrice(event: any) {
-    this.product.price = event;
+    this.product().price = event;
   }
 }

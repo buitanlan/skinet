@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { Order } from '../../shared/models/order';
 
 @Component({
@@ -18,13 +17,14 @@ import { Order } from '../../shared/models/order';
       }
     </div>
   `,
-  imports: [NgIf, RouterLink],
+  imports: [RouterLink],
   standalone: true
 })
 export class CheckoutSuccessComponent {
+  private readonly router = inject(Router);
   order = {} as Order;
 
-  constructor(private readonly router: Router) {
+  constructor() {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation && navigation.extras && navigation.extras.state;
     if (state) {

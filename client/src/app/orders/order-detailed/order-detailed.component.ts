@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { OrdersService } from '../../shared/services/orders.service';
 import { BasketSummaryComponent } from '../../shared/components/basket-summary/basket-summary.component';
 import { OrderTotalsComponent } from '../../shared/components/order-totals/order-totals.component';
-import { NgIf } from '@angular/common';
 import { Order } from '../../shared/models/order';
 
 @Component({
@@ -17,23 +16,22 @@ import { Order } from '../../shared/models/order';
             <app-basket-summary [items]="order.orderItems" [isBasket]="false" [isOrder]="true"></app-basket-summary>
           </div>
           <div class="col-4">
-            <app-order-totals> </app-order-totals>
+            <app-order-totals></app-order-totals>
           </div>
         </div>
       }
     </div>
   `,
-  imports: [BasketSummaryComponent, OrderTotalsComponent, NgIf],
+  imports: [BasketSummaryComponent, OrderTotalsComponent],
   standalone: true
 })
 export class OrderDetailedComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private breadcrumbService = inject(BreadcrumbService);
+  private readonly ordersService = inject(OrdersService);
   order = {} as Order;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService,
-    private readonly ordersService: OrdersService
-  ) {
+  constructor() {
     this.breadcrumbService.set('@OrderDetailed', '');
   }
 

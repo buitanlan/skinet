@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Brand } from '../models/brand';
 import { Pagination } from '../models/pagination';
 import { Type } from '../models/type';
@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ShopService {
+  private readonly http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   products: Product[] = [];
   brands: Brand[] = [];
@@ -20,8 +21,6 @@ export class ShopService {
   pagination = new Pagination();
   shopParams = new ShopParams();
   productCache = new Map();
-
-  constructor(private readonly http: HttpClient) {}
 
   getBrand() {
     if (this.brands.length > 0) {
