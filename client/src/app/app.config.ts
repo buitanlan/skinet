@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
@@ -10,9 +10,8 @@ import { loadingInterceptor } from './shared/interceptors/loading.interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     importProvidersFrom([
-      BrowserAnimationsModule,
       RouterModule.forRoot(routes),
       ToastrModule.forRoot({
         positionClass: 'toast-bottom-right',

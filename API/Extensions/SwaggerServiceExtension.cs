@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace API.Extensions;
 
@@ -6,6 +6,7 @@ public static class SwaggerServiceExtensions
 {
     public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo
@@ -21,25 +22,22 @@ public static class SwaggerServiceExtensions
                 License = new OpenApiLicense
                 {
                     Name = "MIT License",
-                    //Url = new Uri("https://example.com/license"),
                 }
             });
-            var securitySchema = new OpenApiSecurityScheme
+
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Auth Bearer Scheme",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            };
-            c.AddSecurityDefinition("Bearer", securitySchema);
-            var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
-            c.AddSecurityRequirement(securityRequirement);
+                Scheme = "bearer"
+            });
+
+            c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+            });
         });
 
         return services;

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { AccountService } from './shared/services/account.service';
 import { BasketService } from './shared/services/basket.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -18,12 +18,12 @@ import { SectionHeaderComponent } from './shared/components/section-header/secti
     <router-outlet></router-outlet>
   `,
   imports: [NgxSpinnerModule, NavBarComponent, RouterOutlet, SectionHeaderComponent],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   private readonly basketService = inject(BasketService);
   private readonly accountService = inject(AccountService);
-  title = 'SkiNet';
 
   ngOnInit(): void {
     this.loadBasket();
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     const token = localStorage.getItem('token');
     this.accountService.loadCurrentUser(token).subscribe({
       next: () => console.log('load user'),
-      error: (error) => console.log(error)
+      error: (error: unknown) => console.log(error)
     });
   }
 
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     if (basketId) {
       this.basketService.getBasket(basketId).subscribe({
         next: () => console.log('initial basket'),
-        error: (error) => console.log(error)
+        error: (error: unknown) => console.log(error)
       });
     }
   }
